@@ -2,10 +2,10 @@ Jakarta Query
 =============
 
 Jakarta Query defines an object-oriented query language designed for use with 
-Jakarta Persistence and Jakarta Data, consisting of a core language that can 
-be implemented by Jakarta Data providers using non-relational datastores and 
-an extended language tailored for Jakarta Persistence providers or other 
-persistence technologies backed by relational databases.
+Jakarta Persistence, Jakarta Data, and Jakarta NoSQL, consisting of a core
+language that can be implemented by Jakarta Data providers using non-relational
+datastores and an extended language tailored for Jakarta Persistence providers
+or other persistence technologies backed by relational databases.
 
 The language is closely based on the existing query languages defined by 
 Jakarta Persistence and Jakarta Data, and is backward compatible with both.
