@@ -32,4 +32,4 @@ of the project committers and various contributors.
 
 ==== Contributors
 
-The complete list of Jakarta Data contributors may be found https://github.com/jakartaee/query/graphs/contributors[here].
+The complete list of Jakarta Query contributors may be found https://github.com/jakartaee/query/graphs/contributors[here].
