@@ -49,9 +49,9 @@ specification is expressly prohibited.
 
 The notice is:
 
-"Copyright (c) {inceptionYear}, {docyear} Eclipse Foundation AISBL.This software or
-document includes material copied from or derived from Jakarta Data and 
-https://jakarta.ee/specifications/data/."
+Copyright (c) {inceptionYear}, {docyear} Eclipse Foundation AISBL. This software or
+document includes material copied from or derived from Jakarta Data and
+link:https://jakarta.ee/specifications/query/[Jakarta Data Query specification].
 
 === Disclaimers
 
