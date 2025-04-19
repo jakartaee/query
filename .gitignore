@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings/
+target/
+*~
+.vscode/
+.idea
+.DS_Store
+.checkstyle
+.envrc
+jakarta.data-parent.iml
