@@ -20,7 +20,7 @@
 :version-label!:
 :doctype: book
 :license: Apache License v2.0
-:inceptionYear: 2022
+:inceptionYear: 2025
 :source-highlighter: coderay
 :toc: left
 :toclevels: 3
