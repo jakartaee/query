@@ -1,0 +1,35 @@
+// Copyright (c) 2025 Contributors to the Eclipse Foundation
+//
+// This program and the accompanying materials are made available under the
+// terms of the Eclipse Public License v. 2.0 which is available at
+// http://www.eclipse.org/legal/epl-2.0.
+//
+// This Source Code may also be made available under the following Secondary
+// Licenses when the conditions for such availability set forth in the Eclipse
+// Public License v. 2.0 are satisfied: GNU General Public License, version 2
+// with the GNU Classpath Exception which is available at
+// https://www.gnu.org/software/classpath/license.html.
+//
+// SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+
+=== Jakarta Query Project Team
+
+This specification is being developed as part of Jakarta Query project under the
+Jakarta EE Specification Process. It is the result of the collaborative work
+of the project committers and various contributors.
+
+==== Project Leads
+
+* https://projects.eclipse.org/user/8388[Gavin King]
+* https://projects.eclipse.org/user/3043[Lukas Jungmann]
+
+==== Committers
+
+* https://projects.eclipse.org/user/8388[Gavin King]
+* https://projects.eclipse.org/user/3043[Lukas Jungmann]
+* https://projects.eclipse.org/user/10400[Nathan Rauh]
+* https://projects.eclipse.org/user/18033[Riva Tholoor Philip]
+
+==== Contributors
+
+The complete list of Jakarta Query contributors may be found https://github.com/jakartaee/query/graphs/contributors[here].

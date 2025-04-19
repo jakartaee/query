@@ -1,0 +1,44 @@
+// Copyright (c) 2025 Contributors to the Eclipse Foundation
+//
+// This program and the accompanying materials are made available under the
+// terms of the Eclipse Public License v. 2.0 which is available at
+// http://www.eclipse.org/legal/epl-2.0.
+//
+// This Source Code may also be made available under the following Secondary
+// Licenses when the conditions for such availability set forth in the Eclipse
+// Public License v. 2.0 are satisfied: GNU General Public License, version 2
+// with the GNU Classpath Exception which is available at
+// https://www.gnu.org/software/classpath/license.html.
+//
+// SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+
+= Jakarta Data
+:title: Jakarta Query
+:pdf-theme: {docdir}/../../theme/jakartaee-theme.yml
+:authors:
+:email:
+:version-label!:
+:doctype: book
+:license: Apache License v2.0
+:inceptionYear: 2025
+:source-highlighter: coderay
+:toc: left
+:toclevels: 3
+:sectnumlevels: 4
+:setanchors:
+:stem:
+ifdef::backend-pdf[]
+:pagenums:
+:numbered:
+:title-logo-image: image:jakarta_ee_logo_schooner_color_stacked_default.png[pdfwidth=4.25in,align=right]
+endif::[]
+:icons: font
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../../main/java]
+
+:sectnums!:
+include::chapters/license/license-efsl.adoc[]
+
+:sectnums:
+
+include::chapters/introduction/introduction.asciidoc[]
