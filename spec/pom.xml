@@ -103,7 +103,7 @@
                         <revremark>${revremark}</revremark>
                         <revdate>${revisiondate}</revdate>
                         <sourceHighlighter>coderay</sourceHighlighter>
-                        <doctitle>Jakarta Data</doctitle>
+                        <doctitle>Jakarta Query</doctitle>
                     </attributes>
                 </configuration>
             </plugin>
