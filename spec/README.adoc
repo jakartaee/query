@@ -1,6 +1,6 @@
-= Jakarta Data Specification
+= Jakarta Query Specification
 
-This module contains AsciiDoc sources and configuration to generate Jakarta Data documentation in HTML and PDF formats for both Apache License 2 and Jakarta Eclipse Foundation Specification Process.
+This module contains AsciiDoc sources and configuration to generate the Jakarta Query specification in HTML and PDF formats for both Apache License 2 and Jakarta Eclipse Foundation Specification Process.
 
 == Generating the Documentation
 
