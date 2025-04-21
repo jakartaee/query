@@ -58,7 +58,7 @@
 
     <developers>
         <developer>
-            <name>Jakarta Data Developers</name>
+            <name>Jakarta Query Developers</name>
             <email>query-dev@eclipse.org</email>
             <organization>Eclipse Jakarta Query</organization>
             <organizationUrl>https://accounts.eclipse.org/mailing-list/query-dev</organizationUrl>
