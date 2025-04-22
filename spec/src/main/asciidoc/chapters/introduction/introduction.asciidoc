@@ -23,7 +23,7 @@ link:{Jakarta-Persistence}[Jakarta Persistence], link:{Jakarta-Data}[Jakarta Dat
 and link:{Jakarta-NoSQL}[Jakarta NoSQL], with:
 
 - a core language which can be implemented by Jakarta Data and Jakarta NoSQL
-providers using non-relational datastores, and
+providers, and
 - an extended language tailored for Jakarta Persistence providers or other
 persistence technologies backed by relational databases.
 
