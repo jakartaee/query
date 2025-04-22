@@ -99,7 +99,7 @@ This specification does not specify Java APIs for:
 - constructing queries programmatically, nor
 - defining entity classes which are used in queries.
 
-Jakarta Persistence and Jakarta Query define diverse ways in which queries may be embedded and executed in Java, using the `EntityManager`, or a `@Repository` interface, respectively.
+Jakarta Persistence and Jakarta Data define diverse ways in which queries may be embedded and executed in Java, using the `EntityManager` or a `@Repository` interface, respectively.
 
 Furthermore, the semantics defined by Jakarta Query may be reused by reference in other specifications, for example, in the definition of the Jakarta Persistence Criteria API, or in the definition of the Jakarta Data Restrictions.
 
