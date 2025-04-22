@@ -52,7 +52,7 @@ is a dialect of SQL with support for associations and subtype polymorphism.
 :JDQL: https://jakarta.ee/specifications/data/1.0/jakarta-data-1.0#_jakarta_data_query_language
 :JSR-220: https://jcp.org/en/jsr/detail?id=220
 
-Object-oriented dialects of SQL have existed since at least the early 90s.
+Object-oriented dialects of SQL have existed since at least the early 1990s.
 The Object Query Language (OQL) was an early example, targeting object
 databases, but was never widely used, since object databases were themselves
 not widely adopted. Hibernate Query Language (HQL) and the Enterprise JavaBeans
