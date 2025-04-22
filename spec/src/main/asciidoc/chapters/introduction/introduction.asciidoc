@@ -63,7 +63,7 @@ link:{JPQL}[Java Persistence Query Language] (JPQL) by link:{JSR-220}[JSR-220]
 in 2006. JPQL has been implemented by at least five different products and is
 in extremely wide use today. On the other hand, since JPQL is defined as part
 of the Jakarta Persistence specification, it has not been reused outside the
-context of object/relational mapping in Java. More recently, Jakarta Data 1.0
+context of object/relational mapping in Java. In 2024, Jakarta Data 1.0
 introduced the link:{JDQL}[Jakarta Data Query Language] (JDQL), a strict subset
 of JPQL intended for use with non-relational databases.
 
