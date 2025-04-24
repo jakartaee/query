@@ -1,15 +1,10 @@
 = Jakarta Query
 :toc: auto
 
-link:https://jakarta.ee/specifications/persistence/[Jakarta Persistence]
-link:https://jakarta.ee/specifications/data/[Jakarta Data]
-link:https://jakarta.ee/specifications/nosql/[Jakarta NoSQL]
-link:https://jakarta.ee/specifications/persistence/3.2/jakarta-persistence-spec-3.2#a4665[Java Persistence Query Language]
-link:https://jakarta.ee/specifications/data/1.0/jakarta-data-1.0#_jakarta_data_query_language[Jakarta Data Query Language]
-link:https://jcp.org/en/jsr/detail?id=220[JSR-220]
-
 Jakarta Query defines an object-oriented query language designed for use with
-link:[Jakarta Persistence], link:[Jakarta Data], and link:[Jakarta NoSQL], with:
+link:https://jakarta.ee/specifications/persistence/[Jakarta Persistence],
+link:https://jakarta.ee/specifications/data/[Jakarta Data], and
+link:https://jakarta.ee/specifications/nosql/[Jakarta NoSQL], with:
 
 - a core language that can be implemented by Jakarta Data and Jakarta NoSQL
 providers using non-relational datastores, and
@@ -43,12 +38,14 @@ databases, but was never widely used, since object databases were themselves
 not widely adopted. Hibernate Query Language (HQL) and the Enterprise JavaBeans
 Query Language (EJB-QL) were both introduced in 2001 as query languages
 intended for use with object/relational mapping. HQL was widely adopted by the
-Java community and was eventually standardized as the link:[Java Persistence Query Language]
-(JPQL) by link:[JSR-220] in 2006. JPQL has been implemented by at
+Java community and was eventually standardized as the
+link:https://jakarta.ee/specifications/persistence/3.2/jakarta-persistence-spec-3.2#a4665[Java Persistence Query Language]
+(JPQL) by link:https://jcp.org/en/jsr/detail?id=220[JSR-220] in 2006. JPQL has been implemented by at
 least five different products and is in extremely wide use today. On the other
 hand, since JPQL is defined as part of the Jakarta Persistence specification,
 it has not been reused outside the context of object/relational mapping in Java.
-More recently, Jakarta Data 1.0 introduced the link:[Jakarta Data Query Language]
+More recently, Jakarta Data 1.0 introduced the
+link:https://jakarta.ee/specifications/data/1.0/jakarta-data-1.0#_jakarta_data_query_language[Jakarta Data Query Language]
 (JDQL), a strict subset of JPQL intended for use with non-relational databases.
 It is now inconvenient that JDQL and JPQL are maintained separately by different
 groups, and so the Jakarta Query project has taken on responsibility for their
