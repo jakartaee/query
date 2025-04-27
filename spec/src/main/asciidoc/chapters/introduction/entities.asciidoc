@@ -142,3 +142,14 @@ Implementations of Jakarta Query are not required to support storage of such gen
 [NOTE]
 The name of an entity might be involved in mapping an association between a type defined in a programming language (for example, a Java class) and an area of storage in the database (for example, a table).
 Such mappings are completely outside the scope of this specification.
+
+=== Databases
+
+A _database_ is a set of records.
+
+A given database might be restricted to contain only records belonging to a statically-enumerated list of entities.
+
+[NOTE]
+Some databases store records as trees; other databases store them in a flattened _normalized_ form.
+Questions about the representation used for record storage are completely outside the scope of this specification.
+Such questions are the domain of our sister-specifications.
