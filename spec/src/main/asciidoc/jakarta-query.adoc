@@ -42,3 +42,5 @@ include::chapters/license/license-efsl.adoc[]
 :sectnums:
 
 include::chapters/introduction/introduction.asciidoc[]
+
+include::chapters/introduction/entities.asciidoc[]
