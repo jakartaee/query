@@ -23,7 +23,7 @@ Identity for a given atomic value type must be reflexive, symmetric, and transit
 
 === Collections
 
-A _collection_ is a set, list, or map containing atomic values or structures.
+A _collection_ is a finite set, list, or map containing atomic values or structures.
 A collection might contain atomic values, or it might contain structures.
 The keys of a map must be atomic values.
 
@@ -46,7 +46,7 @@ A collection has no identity independent of the values it contains.
 
 === Structures and records
 
-A _structure_ is a set of labelled elements, each of which is an atomic value, a nested structure, or a collection.
+A _structure_ is a finite set of labelled elements, each of which is an atomic value, a nested structure, or a collection.
 
 Structures are inhomogeneous.
 Elements with distinct labels may have distinct types.
@@ -145,7 +145,7 @@ Such mappings are completely outside the scope of this specification.
 
 === Databases
 
-A _database_ is a set of records.
+A _database_ is a finite set of records.
 
 A given database might be restricted to contain only records belonging to a statically-enumerated list of entities.
 
