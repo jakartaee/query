@@ -1,0 +1,144 @@
+== Type system
+
+This specification assumes that data is represented in a structured form, that is, that it is expressed in terms of:
+
+1. **atomic values**,
+2. **collections**, and
+3. **structures**.
+
+Any atomic value, collection, or structure belongs to at least one well-defined type.
+
+=== Atomic values
+
+_Atomic values_ are things defined externally to this specification, taken to include--at bare minimum--strings of Unicode characters, `true` and `false`, integers, floating point numbers, and dates, times, and datetimes.
+Every atomic value has a named type, referred to in the sister-specifications of this specification as a _basic type_.
+
+[NOTE]
+The atomic value types allowed by an implementation of Jakarta Query depend on the programming language and underlying database technology.
+
+Atomic values of distinct type are never considered identical (equal).
+Whether two atomic values of the same type are considered identical depends on semantics which are specific to the type.
+For example, two Unicode strings are identical if they have the same length and the same Unicode character at each position.
+Identity for a given atomic value type must be reflexive, symmetric, and transitive.
+
+=== Collections
+
+A _collection_ is a set, list, or map containing atomic values or structures.
+A collection might contain atomic values, or it might contain structures.
+The keys of a map must be atomic values.
+
+Collections are homogeneous.
+A collection may not contain both atomic values and structures.
+
+- If a collection contains atomic values, then every atomic value has the same type.
+- if a collection contains structures, then every structure has the same type.
+- Every key of a map has the same atomic value type.
+
+A collection therefore has a type derived from the type of the atomic values or structures it contains--and, for a map, from the type of its keys.
+We consider that two collections have the same type if they contain the same type of atomic value or structure.
+For a map, we also require that they have the same type of key.
+
+A collection has no identity independent of the values it contains.
+
+- Two sets are identical if they contain exactly the same elements.
+- Two lists are identical if they contain exactly the same elements at exactly the same positions.
+- Two maps are identical if they contain exactly the same keys, and identical values for each key.
+
+=== Structures and records
+
+A _structure_ is a set of labelled elements, each of which is an atomic value, a nested structure, or a collection.
+
+Structures are inhomogeneous.
+Elements with distinct labels may have distinct types.
+
+Every structure has a type derived from the types of its elements.
+We consider that two structures have the same type if:
+
+- they contain the same labels, and
+- for each label, the labelled elements have the same type.
+
+A structure has no identity independent of the labelled elements it contains.
+Two structures are identical if they contain exactly the same labels, and identical atomic values, collections, or nested structures for each label.
+
+For example--borrowing a convenient notation--the following structure might represent a book:
+
+[source]
+{
+  isbn: "1-85723-235-6",
+  title: "Feersum Endjinn",
+  pages: 279,
+  year: 1994,
+  authors: [
+    {
+      name: "Iain M. Banks"
+      born: 'February 16, 1954',
+      died: 'June 9, 2013',
+    }
+  ]
+}
+
+A _record_ is a special kind of structure.
+Every record must have an _identifier_ which uniquely distinguishes it from other structures with the same type.
+The identifier must be a subset of the labelled elements of the structure.
+
+For example, `{ isbn: "1-85723-235-6" }` might be an identifier of the structure given above.
+
+=== Entities and embeddable types
+
+A structure type might be assigned a static name.
+footnote:[That is, the name is assigned to the type before the program using Jakarta Query is compiled and executed.]
+
+- An _embeddable type_ is an assignment of a name to a given type of structure.
+  For example, we might assign the name `Author` to the type of the structure:
+
+    {
+      name: "Iain M. Banks",
+      born: 'February 16, 1954',
+      died: 'June 9, 2013'
+    }
+
+- An _entity_ is an assignment of a name to a given type of record.
+For example, we might assign the name `Book` to the type of the record given in the example above.
+
+It follows from this definition that we may express:
+
+- an embeddable type as a set of labels, together with their types,
+- an entity as a set of labels, together with their types, and whether they belong to the record identifier.
+
+For example:
+
+[source]
+----
+Author :=
+{
+    name: String,
+    born: LocalDate,
+    died: LocalDate
+}
+
+Book :=
+{
+  isbn: @Id String,
+  title: String,
+  pages: Integer,
+  year: Integer,
+  authors: Set<Author>
+}
+----
+
+A record with the same type as an entity type is said to be an _instance_ (or _instantiation_) of the entity.
+Similarly, a structure with the same type as an embeddable type is said to be an instance of the embeddable type.
+footnote:[In some implementations, it might be possible to assign multiple names to a single structure type, and then a given instance of that type might be considered to belong to just one of the named entity or embeddable types. We do not address this wrinkle here, since implementations of Jakarta Query are not required to allow this.]
+
+An entity is directly addressable in a query.
+An atomic value type, a collection type, or a structure type which is not an entity is not directly addressable, and must be addressed indirectly via an entity.
+
+[NOTE]
+Some database technologies are capable of storing an arbitrary structure whose type is not known at compile time.
+Other technologies require that the structure belong to a defined entity or embeddable type.
+Independent of the database technology itself, an implementation of Jakarta Query might require that structure types be named, or might offer a way to encode and store generic structures.
+Implementations of Jakarta Query are not required to support storage of such generic structures.
+
+[NOTE]
+The name of an entity might be involved in mapping an association between a type defined in a programming language (for example, a Java class) and an area of storage in the database (for example, a table).
+Such mappings are completely outside the scope of this specification.
