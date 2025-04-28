@@ -8,6 +8,7 @@ This specification assumes that data is represented in a structured form, that i
 
 Any atomic value, collection, or structure belongs to at least one well-defined type.
 
+[[atomic-values]]
 === Atomic values
 
 _Atomic values_ are things defined externally to this specification, taken to include--at bare minimum--strings of Unicode characters, `true` and `false`, integers, floating point numbers, and dates, times, and datetimes.
@@ -21,6 +22,7 @@ Whether two atomic values of the same type are considered identical depends on s
 For example, two Unicode strings are identical if they have the same length and the same Unicode character at each position.
 Identity for a given atomic value type must be reflexive, symmetric, and transitive.
 
+[[collections]]
 === Collections
 
 A _collection_ is a finite set, list, or map containing atomic values or structures.
@@ -44,6 +46,7 @@ A collection has no identity independent of the values it contains.
 - Two lists are identical if they contain exactly the same elements at exactly the same positions.
 - Two maps are identical if they contain exactly the same keys, and identical values for each key.
 
+[[structures-and-records]]
 === Structures and records
 
 A _structure_ is a finite set of labelled elements, each of which is an atomic value, a nested structure, or a collection.
@@ -85,8 +88,7 @@ For example, `{ isbn: "1-85723-235-6" }` might be an identifier of the structure
 
 === Entities and embeddable types
 
-A structure type might be assigned a static name.
-footnote:[That is, the name is assigned to the type before the program using Jakarta Query is compiled and executed.]
+A structure type might be assigned a static name.footnote:[That is, the name is assigned to the type before the program using Jakarta Query is compiled and executed.]
 
 - An _embeddable type_ is an assignment of a name to a given type of structure.
   For example, we might assign the name `Author` to the type of the structure:
@@ -97,8 +99,11 @@ footnote:[That is, the name is assigned to the type before the program using Jak
       died: 'June 9, 2013'
     }
 
-- An _entity_ is an assignment of a name to a given type of record.
+- An _entity_ (or _entity type_) is an assignment of a name to a given type of record.
 For example, we might assign the name `Book` to the type of the record given in the example above.
+
+The name must be a legal Java identifier.
+That is, it must be a string of letters and digits, along with the characters `\_` and `$`, and must begin with a letter or with `_`.footnote:[Use of `_` or `$` in the name of an entity is discouraged.]
 
 It follows from this definition that we may express:
 
@@ -142,6 +147,14 @@ Implementations of Jakarta Query are not required to support storage of such gen
 [NOTE]
 The name of an entity might be involved in mapping an association between a type defined in a programming language (for example, a Java class) and an area of storage in the database (for example, a table).
 Such mappings are completely outside the scope of this specification.
+
+=== Circularity
+
+Our definitions above are intended to be descriptive rather than constructive.
+It's not, in general, possible to construct an arbitrary record in a finite number of steps by beginning with atomic values and then recursively constructing structures and collections.
+
+The reason for this is that the graph representing a record is not, in general, a finite tree.
+The representation of a record as a tree might necessarily be infinite, with a nonterminating cycle involving two or more structures.
 
 === Databases
 

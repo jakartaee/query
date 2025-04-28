@@ -1,0 +1,331 @@
+== Basic operations
+
+A query is a sequence of operations acting on lists of structures:
+
+- specification of an initial **root entity**,
+- a sequence of **joins** to joined entities, collections, or embeddable types,
+- **restriction**,
+- **aggregation**,
+- more **restriction**,
+- **projection**, and
+- **ordering**.
+
+For queries without <<subqueries,nesting>>, these operations may be viewed as a pipeline.footnote:[Subqueries complicate the picture; a query involving subqueries is conceptually a tree.]
+Each operation may then be thought of as a stage of the pipeline.
+Some stages may be missing in a given query.
+The only required stage is the first stage: specification of the root entity.
+
+Each operation in the pipeline produces a _result list_.
+A result list is a list in the sense of the previous chapter.
+The elements of a result list are always structures.
+Thus, every result list has a well-defined type, according to the rules specified <<collections,above>>.
+
+Each operation from the list above--except for the first operation, specification of the root entity--acts on the output of the previous stage.
+When evaluated, the operation produces its result list by transforming the result list produced by the previous stage.
+
+A join or root entity has access not only to the result list of its previous stage, but also to the content of a database.
+A query is executed against a specific database and any operation which ranges over an entity type ranges only over those records which belong to the database.
+From now on, the database itself will usually be implicit, and we will not explicitly specify that the records under consideration must belong to the database.
+
+[[root-entity]]
+=== The root entity
+
+Every query begins with a _root entity_.
+A root entity is specified using the syntax:
+
+    from X
+
+where `X` is the name of the entity.
+
+// This is the simplest possible query, and it simply returns every record of a given entity type.footnote:[That is, it returns every record of the given entity type _belonging to a given database_.]
+
+We may assign a label to the root entity of the query using the syntax:
+
+    from X as x
+
+which may be abbreviated as:
+
+    from X x
+
+The label `x` must be a legal Java identifier.
+This label is often called an _alias_ or _identification variable_.
+
+When no label is explicitly specified, the root entity is assigned the implicit label `this`.
+
+A root entity specification evaluates to a result list containing a structure for each record of the root entity type.footnote:[That is, it has a structure for every record of the root entity type _belonging to the database_.]
+Each structure contains a single labelled element: the record, labelled by the alias `x`.
+
+For example, the query `from Book` might return a list containing structures like:
+
+[source]
+{
+  this: {
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    pages: 279,
+    year: 1994,
+    authors: [
+      {
+        name: "Iain M. Banks"
+        born: 'February 16, 1954',
+        died: 'June 9, 2013',
+      }
+    ]
+  }
+}
+
+And the query `from Book as book` returns a list containing structures like:
+
+[source]
+{
+  book: {
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    pages: 279,
+    year: 1994,
+    authors: [
+      {
+        name: "Iain M. Banks"
+        born: 'February 16, 1954',
+        died: 'June 9, 2013',
+      }
+    ]
+  }
+}
+
+[[joins]]
+=== Joins
+
+Every join has a _target_, which must be:
+
+- an entity,
+- a collection, or
+- an embeddable type.
+
+A join introduces a new labelled element to a result list.
+Evaluating a sequence of joins produces a result list in which each structure contains a
+labelled element corresponding to each join.
+The label of this element is often called the _alias_ or _identification variable_ of the join.
+
+==== Joins to named entities
+
+A join may specify the name of an entity:
+
+    [from], Y as y
+
+where `Y` is the name of the entity, `y` is the label (alias) assigned to it, and `[from]` is a root entity or a join.
+As before, the keyword `as` is optional.
+
+This kind of join produces a cartesian product.
+For each structure _r_ of the result list of the operation on which the join acts, and for each record _y_ of the entity type `Y`, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the record _y_ labelled by the alias `y`.
+
+For example, this query is a cartesian product:
+
+    from Book as book, Loan as loan
+
+This query evaluates to a result list containing a structure for each pairing of a record of entity `Book` with a record of entity `Loan`.
+The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `loan`, respectively.
+The list might contain structures this:
+
+[source]
+{
+  book: {
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    pages: 279,
+    year: 1994,
+    authors: [
+      {
+        name: "Iain M. Banks"
+        born: 'February 16, 1954',
+        died: 'June 9, 2013',
+      }
+    ]
+  },
+  loan: {
+    bookIsbn: "9781932394153",
+    borrowerCard: "XYZ-123"
+  }
+}
+
+Note that there is no meaningful relationship between the `book` and the `loan`.
+
+A join to a named entity may be immediately followed by a <<restriction,restriction>>.
+In this case, the syntax is slightly different:
+
+    [from] join Y as y on [predicate]
+
+where `[predicate]` is a predicate, as defined later in <<predicates>>.
+
+For example:
+
+    from Book as book
+    join Loan as loan
+        on book.isbn = loan.bookIsbn
+
+This kind of join is interpreted as a sequence of two operations, a join of the previous kind, with no `on`, followed by a <<restriction,restriction>> with the given predicate.
+
+The result of the query might contain structures like:
+
+[source]
+{
+  book: {
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    pages: 279,
+    year: 1994,
+    authors: [
+      {
+        name: "Iain M. Banks"
+        born: 'February 16, 1954',
+        died: 'June 9, 2013',
+      }
+    ]
+  },
+  loan: {
+    bookIsbn: "9781857232738",
+    borrowerCard: "ABC-098"
+  }
+}
+
+This time, `isbn` and `bookIsbn` agree.
+
+==== Joins to nested entities, collections, or collections
+
+Instead of named entity, a join may identify a structure or collection nested within the result list of the operation on which it acts:
+
+    [from] join [path] as y
+
+where `[path]` is a path expression, as defined later in <<path-expressions>>, and `y` is the label.
+
+For example:
+
+    from Book as book
+    join book.authors as author
+
+The path expression identifies a structure nested within the result list of the operation on which the join acts.
+
+For each structure _r_ of the result list of the operation on which the join acts:
+
+- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the structure _s_ labelled by the alias `y`.
+- If the path expression resolves to a collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
+
+The previous example evaluates to a list containing a structure for each `Author` of each `Book`.
+The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `author`, respectively.
+The list might contain structures like this:
+
+[source]
+{
+  book: {
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    pages: 279,
+    year: 1994,
+    authors: [
+      {
+        name: "Iain M. Banks"
+        born: 'February 16, 1954',
+        died: 'June 9, 2013',
+      }
+    ]
+  },
+  author: {
+    name: "Iain M. Banks"
+    born: 'February 16, 1954',
+    died: 'June 9, 2013',
+  }
+}
+
+Notice that this kind of join has the effect of duplicating nested structures or atomic values at the top level of the of structure belonging to the result list.
+
+[NOTE]
+This picture should not be taken too literally.
+Implementations of Jakarta Query do not, in practice, always return the entire result of a query to the client, but instead replace some branches of the graph with some sort of proxy object.
+
+==== Left joins
+
+
+
+[[restriction]]
+=== Restriction
+
+_Restriction_, also called _selection_, reduces the size of a result list, without modifying its type.
+
+Restriction may occur before or after aggregation, or, as we already saw <<joins,above>>, it may occur immediately after a join.
+
+When restriction precedes aggregation, the syntax is:
+
+    [from] where [predicate]
+
+where `[predicate]` is a logical <<predicates,predicate>> expression.
+
+When restriction follows aggregation, the syntax is:
+
+    [group-by] having [predicate]
+
+where `[group-by]` is a legal <<aggregation,aggregation>>.
+
+Restriction eliminates every element of the result list which does not satisfy the given predicate expression, as defined later in <<predicates>>.
+That is, the result list of a restriction contains a structure _r_ if and only if:
+
+- _r_ is in the result list of the operation on which the restriction acts, and
+- _r_ satisfies the logical predicate.
+
+[[aggregation]]
+=== Aggregation
+
+_Aggregation_ groups the elements of a result list into sublists.
+That is, it transforms a list into a list of lists.
+
+TODO
+
+[[projection]]
+=== Projection
+
+_Projection_ changes the type of a result list without modifying its size.
+
+A projection is written in the form:
+
+    [result] select [expression] as x, [expression] as y, ...
+
+or, more conventionally, but much more confusingly, in the form:
+
+    select [expression] as x, [expression] as y, ... [result]
+
+where `x`, `y`, ... are all labels and `[result]` is a root entity, join, restriction, or aggregation, and each `[expression]` is a value expression, as defined later in <<expressions>>.
+
+As usual, the `as` keyword is optional, and the labels must be legal Java identifiers.
+
+The labels, sometimes called _aliases_, are optional.
+If a label is missing from a value expression, the value expression is automatically assigned a label.
+
+[NOTE]
+For historical reasons, the label defaults to the integer position of the value expression in the `select` list.
+This is unfortunate, since this an integer is not a legal Java identifier, and therefore not a legal label.
+Such defaulted labels may not be referred to in the query language except--again for historical reasons--in the `order by` clause.
+
+Projection produces a new structure _r'_ for each structure _r_ in the result list of the operation on which the projection acts.
+The new structure  _r'_ is built by evaluating the value expressions specified by the projection in the context of the corresponding element structure _r_, according to semantics given later in <<expressions>>.
+For each value expression with label `x` in the given `select` list, _r'_ contains a element labelled `x` obtained by evaluating the value expression in the context of _r_.
+
+For example:
+
+    from Book as book
+    join book.authors as author
+    select book.isbn as isbn, book.title as title, author.name as author
+
+returns a list containing elements like:
+
+[source]
+{
+    isbn: "9781857232738",
+    title: "Feersum Endjinn",
+    author: "Iain M. Banks"
+}
+
+[[ordering]]
+=== Ordering
+
+Ordering changes the order of the elements in a result list, without changing the size or type of the list.
+
+TODO
