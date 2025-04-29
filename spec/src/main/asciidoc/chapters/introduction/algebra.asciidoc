@@ -301,7 +301,7 @@ If a label is missing from a value expression, the value expression is automatic
 
 [NOTE]
 For historical reasons, the label defaults to the integer position of the value expression in the `select` list.
-This is unfortunate, since this an integer is not a legal Java identifier, and therefore not a legal label.
+This is unfortunate because an integer is not a legal Java identifier, and therefore not a legal label.
 Such defaulted labels may not be referred to in the query language except--again for historical reasons--in the `order by` clause.
 
 Projection produces a new structure _r'_ for each structure _r_ in the result list of the operation on which the projection acts.
