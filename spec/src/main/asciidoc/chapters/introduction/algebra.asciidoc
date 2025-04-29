@@ -223,16 +223,16 @@ The list might contain structures like this:
     year: 1994,
     authors: [
       {
-        name: "Iain M. Banks"
+        name: "Iain M. Banks",
         born: 'February 16, 1954',
-        died: 'June 9, 2013',
+        died: 'June 9, 2013'
       }
     ]
   },
   author: {
-    name: "Iain M. Banks"
+    name: "Iain M. Banks",
     born: 'February 16, 1954',
-    died: 'June 9, 2013',
+    died: 'June 9, 2013'
   }
 }
 
