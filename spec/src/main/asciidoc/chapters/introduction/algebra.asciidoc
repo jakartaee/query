@@ -66,9 +66,9 @@ For example, the query `from Book` might return a list containing structures lik
     year: 1994,
     authors: [
       {
-        name: "Iain M. Banks"
+        name: "Iain M. Banks",
         born: 'February 16, 1954',
-        died: 'June 9, 2013',
+        died: 'June 9, 2013'
       }
     ]
   }
@@ -85,9 +85,9 @@ And the query `from Book as book` returns a list containing structures like:
     year: 1994,
     authors: [
       {
-        name: "Iain M. Banks"
+        name: "Iain M. Banks",
         born: 'February 16, 1954',
-        died: 'June 9, 2013',
+        died: 'June 9, 2013'
       }
     ]
   }
@@ -136,9 +136,9 @@ The list might contain structures this:
     year: 1994,
     authors: [
       {
-        name: "Iain M. Banks"
+        name: "Iain M. Banks",
         born: 'February 16, 1954',
-        died: 'June 9, 2013',
+        died: 'June 9, 2013'
       }
     ]
   },
@@ -176,9 +176,9 @@ The result of the query might contain structures like:
     year: 1994,
     authors: [
       {
-        name: "Iain M. Banks"
+        name: "Iain M. Banks",
         born: 'February 16, 1954',
-        died: 'June 9, 2013',
+        died: 'June 9, 2013'
       }
     ]
   },

@@ -73,9 +73,9 @@ For example--borrowing a convenient notation--the following structure might repr
   year: 1994,
   authors: [
     {
-      name: "Iain M. Banks"
+      name: "Iain M. Banks",
       born: 'February 16, 1954',
-      died: 'June 9, 2013',
+      died: 'June 9, 2013'
     }
   ]
 }
