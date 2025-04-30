@@ -52,8 +52,11 @@ This label is often called an _alias_ or _identification variable_.
 
 When no label is explicitly specified, the root entity is assigned the implicit label `this`.
 
-A root entity specification evaluates to a result list containing a structure for each record of the root entity type.footnote:[That is, it has a structure for every record of the root entity type _belonging to the database_.]
+A root entity specification evaluates to a result list containing a structure for each record of the root entity type or of any entity type which inherits the root entity type.
 Each structure contains a single labelled element: the record, labelled by the alias `x`.
+
+That is, for each record _r_ in the database, the result list has a structure _s_ containing _r_ labelled by `x` if and only if the type of _r_ <<inheritance,inherits>> the root entity type.
+The structure _s_ contains no other elements.
 
 For example, the query `from Book` might return a list containing structures like:
 
@@ -117,7 +120,7 @@ where `Y` is the name of the entity, `y` is the label (alias) assigned to it, an
 As before, the keyword `as` is optional.
 
 This kind of join produces a cartesian product.
-For each structure _r_ of the result list of the operation on which the join acts, and for each record _y_ of the entity type `Y`, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the record _y_ labelled by the alias `y`.
+For each structure _r_ of the result list of the operation on which the join acts, and for each record _y_ of any entity type which inherits `Y`, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the record _y_ labelled by the alias `y`.
 
 For example, this query is a cartesian product:
 
