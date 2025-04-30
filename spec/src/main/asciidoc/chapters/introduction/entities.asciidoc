@@ -33,7 +33,8 @@ Collections are homogeneous.
 A collection may not contain both atomic values and structures.
 
 - If a collection contains atomic values, then every atomic value has the same type.
-- if a collection contains structures, then every structure has the same type.
+- If a collection contains structures, then every structure has the same type.
+- As an exception to the previous rule, a collection may contain structures belonging to distinct <<entities-embeddables,entity types>> if there is some entity type which is <<inheritance,inherited>> by the type of every structure contained in the collection.
 - Every key of a map has the same atomic value type.
 
 A collection therefore has a type derived from the type of the atomic values or structures it contains--and, for a map, from the type of its keys.
@@ -86,6 +87,7 @@ The identifier must be a subset of the labelled elements of the structure.
 
 For example, `{ isbn: "1-85723-235-6" }` might be an identifier of the structure given above.
 
+[[entities-embeddables]]
 === Entities and embeddable types
 
 A structure type might be assigned a static name.footnote:[That is, the name is assigned to the type before the program using Jakarta Query is compiled and executed.]
@@ -147,6 +149,27 @@ Implementations of Jakarta Query are not required to support storage of such gen
 [NOTE]
 The name of an entity might be involved in mapping an association between a type defined in a programming language (for example, a Java class) and an area of storage in the database (for example, a table).
 Such mappings are completely outside the scope of this specification.
+
+[[inheritance]]
+==== Entity type inheritance
+
+_Inheritance_ is a relationship between entity types.
+An entity `X` inherits an entity `Y` if and only if for every type labelled `y` in `Y`, there is a corresponding type labelled `y` in `X` and either:
+
+- the two types with label `y` are identical, or
+- the type labelled `y` in `Y` is an entity type `T`, the type labelled `y` in `X` is an entity type `S`, and `S` inherits `T`.
+
+Thus, there is a simple mapping from records of type `X` to records of type `Y`.
+Given a record _r_ of type `X`, the _restriction_ of _r_ to a type `Y` inherited by `X` is a structure _s_ containing an element labelled `y` for each type with label `y` occurring in the type `Y`:
+
+- If the type of the element _e_ of `X` with label `y` is identical to the type with label `y` in `Y`, then _s_ contains _e_ labelled `y`.
+- Otherwise, the type of the element _e_ of `X` must be an entity type `S`, the type with the label `y` in `Y` must be an entity type `T`, and `S` must inherit `T`.
+Then _s_ contains the restriction of _e_ to `T`, labelled `y`.
+
+Then _s_ is a record of type `Y`.
+
+Any well-defined operation on records of type `Y` is also a well-defined operation on the restriction of a record to `Y`.
+We therefore adopt the principle that an operation which may be applied to a record of a given entity type may also be applied to a record of any entity type which inherits the first entity type.
 
 === Circularity
 
