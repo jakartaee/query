@@ -33,7 +33,10 @@ From now on, the database itself will usually be implicit, and we will not expli
 Every query begins with a _root entity_.
 A root entity is specified using the syntax:
 
-    from X
+[source,sql]
+----
+from X
+----
 
 where `X` is the name of the entity.
 
@@ -41,11 +44,17 @@ where `X` is the name of the entity.
 
 We may assign a label to the root entity of the query using the syntax:
 
-    from X as x
+[source,sql]
+----
+from X as x
+----
 
 which may be abbreviated as:
 
-    from X x
+[source,sql]
+----
+from X x
+----
 
 The label `x` must be a legal Java identifier.
 This label is often called an _alias_ or _identification variable_.
@@ -60,7 +69,8 @@ The structure _s_ contains no other elements.
 
 For example, the query `from Book` might return a list containing structures like:
 
-[source]
+[source,json]
+----
 {
   this: {
     isbn: "9781857232738",
@@ -76,10 +86,12 @@ For example, the query `from Book` might return a list containing structures lik
     ]
   }
 }
+----
 
 And the query `from Book as book` returns a list containing structures like:
 
-[source]
+[source,json]
+----
 {
   book: {
     isbn: "9781857232738",
@@ -95,6 +107,7 @@ And the query `from Book as book` returns a list containing structures like:
     ]
   }
 }
+----
 
 [[joins]]
 === Joins
@@ -114,7 +127,10 @@ The label of this element is often called the _alias_ or _identification variabl
 
 A join may specify the name of an entity:
 
-    [from], Y as y
+[source,sql]
+----
+[from], Y as y
+----
 
 where `Y` is the name of the entity, `y` is the label (alias) assigned to it, and `[from]` is a root entity or a join.
 As before, the keyword `as` is optional.
@@ -124,13 +140,17 @@ For each structure _r_ of the result list of the operation on which the join act
 
 For example, this query is a cartesian product:
 
-    from Book as book, Loan as loan
+[source,sql]
+----
+from Book as book, Loan as loan
+----
 
 This query evaluates to a result list containing a structure for each pairing of a record of entity `Book` with a record of entity `Loan`.
 The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `loan`, respectively.
 The list might contain structures this:
 
-[source]
+[source,json]
+----
 {
   book: {
     isbn: "9781857232738",
@@ -150,27 +170,32 @@ The list might contain structures this:
     borrowerCard: "XYZ-123"
   }
 }
+----
 
 Note that there is no meaningful relationship between the `book` and the `loan`.
 
 A join to a named entity may be immediately followed by a <<restriction,restriction>>.
 In this case, the syntax is slightly different:
 
-    [from] join Y as y on [predicate]
+[source,sql]
+----
+[from] join Y as y on [predicate]
+----
 
 where `[predicate]` is a predicate, as defined later in <<predicates>>.
 
 For example:
-
-    from Book as book
-    join Loan as loan
-        on book.isbn = loan.bookIsbn
+[source,sql]
+from Book as book
+join Loan as loan
+    on book.isbn = loan.bookIsbn
 
 This kind of join is interpreted as a sequence of two operations, a join of the previous kind, with no `on`, followed by a <<restriction,restriction>> with the given predicate.
 
 The result of the query might contain structures like:
 
-[source]
+[source,json]
+----
 {
   book: {
     isbn: "9781857232738",
@@ -190,6 +215,7 @@ The result of the query might contain structures like:
     borrowerCard: "ABC-098"
   }
 }
+----
 
 This time, `isbn` and `bookIsbn` agree.
 
@@ -197,14 +223,20 @@ This time, `isbn` and `bookIsbn` agree.
 
 Instead of named entity, a join may identify a structure or collection nested within the result list of the operation on which it acts:
 
-    [from] join [path] as y
+[source,sql]
+----
+[from] join [path] as y
+----
 
 where `[path]` is a path expression, as defined later in <<path-expressions>>, and `y` is the label.
 
 For example:
 
-    from Book as book
-    join book.authors as author
+[source,sql]
+----
+from Book as book
+join book.authors as author
+----
 
 The path expression identifies a structure nested within the result list of the operation on which the join acts.
 
@@ -217,7 +249,8 @@ The previous example evaluates to a list containing a structure for each `Author
 The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `author`, respectively.
 The list might contain structures like this:
 
-[source]
+[source,json]
+----
 {
   book: {
     isbn: "9781857232738",
@@ -238,6 +271,7 @@ The list might contain structures like this:
     died: 'June 9, 2013'
   }
 }
+----
 
 Notice that this kind of join has the effect of duplicating nested structures or atomic values at the top level of the of structure belonging to the result list.
 
@@ -258,13 +292,19 @@ Restriction may occur before or after aggregation, or, as we already saw <<joins
 
 When restriction precedes aggregation, the syntax is:
 
-    [from] where [predicate]
+[source,sql]
+----
+[from] where [predicate]
+----
 
 where `[predicate]` is a logical <<predicates,predicate>> expression.
 
 When restriction follows aggregation, the syntax is:
 
-    [group-by] having [predicate]
+[source,sql]
+----
+[group-by] having [predicate]
+----
 
 where `[group-by]` is a legal <<aggregation,aggregation>>.
 
@@ -289,11 +329,17 @@ _Projection_ changes the type of a result list without modifying its size.
 
 A projection is written in the form:
 
-    [result] select [expression] as x, [expression] as y, ...
+[source,sql]
+----
+[result] select [expression] as x, [expression] as y, ...
+----
 
 or, more conventionally, but much more confusingly, in the form:
 
-    select [expression] as x, [expression] as y, ... [result]
+[source,sql]
+----
+select [expression] as x, [expression] as y, ... [result]
+----
 
 where `x`, `y`, ... are all labels and `[result]` is a root entity, join, restriction, or aggregation, and each `[expression]` is a value expression, as defined later in <<expressions>>.
 
@@ -313,18 +359,23 @@ For each value expression with label `x` in the given `select` list, _r'_ contai
 
 For example:
 
-    from Book as book
-    join book.authors as author
-    select book.isbn as isbn, book.title as title, author.name as author
+[source,sql]
+----
+from Book as book
+join book.authors as author
+select book.isbn as isbn, book.title as title, author.name as author
+----
 
 returns a list containing elements like:
 
-[source]
+[source,json]
+----
 {
     isbn: "9781857232738",
     title: "Feersum Endjinn",
     author: "Iain M. Banks"
 }
+----
 
 [[ordering]]
 === Ordering

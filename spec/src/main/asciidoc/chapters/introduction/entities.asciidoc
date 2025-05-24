@@ -66,7 +66,8 @@ Two structures are identical if they contain exactly the same labels, and identi
 
 For example--borrowing a convenient notation--the following structure might represent a book:
 
-[source]
+[source,json]
+----
 {
   isbn: "1-85723-235-6",
   title: "Feersum Endjinn",
@@ -80,6 +81,7 @@ For example--borrowing a convenient notation--the following structure might repr
     }
   ]
 }
+----
 
 A _record_ is a special kind of structure.
 Every record must have an _identifier_ which uniquely distinguishes it from other structures with the same type.
