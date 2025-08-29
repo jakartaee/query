@@ -171,8 +171,16 @@ A _path expression_ is a period-separated list of Java identifiers, with syntax 
 
 The type of the whole path expression is the type of the last element of the list. For example, `pages` is assigned the type `int`, `address` is assigned the type `org.example.Address`, and `address.street` is assigned the type `java.lang.String`.
 
-NOTE: Typically, the last element of a path expression is assigned a <<Basic types,basic type>>. Non-terminal path elements are usually assigned an embeddable type, if the element references an <<Embedded attributes and embeddable classes,embedded attribute>>, or an entity type, if the element references an <<Entity associations,association attribute>>. However, since a Jakarta Data provider is not required to support embedded attributes or associations, a JDQL implementation is not required to support compound path expressions.
+[NOTE]
+====
+Typically, the last element of a path expression is assigned a <<Basic types,basic type>>.
+Non-terminal path elements are usually assigned an embeddable type, if the element references an
+<<Embedded attributes and embeddable classes,embedded attribute>>, or an entity type, if the element references an
+<<Entity associations,association attribute>>.
 
+However, because not all providers are required to support embedded attributes or associations,
+an implementation of JQL is not required to support compound path expressions.
+====
 When a path expression is executed, each element of the path is evaluated in turn:
 
 - the first element of the path expression is evaluated in the context of a given record of the queried entity type, and evaluates to the value of the named entity attribute of the given record, and then
@@ -204,7 +212,11 @@ When any argument expression of any function call evaluates to a null value, the
 
 NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, a JDQL implementation is not required to provide the function.
 
-If the JQL implementation does not support a standard function explicitly listed above, it must throw `UnsupportedOperationException` when the function name occurs in a query. Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses an unsupported function.
+If a JQL implementation does not support a standard function explicitly listed above, it **MUST** signal an error.
+At runtime, this error should be reported by throwing `UnsupportedOperationException` (or an equivalent error defined
+by the host environment).
+
+Alternatively, implementations are permitted to perform validation earlier and reject the query definition at compilation or deployment time if it references an unsupported function.
 
 NOTE: On the other hand, an implementation of JQL might provide additional built-in functions, and might even allow invocation of user-defined functions. Section 4.7 of the Jakarta Persistence specification defines a set of functions that all JPQL implementations are required to provide, including `concat`, `substring`, `trim`, `locate`, `ceiling`, `floor`, `exp`, `ln`, `mod`, `power`, `round`, `sign`, `sqrt`, `cast`, `extract`, `coalesce`, and `nullif`. JDQL implementations are encouraged to support any of these functions which are reasonably implementable.
 
@@ -224,13 +236,18 @@ The concatenation operator `||` is assigned the type `java.lang.String`. Its ope
 
 The numeric operators `+`, `-`, `*`, and `/` have the same meaning for primitive numeric types they have in Java, and operator expression involving these operators are assigned the types they would be assigned in Java.
 
-NOTE: As an exception, when the operands of `/` are both integers, a JDQL implementation is not required to interpret the operator expression as integer division if that is not the native semantics of the database. However, portability is maximized when Jakarta Data providers _do_ interpret such an expression as integer division.
+[NOTE]
+====
+As an exception, when the operands of `/` are both integers, a JQL implementation is not required to
+interpret the operator expression as integer division if that is not the native semantics of the datastore.
+However, portability is maximized when providers *do* interpret such an expression as integer division.
+====
 
 The four numeric operators may also be applied to an operand of wrapper type, for example, to `java.lang.Integer` or `java.lang.Double`. In this case, the operator expression is assigned a wrapper type, and evaluates to a null value when either of its operands evaluates to a null value. When both operands are non-null, the semantics are identical to the semantics of an operator expression involving the corresponding primitive types.
 
 The four numeric operators may also be applied to operands of type `java.math.BigInteger` or `java.math.BigDecimal`.
 
-A numeric operator expression is evaluated according to the native semantics of the database. In translating an operator expression to the native query language of the database, a Jakarta Data provider is encouraged, but not required, to apply reasonable transformations so that evaluation of the expression more closely mimics the semantics of the Java language.
+A numeric operator expression is evaluated according to the native semantics of the datastore. When translating an operator expression to the native query language of the underlying system,  a JQL implementation is encouraged, but not required, to apply reasonable transformations so that  the evaluation of the expression more closely mimics the semantics of the Java language.
 
 ==== Numeric types and numeric type promotion
 
@@ -311,7 +328,10 @@ The equality and inequality operators are `=`, `&lt;&gt;`, `&lt;`, `&gt;`, `&lt;
 
 The operands of an equality or inequality operator must have the same type.
 
-NOTE: Portability is maximized when Jakarta Data providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
+[NOTE]
+====
+Portability is maximized when providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
+====
 
 [WARNING]
 ====
@@ -445,11 +465,14 @@ Alternatively, the `select` clause may contain either:
 
  A query beginning with `select count(this)` always returns a single result of type `Long`, no matter how many records satisfy the conditional expression in the `where` clause.
 
-NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Data provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
+[NOTE]
+====
+If a datastore does not natively provide the ability to count query results, providers are strongly encouraged, but not required, to implement this operation by counting the query results in the host language.
+====
 
-If the JQL implementation does not support `count(this)`, it must throw `UnsupportedOperationException` when this aggregate expression occurs in a query.  Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses the unsupported aggregate expression.
+If a JQL implementation does not support `count(this)`, it **MUST** signal an error. At runtime, this error should be reported by throwing `UnsupportedOperationException` (or an equivalent error defined by the host environment).
 
-The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
+Alternatively, an implementation is permitted to perform validation earlier and reject the query definition at compilation or deployment time if it references  an unsupported aggregate expression. The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
 
 [WARNING]
 ====
@@ -461,7 +484,9 @@ Wide-column databases:: The ability to use a `select` clause may depend on the p
 
 Graph and document databases:: Support for flexible `select` clauses, including path expressions and aggregate functions like `count(this)` is required. Performance might vary based on the size and indexing of the dataset.
 
-For `count(this)` in particular, if the NoSQL datastore does not natively support counting query results, the Jakarta Data provider is encouraged to implement this operation in Java. However, providers are not required to do so. If `count(this)` is unsupported, an `UnsupportedOperationException` must be thrown during query execution, or repository methods using this expression may be rejected at compilation time.
+For `count(this)` in particular, if the underlying datastore does not natively support counting query results, a provider is encouraged, but not required, to emulate this operation in the host language.
+
+If `count(this)` is unsupported, the implementation **MUST** signal an error. At runtime, this error should be reported by throwing `UnsupportedOperationException` (or an equivalent error defined by the host environment). Alternatively, the implementation may reject the query definition at compilation or deployment time if it references this unsupported aggregate expression.
 
 It is advisable to review your NoSQL provider's documentation to confirm the support and performance implications of `select` clauses and aggregate functions in your queries.
 ====
