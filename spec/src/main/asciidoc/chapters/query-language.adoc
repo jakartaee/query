@@ -98,7 +98,7 @@ Numeric literals come in two flavors:
 
 In the grammar, integer and decimal literals are labelled with the `INTEGER` and `DOUBLE` token types respectively.
 
-NOTE: JDQL does not require support for literals written in octal or hexadecimal.
+NOTE: JQL does not require support for literals written in octal or hexadecimal.
 
 ==== Whitespace
 
@@ -112,7 +112,7 @@ As usual, token recognition is "greedy". Therefore, whitespace must be placed be
 
 === Expressions
 
-An expression is a sequence of tokens to which a Java type can be assigned, and which evaluates to a well-defined value when the query is executed. In JDQL, expressions may be categorized as:
+An expression is a sequence of tokens to which a Java type can be assigned, and which evaluates to a well-defined value when the query is executed. In JQL, expressions may be categorized as:
 
 - literals,
 - special values,
@@ -140,17 +140,21 @@ The syntax for special values is given by the `special_expression` grammar rule.
 
 ==== Parameter expressions
 
-A parameter expression, with syntax given by `input_parameter`, is assigned the type of the repository method parameter it matches. For example, the parameter `:titlePattern` is assigned the type `java.lang.String`:
+A parameter expression, with syntax given by `input_parameter`, is assigned a type according to its binding in the host environment. For example, if a parameter is bound to a `java.lang.String`, then the parameter expression is of type `String`.
 
+When executed, a parameter expression evaluates to the value provided by the calling program or framework.
+
+[NOTE]
+====
+Positional and named parameters must not be mixed in a single query.
+====
+
+.Example usage in Jakarta Data
 [source,java]
 ----
 @Query("where title like :titlePattern")
 List<Book> booksMatchingTitle(String titlePattern);
 ----
-
-When executed, a parameter expression evaluates to the argument supplied to the parameter of the repository method.
-
-NOTE: Positional and named parameters must not be mixed in a single query.
 
 ==== Enum literals
 
@@ -200,9 +204,9 @@ When any argument expression of any function call evaluates to a null value, the
 
 NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, a JDQL implementation is not required to provide the function.
 
-If the JDQL implementation does not support a standard function explicitly listed above, it must throw `UnsupportedOperationException` when the function name occurs in a query. Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses an unsupported function.
+If the JQL implementation does not support a standard function explicitly listed above, it must throw `UnsupportedOperationException` when the function name occurs in a query. Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses an unsupported function.
 
-NOTE: On the other hand, an implementation of JDQL might provide additional built-in functions, and might even allow invocation of user-defined functions. Section 4.7 of the Jakarta Persistence specification defines a set of functions that all JPQL implementations are required to provide, including `concat`, `substring`, `trim`, `locate`, `ceiling`, `floor`, `exp`, `ln`, `mod`, `power`, `round`, `sign`, `sqrt`, `cast`, `extract`, `coalesce`, and `nullif`. JDQL implementations are encouraged to support any of these functions which are reasonably implementable.
+NOTE: On the other hand, an implementation of JQL might provide additional built-in functions, and might even allow invocation of user-defined functions. Section 4.7 of the Jakarta Persistence specification defines a set of functions that all JPQL implementations are required to provide, including `concat`, `substring`, `trim`, `locate`, `ceiling`, `floor`, `exp`, `ln`, `mod`, `power`, `round`, `sign`, `sqrt`, `cast`, `extract`, `coalesce`, and `nullif`. JDQL implementations are encouraged to support any of these functions which are reasonably implementable.
 
 ==== Operator expressions
 
@@ -243,7 +247,7 @@ The type assigned to an operator expression depends on the types of its operand 
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
 
-NOTE: JPQL defines the result of a conditional expression in terms of ternary logic. JDQL does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
+NOTE: JQL defines the result of a conditional expression in terms of ternary logic. JDQL does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
 
 Conditional expressions may be categorized as:
 
@@ -384,7 +388,7 @@ Graph and document databases:: The `AND` and `OR` operators and all of the restr
 
 === Clauses
 
-Each JDQL statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `select`, `set`, or `order`.
+Each JQL statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `select`, `set`, or `order`.
 
 There is a logical ordering of clauses, reflecting the order in which their effect must be computed by the datastore:
 
