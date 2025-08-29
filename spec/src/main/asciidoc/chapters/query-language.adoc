@@ -533,5 +533,5 @@ The following grammar defines the syntax of JDQL, via ANTLR4-style BNF.
 
 [source, antlrv4]
 ----
-include::../../antlr/JDQL.g4[]
+include::../../antlr/JQL.g4[]
 ----
