@@ -194,7 +194,7 @@ An _identifier expression_, with syntax given by `id_expression`, is assigned th
 
 ==== Function calls
 
-A _function call_ is the name of a JDQL function, followed by a parenthesized list of argument expressions, with syntax given by `function_expression`.
+A _function call_ is the name of a JQL function, followed by a parenthesized list of argument expressions, with syntax given by `function_expression`.
 
 - The `abs()` function is assigned the type of its numeric argument, and evaluates to the absolute value of the numeric value to which its argument evaluates. Its argument must be of numeric type.
 
@@ -210,7 +210,7 @@ A _function call_ is the name of a JDQL function, followed by a parenthesized li
 
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
 
-NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, a JDQL implementation is not required to provide the function.
+NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, a JQL implementation is not required to provide the function.
 
 If a JQL implementation does not support a standard function explicitly listed above, it **MUST** signal an error.
 At runtime, this error should be reported by throwing `UnsupportedOperationException` (or an equivalent error defined
@@ -218,7 +218,7 @@ by the host environment).
 
 Alternatively, implementations are permitted to perform validation earlier and reject the query definition at compilation or deployment time if it references an unsupported function.
 
-NOTE: On the other hand, an implementation of JQL might provide additional built-in functions, and might even allow invocation of user-defined functions. Section 4.7 of the Jakarta Persistence specification defines a set of functions that all JPQL implementations are required to provide, including `concat`, `substring`, `trim`, `locate`, `ceiling`, `floor`, `exp`, `ln`, `mod`, `power`, `round`, `sign`, `sqrt`, `cast`, `extract`, `coalesce`, and `nullif`. JDQL implementations are encouraged to support any of these functions which are reasonably implementable.
+NOTE: On the other hand, an implementation of JQL might provide additional built-in functions, and might even allow invocation of user-defined functions. Section 4.7 of the Jakarta Persistence specification defines a set of functions that all JPQL implementations are required to provide, including `concat`, `substring`, `trim`, `locate`, `ceiling`, `floor`, `exp`, `ln`, `mod`, `power`, `round`, `sign`, `sqrt`, `cast`, `extract`, `coalesce`, and `nullif`. JQL implementations are encouraged to support any of these functions which are reasonably implementable.
 
 ==== Operator expressions
 
@@ -264,7 +264,7 @@ The type assigned to an operator expression depends on the types of its operand 
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
 
-NOTE: JQL defines the result of a conditional expression in terms of ternary logic. JDQL does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
+NOTE: JQL defines the result of a conditional expression in terms of ternary logic. JQL does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
 
 Conditional expressions may be categorized as:
 
@@ -348,15 +348,15 @@ When using NoSQL databases, there are limitations to the support of equality and
 
 Every <<Basic types,basic type>> can, in principle, be equipped with a total order. An order for a type determines the result of inequality comparisons, and the effect of the <<Order clause>>.
 
-For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. JDQL implementations must sort these types according to their natural order, that is, the order in JDQL must agree with the order defined by Java.
+For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. JQL implementations must sort these types according to their natural order, that is, the order in JQL must agree with the order defined by Java.
 
 Boolean values must be ordered so that `false < true` is satisfied.
 
 For other types, there is at least some freedom in the choice of order. Usually, the order is determined by the native semantics of the database. Note that:
 
-- Textual data is represented in JDQL as the type `java.lang.String`. Strings are in general ordered lexicographically, but the ordering also depends on the character set and collation used by the database server. Applications must not assume that the order agrees with the `compareTo()` method of `java.lang.String`. In evaluating an inequality involving string operands, an implementation of JDQL is not required to emulate Java collation.
+- Textual data is represented in JQL as the type `java.lang.String`. Strings are in general ordered lexicographically, but the ordering also depends on the character set and collation used by the database server. Applications must not assume that the order agrees with the `compareTo()` method of `java.lang.String`. In evaluating an inequality involving string operands, an implementation of JQL is not required to emulate Java collation.
 
-- Binary data is represented in JDQL as the type `byte[]`. Binary data is in general ordered lexicographically with respect to the constituent bytes. However, since this ordering is rarely meaningful, this specification does not require implementations of JDQL to respect it.
+- Binary data is represented in JQL as the type `byte[]`. Binary data is in general ordered lexicographically with respect to the constituent bytes. However, since this ordering is rarely meaningful, this specification does not require implementations of JQL to respect it.
 
 - This specification does not define an order for the sorting of Java `enum` values, which is provider-dependent. A programming model for entity classes might allow control over the order of `enum` values. For example, Jakarta Persistence allows this via the `@Enumerated` annotation.
 
@@ -391,7 +391,7 @@ The logical operators are `and`, `or`, and `not`.
 
 This specification leaves undefined the interpretation of the `not` operator when its operand _is not_ satisfied.
 
-CAUTION: A compliant implementation of JDQL might feature SQL/JPQL-style ternary logic, where `not n > 0` is an unsatisfied logical expression when `n` evaluates to null, or it might feature binary logic where the same expression is considered satisfied. Application programmers should take great care when using the `not` operator with scalar expressions involving `null` values.
+CAUTION: A compliant implementation of JQL might feature SQL/JPQL-style ternary logic, where `not n > 0` is an unsatisfied logical expression when `n` evaluates to null, or it might feature binary logic where the same expression is considered satisfied. Application programmers should take great care when using the `not` operator with scalar expressions involving `null` values.
 
 Syntactically, logical operators are parsed with lower precedence than <<Equality and inequality operators,equality and inequality operators>> and other <<Conditional expressions,conditional expressions listed above>>. The `not` operator has higher precedence than `and` and `or`. The `and` operator has higher precedence than `or`.
 
@@ -554,7 +554,7 @@ If a NoSQL database is not capable of the execution of conditional deletes or ca
 
 === Syntax
 
-The following grammar defines the syntax of JDQL, via ANTLR4-style BNF.
+The following grammar defines the syntax of JQL, via ANTLR4-style BNF.
 
 [source, antlrv4]
 ----
