@@ -42,11 +42,14 @@ Lexical analysis requires recognition of the following token types:
 
 An _identifier_ is any legal Java identifier which is not a keyword. Identifiers are case-sensitive: `hello`, `Hello`, and `HELLO` are distinct identifiers.
 
-In the JDQL grammar, identifiers are labelled with the `IDENTIFIER` token type.
+In the JQL grammar, identifiers are labelled with the `IDENTIFIER` token type.
 
 The following identifiers are _keywords_: `select`, `update`, `set`, `delete`, `from`, `where`, `order`, `by`, `asc`, `desc`, `not`, `and`, `or`, `between`, `like`, `in`, `null`, `local`, `true`, `false`. In addition, every reserved identifier listed in section 4.4.1 of the Jakarta Persistence specification version 3.2 is also considered a reserved identifier. Keywords and other reserved identifiers are case-insensitive: `null`, `Null`, and `NULL` are three ways to write the same keyword.
 
-NOTE: Use of a reserved identifier as a regular identifier in JDQL might be accepted by a given Jakarta Data provider, but such usage is not guaranteed to be portable between providers.
+[NOTE]
+====
+Use of a reserved identifier as a regular identifier in JQL might be accepted by some providers, but such usage is not guaranteed to be portable between implementations.
+====
 
 ==== Parameters
 
