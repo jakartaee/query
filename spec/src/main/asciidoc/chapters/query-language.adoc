@@ -403,12 +403,14 @@ The interpretation and effect of each clause in this list is influenced by claus
 
 The `from` clause, with syntax given by `from_clause`, specifies an _entity name_ which identifies the queried entity. Path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<Entity names>>.
 
-NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
+[NOTE]
+====
+The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax *should* be `update from Entity`, but for historical reasons it is simply `update Entity`.
+====
 
-The `from` clause is optional in `select` statements. When it is missing, the queried entity is determined by the return type of the repository method, or, if the return type is not an entity type, by the primary entity type of the repository.
+The `from` clause is optional in `select` statements. When omitted, the queried entity must be determined by the host environment in which the query is executed.
 
-For example, this repository method declaration:
-
+.Example usage in Jakarta Data
 [source,java]
 ----
 @Query("where title like :title")
@@ -445,7 +447,7 @@ Alternatively, the `select` clause may contain either:
 
 NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Data provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
 
-If the JDQL implementation does not support `count(this)`, it must throw `UnsupportedOperationException` when this aggregate expression occurs in a query.  Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses the unsupported aggregate expression.
+If the JQL implementation does not support `count(this)`, it must throw `UnsupportedOperationException` when this aggregate expression occurs in a query.  Alternatively, the Jakarta Data provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses the unsupported aggregate expression.
 
 The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
 
@@ -471,19 +473,25 @@ The `set` clause, with syntax given by `set_clause`, specifies a list of updates
 
 ==== Order clause
 
-The `order` clause (or `order by` clause), with syntax given by `orderby_clause`, specifies a lexicographic order for the query results, that is, a list of entity attributes used to sort the records which satisfy the restriction imposed by the `where` clause. The keywords `asc` and `desc` specify that a given attribute should be sorted in ascending or descending order respectively; when neither is specified, ascending order is the default.
+The `order` clause (or `order by` clause), with syntax given by `orderby_clause`, specifies a lexicographic order for the query results: a list of attributes used to sort the records that satisfy the `where` clause. The keywords `asc` and `desc` indicate ascending or descending order, respectively; when neither is specified, ascending order is the default.
 
-NOTE: An implementation of JDQL is not required to support sorting by entity attributes which are not returned by the query. If a query returns the queried entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, a provider might require that an attribute which occurs in the `order` also occurs in the `select`.
+[NOTE]
+====
+An implementation is not required to support sorting by attributes that are not part of the query result. If a query returns the queried entity, then any sortable attribute of that entity may appear in the `order` clause. Otherwise, if the query has an explicit `select` list, a provider might require that any attribute in the `order` list also appear in the `select` list.
+====
 
-Entity attributes occurring earlier in the `order by` clause take precedence. That is, an attribute occurring later in the `order by` clause is only used to resolve "ties" between records which cannot be unambiguously ordered using only earlier attributes.
+Attributes appearing earlier in the `order by` list take precedence; attributes later in the list are only used to break ties.
 
-This specification does not define how null values are ordered with respect to non-null values. The ordering of null values may vary between data stores and between Jakarta Data providers.
+This specification does not define how `null` values are ordered relative to non-`null` values. The ordering of `null` values may vary between datastores and between providers.
 
-The `order` clause is always optional. When it is missing, and when no sort criteria are given as arguments to a parameter of the repository method, the order of the query results is undefined, and might not be deterministic.
+The `order` clause is always optional. When it is omitted, and when no sort criteria are provided by the host environment, the order of the results is undefined and might not be deterministic.
 
-NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Data provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
+[NOTE]
+====
+If a datastore does not natively support result sorting, providers are strongly encouraged, but not required, to perform sorting in the host language before returning results.
+====
 
-If the Jakarta Data provider cannot satisfy a request for sorted query results, it must throw `DataException`.
+If a provider cannot satisfy a request for sorted results (for example, due to unsupported sort attributes, incompatible projections, or datastore limitations), it **MUST** signal an error using the host environment’s standard query execution error mechanism. This specification does not mandate a specific exception type or error class.
 
 === Statements
 
