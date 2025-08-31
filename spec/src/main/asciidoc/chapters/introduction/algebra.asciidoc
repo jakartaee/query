@@ -360,7 +360,25 @@ That is, the result list of a restriction contains a structure _r_ if and only i
 _Aggregation_ groups the elements of a result list into sublists.
 That is, it transforms a list into a list of lists.
 
-TODO
+Aggregation follows a root entity or join:
+
+[source,sql]
+----
+[from] group by [expression], [expression], ...
+----
+
+where each `[expression]` is a value expression, as defined later in <<expressions>>.
+
+1. For each structure _r_ of the result list of the operation on which the aggregation acts, a _grouping tuple_ is constructed by evaluating each of the value expressions specified by the aggregation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
+
+2. For each distinct resulting value _t_ of the grouping tuple, a result sublist _l~t~_ is constructed containing every structure _r_ which produced that value of the grouping tuple.
+
+3. Finally, the result list of the aggregation contains every such result sublist _l~t~_.
+
+Each value expression must evaluate to an atomic value or record.
+
+[NOTE]
+If a value expression evaluates to a record, the record may be replaced by its identifier in the grouping tuple.
 
 [[projection]]
 === Projection
