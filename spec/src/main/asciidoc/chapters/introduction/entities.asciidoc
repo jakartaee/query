@@ -181,6 +181,8 @@ It's not, in general, possible to construct an arbitrary record in a finite numb
 The reason for this is that the graph representing a record is not, in general, a finite tree.
 The representation of a record as a tree might necessarily be infinite, with a nonterminating cycle involving two or more structures.
 
+On the other hand, any record is assumed to be representable as a finite directed graph.
+
 === Databases
 
 A _database_ is a finite set of records.
@@ -189,5 +191,6 @@ A given database might be restricted to contain only records belonging to a stat
 
 [NOTE]
 Some databases store records as trees; other databases store them in a flattened _normalized_ form.
+In some databases, records must be disjoint; in other databases, one record might be nested inside another record.
 Questions about the representation used for record storage are completely outside the scope of this specification.
 Such questions are the domain of our sister-specifications.
