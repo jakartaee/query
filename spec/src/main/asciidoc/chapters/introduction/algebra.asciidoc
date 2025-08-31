@@ -225,10 +225,18 @@ Instead of named entity, a join may identify a structure or collection nested wi
 
 [source,sql]
 ----
-[from] join [path] as y
+[from] inner join [path] as y
 ----
 
 where `[path]` is a path expression, as defined later in <<path-expressions>>, and `y` is the label.
+
+As usual, the keyword `as` is optional.
+The keyword `inner` is also completely optional, and so a join may be written:
+
+[source,sql]
+----
+[from] join [path] as y
+----
 
 For example:
 
@@ -281,6 +289,38 @@ Implementations of Jakarta Query do not, in practice, always return the entire r
 
 ==== Left joins
 
+A left join is similar to a regular join:
+
+[source,sql]
+----
+[from] left outer join [path] as y
+----
+
+where `[path]` is a path expression, as before, and `y` is the label.
+
+As usual, the keyword `as` is optional.
+The keyword `outer` is also completely optional, and so a left join may be written:
+
+[source,sql]
+----
+[from] left join [path] as y
+----
+
+For example:
+
+[source,sql]
+----
+from Book as book
+left join book.authors as author
+----
+
+The path expression identifies a structure nested within the result list of the operation on which the join acts.
+
+For each structure _r_ of the result list of the operation on which the join acts:
+
+- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the structure _s_ labelled by the alias `y`.
+- If the path expression resolves to a nonempty collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
+- Otherwise, if a path expression resolves to no structure, or to an empty collection, the result list contains a structure _r'_ containing only the labelled elements of _r_.
 
 
 [[restriction]]
