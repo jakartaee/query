@@ -486,3 +486,13 @@ Such ordering is typically determined by the database itself.
 
 Each value expression in the `order by` list must also occur in the projection list. TODO!
 
+For example:
+
+[source,sql]
+----
+from Book as book
+join book.authors as author
+select book.isbn as isbn, book.title as title, author.name as author
+order by book.isbn desc
+----
+
