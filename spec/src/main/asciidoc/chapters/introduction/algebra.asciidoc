@@ -354,6 +354,16 @@ That is, the result list of a restriction contains a structure _r_ if and only i
 - _r_ is in the result list of the operation on which the restriction acts, and
 - _r_ satisfies the logical predicate.
 
+[[restriction-and-aggregation]]
+==== Restriction and aggregation
+
+When restriction is applied to a query involving aggregation, the predicate may only involve:
+
+- value expressions which also occur in the `group by` clause, and
+- aggregate function expressions, as specified below in <<aggregate-functions>>.
+
+In this case, the restriction eliminates entire nested lists belonging to the result list of the aggregation operation.
+
 [[aggregation]]
 === Aggregation
 
@@ -371,9 +381,9 @@ where each `[expression]` is a value expression, as defined later in <<expressio
 
 1. For each structure _r_ of the result list of the operation on which the aggregation acts, a _grouping tuple_ is constructed by evaluating each of the value expressions specified by the aggregation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
 
-2. For each distinct resulting value _t_ of the grouping tuple, a result sublist _l~t~_ is constructed containing every structure _r_ which produced that value of the grouping tuple.
+2. For each distinct resulting value _t_ of the grouping tuple, a nested list _l~t~_ is constructed containing every structure _r_ which produced that value of the grouping tuple.
 
-3. Finally, the result list of the aggregation contains every such result sublist _l~t~_.
+3. Finally, the result list of the aggregation contains every such nested list _l~t~_.
 
 Each value expression must evaluate to an atomic value or record.
 
@@ -435,9 +445,44 @@ returns a list containing elements like:
 }
 ----
 
+[[projection-and-aggregation]]
+==== Projection and aggregation
+
+When projection is applied to a query involving aggregation, every value expression in the `select` list must be either:
+
+- a value expression which also occurs in the `group by` clause, or
+- an aggregate function expression, as specified below in <<aggregate-functions>>.
+
+In this case, the projection has the additional effect of collapsing the list of lists produced by aggregation, producing a single result structure for each nested list in the result list of the operation to which the projection applies.
+
 [[ordering]]
 === Ordering
 
 Ordering changes the order of the elements in a result list, without changing the size or type of the list.
 
-TODO
+Ordering is the last operation of a query:
+
+[source,sql]
+----
+[result] order by [order], [order], ...
+----
+
+where `[result]` is a root entity, join, restriction, aggregation, or projection, and each `[order]` is an ordering criterion comprising:
+
+- a value expression, subject to the restrictions given below, and
+- optionally, `asc` or `desc`, specifying ascending or descending order, and
+- optionally, `nulls first`, or `nulls last`, specifying the precedence of null values.
+
+If neither `asc` nor `desc` is explicitly specified, ascending order is assumed.
+If neither `nulls first` nor `nulls last` is explicitly specified, the precedence of null values is not defined by this specification.
+
+1. For each structure _r_ of the result list of the operation on which the aggregation acts, an _ordering tuple_ is constructed by evaluating each of the value expressions specified by the ordering operation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
+
+2. The result list is sorted according to the lexicographic order of the resulting ordering tuples.
+
+[NOTE]
+This specification does not specify an order for atomic values or structures.
+Such ordering is typically determined by the database itself.
+
+Each value expression in the `order by` list must also occur in the projection list. TODO!
+
