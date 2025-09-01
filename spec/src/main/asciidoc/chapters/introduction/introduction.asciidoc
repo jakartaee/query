@@ -112,4 +112,4 @@ ANTLR 4-style BNF is used to define the syntax of the language.
 
 
 include::project_team.adoc[]
-include::../query-language.adoc[]
+
