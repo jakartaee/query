@@ -46,3 +46,5 @@ include::chapters/introduction/introduction.asciidoc[]
 include::chapters/introduction/entities.asciidoc[]
 
 include::chapters/introduction/algebra.asciidoc[]
+
+include::chapters/language/query-language.adoc[]
