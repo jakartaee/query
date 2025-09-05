@@ -47,4 +47,11 @@ include::chapters/introduction/entities.asciidoc[]
 
 include::chapters/introduction/algebra.asciidoc[]
 
-include::chapters/language/query-language.adoc[]
+include::chapters/language/lexical.adoc[]
+
+include::chapters/language/expressions.adoc[]
+
+include::chapters/language/statements.adoc[]
+
+include::chapters/language/syntax.adoc[]
+
