@@ -1,0 +1,78 @@
+== Lexical structure
+
+Lexical analysis requires recognition of the following token types:
+
+- keywords (reserved identifiers),
+- regular identifiers,
+- named and ordinal parameters,
+- operators and punctuation characters,
+- literal strings, and
+- integer and decimal number literals.
+
+=== Identifiers and keywords
+
+An _identifier_ is any legal Java identifier which is not a keyword. Identifiers are case-sensitive: `hello`, `Hello`, and `HELLO` are distinct identifiers.
+
+In the JQL grammar, identifiers are labelled with the `IDENTIFIER` token type.
+
+The following identifiers are _keywords_: `select`, `update`, `set`, `delete`, `from`, `where`, `order`, `by`, `asc`, `desc`, `not`, `and`, `or`, `between`, `like`, `in`, `null`, `local`, `true`, `false`. In addition, every reserved identifier listed in section 4.4.1 of the Jakarta Persistence specification version 3.2 is also considered a reserved identifier. Keywords and other reserved identifiers are case-insensitive: `null`, `Null`, and `NULL` are three ways to write the same keyword.
+
+NOTE: Use of a reserved identifier as a regular identifier in JQL might be accepted by a given Jakarta Query provider, but such usage is not guaranteed to be portable between providers.
+
+=== Parameters
+
+A _named parameter_ is a legal Java identifier prefixed with the `:` character, for example, `:name`.
+
+An _ordinal parameter_ is a decimal integer prefixed with the `?` character, for example, `?1`.
+
+Ordinal parameters are numbered sequentially, starting with `?1`.
+
+=== Operators and punctuation
+
+The character sequences `+`, `-`, `*`, `/`, `||`, `=`, `<`, `>`, `<>`, `&lt;=`, `>=` are _operators_.
+
+The characters `(`, `)`, and `,` are _punctuation characters_.
+
+[WARNING]
+====
+When working with NoSQL databases, the support for arithmetic operations and support of parentheses for precedence might vary significantly:
+
+Key-value databases:: Arithmetic operations (`+`, `-`, `*`, `/`) are not supported. These databases are designed for simple key-based lookups and lack query capabilities for complex operations.
+
+Wide-column databases:: Arithmetic operations are not required to be supported. Some wide-column databases might offer limited support, which might require secondary indexing even for basic querying.
+
+Document Databases:: Support of arithmetic operations and support of parenthesis for precedence are not required, although databases typically offer these capabilities. Behavior and extent of support can vary significantly between providers.
+
+Graph Databases:: Support for arithmetic operations and parentheses for precedence are not required but is typically offered by databases. Behavior and extent of support can vary significantly between providers.
+
+Due to the diversity of NoSQL database types and their querying capabilities, there is no guarantee that all NoSQL providers will support punctuation characters such as parentheses `(`, `)` for defining operation precedence. It is recommended to consult your NoSQL provider's documentation to confirm the supported query features and their behavior.
+====
+
+=== String literals
+
+A _literal string_ is a character sequence quoted using the character `'`.
+
+A single literal `'` character may be included within a string literal by self-escaping it, that is, by writing `''`. For example, the string literal ``'Furry''s theorem has nothing to do with furries.'`` evaluates to the string `pass:[Furry's theorem has nothing to do with furries.]`.
+
+In the grammar, literal strings are labelled with the `STRING` token type.
+
+=== Numeric literals
+
+Numeric literals come in two flavors:
+
+- any legal Java decimal literal of type `int` or `long` is an _integer literal_, and
+- any legal Java literal of type `float` or `double` is a _decimal literal_.
+
+In the grammar, integer and decimal literals are labelled with the `INTEGER` and `DOUBLE` token types respectively.
+
+NOTE: JQL does not require support for literals written in octal or hexadecimal.
+
+=== Whitespace
+
+The characters Space, Horizontal Tab, Line Feed, Form Feed, and Carriage Return are considered whitespace characters and make no contribution to the token stream.
+
+As usual, token recognition is "greedy". Therefore, whitespace must be placed between two tokens when:
+
+- a keyword directly follows an identifier or named parameter,
+- an identifier directly follows a keyword or named parameter, or
+- a numeric literal directly follows an identifier, keyword, or parameter.
