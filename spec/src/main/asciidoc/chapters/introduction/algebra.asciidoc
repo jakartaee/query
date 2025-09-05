@@ -123,6 +123,7 @@ Evaluating a sequence of joins produces a result list in which each structure co
 labelled element corresponding to each join.
 The label of this element is often called the _alias_ or _identification variable_ of the join.
 
+[[joins-entities]]
 ==== Joins to named entities
 
 A join may specify the name of an entity:
@@ -219,6 +220,7 @@ The result of the query might contain structures like:
 
 This time, `isbn` and `bookIsbn` agree.
 
+[[joins-nested]]
 ==== Joins to nested entities, collections, or collections
 
 Instead of named entity, a join may identify a structure or collection nested within the result list of the operation on which it acts:
@@ -287,6 +289,7 @@ Notice that this kind of join has the effect of duplicating nested structures or
 This picture should not be taken too literally.
 Implementations of Jakarta Query do not, in practice, always return the entire result of a query to the client, but instead replace some branches of the graph with some sort of proxy object.
 
+[[left-joins]]
 ==== Left joins
 
 A left join is similar to a regular join:
@@ -322,6 +325,23 @@ For each structure _r_ of the result list of the operation on which the join act
 - If the path expression resolves to a nonempty collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
 - Otherwise, if a path expression resolves to no structure, or to an empty collection, the result list contains a structure _r'_ containing only the labelled elements of _r_.
 
+[[fetch-joins]]
+==== Fetch joins
+
+A fetch join is a hint to the Jakarta Query implementation regarding which data in the query result set the application program will access.
+A fetch join does not affect the shape of the query result set, and therefore does not introduce a label.
+Otherwise, the syntax is similar to a left join:
+
+[source,sql]
+----
+[from] left outer join fetch [path]
+----
+[source,sql]
+----
+[from] left join fetch [path]
+----
+
+NOTE: The sister specifications of this specification assign semantics to this syntax.
 
 [[restriction]]
 === Restriction
