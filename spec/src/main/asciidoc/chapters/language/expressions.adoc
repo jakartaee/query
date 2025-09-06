@@ -213,7 +213,7 @@ When using NoSQL databases, there are limitations to the support of equality and
 
 === Ordering
 
-Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of inequality comparisons, and the effect of the <<Order clause>>.
+Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of inequality comparisons and the effect of the <<Order clause>>.
 
 For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. JQL implementations must sort these types according to their natural order, that is, the order in JQL must agree with the order defined by Java.
 
