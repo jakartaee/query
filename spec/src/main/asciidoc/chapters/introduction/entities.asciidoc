@@ -24,7 +24,7 @@ Identity for a given atomic value type must be reflexive, symmetric, and transit
 
 [NOTE]
 ====
-An implementation of this specification in Java typically supports at least the following atomic types: Java primitive types, `String`, `LocalDate`, `LocalDateTime`, `LocalTime`, `Year`, and `Instant`, `java.util.UUID`, `java.math.BigInteger` and `java.math.BigDecimal`, `byte[]`, and  `enum` types.
+An implementation of this specification in Java typically supports at least the following atomic types: Java primitive types and their wrapper types, `String`, `LocalDate`, `LocalDateTime`, `LocalTime`, `Year`, and `Instant`, `java.util.UUID`, `java.math.BigInteger` and `java.math.BigDecimal`, `byte[]`, and  `enum` types.
 ====
 
 [[collections]]
