@@ -1,5 +1,6 @@
 == Expressions
 
+[[value-expressions]]
 === Value expressions
 
 An expression is a sequence of tokens to which a type can be assigned, and which evaluates to a well-defined value when the query is executed.
@@ -49,6 +50,7 @@ An _enum literal expression_ is a Java identifier, with syntax specified by `enu
 
 When executed, an enum expression evaluates to the named member of the Java `enum` type.
 
+[[path-expressions]]
 ==== Path expressions
 
 A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. Each identifier is interpreted as the name of an attribute of an entity or embeddable class. Each prefix of the list is assigned a Java type:
@@ -130,6 +132,7 @@ The type assigned to an operator expression depends on the types of its operand 
 > * otherwise, if there is an operand of type `Long` or `long`, the expression is of type `Long`, unless the operator is `/` (division), in which case the expression type is not defined here;
 > * otherwise, if there is an operand of integral type, the expression is of type `Integer`, unless the operator is `/` (division), in which case the expression type is not defined here.
 
+[[predicates]]
 === Conditional expressions
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
