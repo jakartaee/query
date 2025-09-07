@@ -5,5 +5,10 @@ The following grammar defines the syntax of the Jakarta Query language, via ANTL
 
 [source, antlrv4]
 ----
-include::../../../../antlr/JQL.g4[]
+include::../../../../antlr/JQL-core.g4[]
+----
+
+[source, antlrv4]
+----
+include::../../../../antlr/JQL-full.g4[]
 ----
