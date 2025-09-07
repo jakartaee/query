@@ -507,5 +507,5 @@ The following grammar defines the syntax of JQL, via ANTLR4-style BNF.
 
 [source, antlrv4]
 ----
-include::../../antlr/JQL.g4[]
+include::../../../../antlr/JQL.g4[]
 ----
