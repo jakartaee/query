@@ -397,7 +397,7 @@ Aggregation follows a root entity or join:
 [from] group by [expression], [expression], ...
 ----
 
-where each `[expression]` is a value expression, as defined later in <<expressions>>.
+where each `[expression]` is a value expression, as defined later in <<value-expressions>>.
 
 1. For each structure _r_ of the result list of the operation on which the aggregation acts, a _grouping tuple_ is constructed by evaluating each of the value expressions specified by the aggregation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
 
@@ -429,7 +429,7 @@ or, more conventionally, but much more confusingly, in the form:
 select [expression] as x, [expression] as y, ... [result]
 ----
 
-where `x`, `y`, ... are all labels and `[result]` is a root entity, join, restriction, or aggregation, and each `[expression]` is a value expression, as defined later in <<expressions>>.
+where `x`, `y`, ... are all labels and `[result]` is a root entity, join, restriction, or aggregation, and each `[expression]` is a value expression, as defined later in <<value-expressions>>.
 
 As usual, the `as` keyword is optional, and the labels must be legal Java identifiers.
 
@@ -442,7 +442,7 @@ This is unfortunate because an integer is not a legal Java identifier, and there
 Such defaulted labels may not be referred to in the query language except--again for historical reasons--in the `order by` clause.
 
 Projection produces a new structure _r'_ for each structure _r_ in the result list of the operation on which the projection acts.
-The new structure  _r'_ is built by evaluating the value expressions specified by the projection in the context of the corresponding element structure _r_, according to semantics given later in <<expressions>>.
+The new structure  _r'_ is built by evaluating the value expressions specified by the projection in the context of the corresponding element structure _r_, according to semantics given later in <<value-expressions>>.
 For each value expression with label `x` in the given `select` list, _r'_ contains a element labelled `x` obtained by evaluating the value expression in the context of _r_.
 
 For example:
