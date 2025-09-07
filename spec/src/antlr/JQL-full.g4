@@ -401,6 +401,11 @@ like_expression
       ('ESCAPE' escape_character)?
     ;
 
+pattern_value
+    : string_literal
+    | single_valued_input_parameter
+    ;
+
 null_comparison_expression
     : (single_valued_path_expression | input_parameter)
       'IS' 'NOT'? 'NULL'
@@ -762,8 +767,6 @@ enum_literal : IDENTIFIER ('.' IDENTIFIER)*;
 
 
 trim_character : CHARACTER;
-
-pattern_value : STRING;
 
 escape_character : CHARACTER;
 
