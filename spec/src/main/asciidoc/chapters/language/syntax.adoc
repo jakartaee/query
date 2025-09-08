@@ -1,6 +1,7 @@
+[[syntax]]
 == Syntax
 
-The following grammar defines the syntax of JQL, via ANTLR4-style BNF.
+The following grammar defines the syntax of the Jakarta Query language, via ANTLR4-style BNF.
 
 [source, antlrv4]
 ----
