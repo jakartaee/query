@@ -15,7 +15,12 @@ An _identifier_ is any legal Java identifier which is not a keyword. Identifiers
 
 In the <<syntax,grammar>>, identifiers are labelled with the `IDENTIFIER` token type.
 
-The following identifiers are _keywords_: `select`, `update`, `set`, `delete`, `from`, `where`, `order`, `by`, `asc`, `desc`, `not`, `and`, `or`, `between`, `like`, `in`, `null`, `local`, `true`, `false`. In addition, every reserved identifier listed in section 4.4.1 of the Jakarta Persistence specification version 3.2 is also considered a reserved identifier. Keywords and other reserved identifiers are case-insensitive: `null`, `Null`, and `NULL` are three ways to write the same keyword.
+The following identifiers are _keywords_: `abs`, `all`, `and`, `any`, `as`, `asc`, `avg`, `between`, `both`, `by`, `case`, `ceiling`, `class`, `coalesce`, `concat`, `count`, `current_date`, `current_time`, `current_timestamp`, `delete`, `desc`, `distinct`, `else`, `empty`, `end`, `entry`, `escape`, `except`, `exists`, `exp`, `extract`, `false`, `fetch`, `first`, `floor`, `from`, `function`, `group`, `having`, `in`, `index`, `inner`, `intersect`, `is`, `join`, `key`, `leading`, `last`, `left`, `length`, `like`, `local`, `ln`, `locate`, `lower`, `max`, `member`, `min`, `mod`, `new`, `not`, `null`, `nulls`, `nullif`, `object`, `of`, `on`, `or`, `order`, `outer`, `position`, `power`, `replace`, `right`, `round`, `select`, `set`, `sign`, `size`, `some`, `sqrt`, `substring`, `sum`, `then`, `trailing`, `treat`, `trim`, `true`, `type`, `union`, unknown`, `update`, `upper`, `value`, `when`, `where`.footnote:[Jakarta Persistence reserves the following additional keywords for
+future use: `BIT_LENGTH`, `CHAR_LENGTH`, `CHARACTER_LENGTH`, and `UNKNOWN`.].
+
+**TODO:** function names don't really need to be keywords!
+
+Keywords and other reserved identifiers are case-insensitive: `null`, `Null`, and `NULL` are three ways to write the same keyword.
 
 NOTE: Use of a reserved identifier as a regular identifier in a query might be accepted by a given Jakarta Query provider, but such usage is not guaranteed to be portable between providers.
 
