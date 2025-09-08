@@ -21,12 +21,12 @@ The `from` clause, with syntax given by `from_clause`, specifies an _entity name
 
 NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
 
-The `from` clause is optional in `select` statements. When it is missing, the queried entity is determined by some defaulting rule defined externally to this specification, for example:
+The `from` clause is optional in `select` statements when a mechanism from an external specification is used to identify the queried entity. For example:
 
-1. a result type might be supplied via an API cainvocationll (for example, via `createQuery()` in Jakarta Persistence), or
+1. a result type might be supplied via an API invocation (for example, via `createQuery()` in Jakarta Persistence), or
 2. it might be determined by static analysis (for example, in Jakarta Data, by the return type of a repository method or by the primary entity type of the repository).
 
-For example, this query:
+For example, this query provided to the Jakarta Persistence `createQuery()` method with result type of `Book.class` or supplied to a Jakarta Data repository method that returns `List<Book>`:
 
 [source,sql]
 ----
@@ -91,7 +91,7 @@ Entity attributes occurring earlier in the `order by` clause take precedence. Th
 
 This specification does not define how null values are ordered with respect to non-null values. The ordering of null values may vary between data stores and between Jakarta Query providers.
 
-The `order` clause is always optional. When it is missing, the order of the query results is not defined by this specification, and might not be deterministic.
+The `order` clause is always optional. When it is missing, the order of the query results is not defined by this specification and might not be deterministic.
 
 NOTE: An implementation of Jakarta Query might provide some other facility to specify sorting criteria for the results of a given query. For example, Jakarta Query allows an object carrying sorting criteria to be passed as an argument to a repository method.
 
