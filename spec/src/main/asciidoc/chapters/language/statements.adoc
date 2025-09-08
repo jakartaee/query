@@ -1,15 +1,17 @@
 == Statements and clauses
 
-Each statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `select`, `set`, or `order`.
+Each statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `group`, `having`, `select`, `set`, or `order`.
 
 === Clauses
 
-There is a logical ordering of clauses, reflecting the order in which their effect must be computed by the datastore:
+As discussed in <<algebra>>, there is a logical ordering of clauses, reflecting the order in which their effect must be computed by the datastore:
 
 1. `from`
 2. `where`,
-3. `select` or `set`,
-4. `order`.
+3. `group`
+4. `having`,
+5. `select` or `set`,
+6. `order`.
 
 The interpretation and effect of each clause in this list is influenced by clauses occurring earlier in the list, but not by clauses occurring later in the list.
 
