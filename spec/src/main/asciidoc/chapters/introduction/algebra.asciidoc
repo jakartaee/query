@@ -1,3 +1,4 @@
+[[algebra]]
 == Basic operations
 
 A query is a sequence of operations acting on lists of structures:
