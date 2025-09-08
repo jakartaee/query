@@ -178,7 +178,7 @@ update_clause
     ;
 
 update_item
-    : identification_variable '.'?
+    : (identification_variable '.')?
       (single_valued_embeddable_object_field '.')*
       (state_field | single_valued_object_field)
       '=' new_value
