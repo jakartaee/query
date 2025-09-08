@@ -69,8 +69,6 @@ Wide-column databases:: The ability to use a `select` clause may depend on the p
 
 Graph and document databases:: Support for flexible `select` clauses, including path expressions and aggregate functions like `count(this)` is required. Performance might vary based on the size and indexing of the dataset.
 
-For `count(this)` in particular, if the NoSQL datastore does not natively support counting query results, the Jakarta Query provider is encouraged to implement this operation in Java. However, providers are not required to do so. If `count(this)` is unsupported, an `UnsupportedOperationException` must be thrown during query execution, or repository methods using this expression may be rejected at compilation time.
-
 It is advisable to review your NoSQL provider's documentation to confirm the support and performance implications of `select` clauses and aggregate functions in your queries.
 ====
 
