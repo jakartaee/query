@@ -72,6 +72,12 @@ In the grammar, integer and decimal literals are labelled with the `INTEGER` and
 
 NOTE: Jakarta Query does not require support for literals written in octal or hexadecimal.
 
+=== Single-character literals
+
+The `trim_character` and `escape_character` rules allow specification of a single literal character quoted using the `'` character.
+
+In the grammar, such single-character literals are labelled with the `CHARACTER` token type.
+
 === Whitespace
 
 The characters Space, Horizontal Tab, Line Feed, Form Feed, and Carriage Return are considered whitespace characters and make no contribution to the token stream.
