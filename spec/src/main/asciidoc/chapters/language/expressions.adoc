@@ -39,7 +39,7 @@ A parameter expression, with syntax given by `input_parameter`, is assigned a ty
 
 NOTE: This specification does not define how arguments are assigned to parameter expressions.
 
-When executed, a parameter expression evaluates to the argument supplied to the parameter of the repository method.
+When executed, a parameter expression evaluates to the argument assigned to the parameter..
 
 NOTE: Positional and named parameters must not be mixed in a single query.
 

@@ -19,7 +19,10 @@ The `from` clause, with syntax given by `from_clause`, specifies an _entity name
 
 NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
 
-The `from` clause is optional in `select` statements. When it is missing, the queried entity is determined by the return type of the repository method, or, if the return type is not an entity type, by the primary entity type of the repository.
+The `from` clause is optional in `select` statements. When it is missing, the queried entity is determined by some defaulting rule defined externally to this specification, for example:
+
+1. a result type might be supplied via an API cainvocationll (for example, via `createQuery()` in Jakarta Persistence), or
+2. it might be determined by static analysis (for example, in Jakarta Data, by the return type of a repository method or by the primary entity type of the repository).
 
 For example, this query:
 
@@ -86,7 +89,9 @@ Entity attributes occurring earlier in the `order by` clause take precedence. Th
 
 This specification does not define how null values are ordered with respect to non-null values. The ordering of null values may vary between data stores and between Jakarta Query providers.
 
-The `order` clause is always optional. When it is missing, and when no sort criteria are given as arguments to a parameter of the repository method, the order of the query results is undefined, and might not be deterministic.
+The `order` clause is always optional. When it is missing, the order of the query results is not defined by this specification, and might not be deterministic.
+
+NOTE: An implementation of Jakarta Query might provide some other facility to specify sorting criteria for the results of a given query. For example, Jakarta Query allows an object carrying sorting criteria to be passed as an argument to a repository method.
 
 NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
 
