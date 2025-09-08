@@ -55,7 +55,7 @@ this_implicit_variable
 
 identification_variable_declarations
     : identification_variable_declaration
-      (',' (identification_variable_declaration | collection_member_declaration))*
+      (',' identification_variable_declaration)*
     ;
 
 identification_variable_declaration
@@ -114,12 +114,6 @@ join_single_valued_path_expression
     : (identification_variable '.')?
       (single_valued_embeddable_object_field '.')*
       single_valued_object_field
-    ;
-
-// deprecated
-collection_member_declaration
-    : 'IN' '(' collection_valued_path_expression ')'
-      'AS'? identification_variable
     ;
 
 qualified_identification_variable
@@ -215,7 +209,6 @@ select_expression
     | scalar_expression
     | aggregate_expression
     | identification_variable
-    | 'OBJECT' '(' identification_variable ')'  //deprecated
     | constructor_expression
     ;
 
@@ -288,13 +281,12 @@ subquery
 
 subquery_from_clause
     : 'FROM' subselect_identification_variable_declaration
-      (',' subselect_identification_variable_declaration | collection_member_declaration)*
+      (',' subselect_identification_variable_declaration )*
     ;
 
 subselect_identification_variable_declaration
     : identification_variable_declaration
     | derived_path_expression 'AS'? identification_variable join*
-    | derived_collection_member_declaration
     ;
 
 derived_path_expression
@@ -315,12 +307,6 @@ simple_derived_path
 
 treated_derived_path
     : 'TREAT' '(' general_derived_path 'AS' subtype ')'
-    ;
-
-derived_collection_member_declaration
-    : 'IN' superquery_identification_variable '.'
-      (single_valued_object_field '.')*
-      collection_valued_field
     ;
 
 simple_select_clause
@@ -526,7 +512,6 @@ datetime_expression
     | aggregate_expression
     | case_expression
     | function_invocation
-    | date_time_timestamp_literal
     | '(' subquery ')'
     ;
 
@@ -595,10 +580,7 @@ functions_returning_numerics
     ;
 
 functions_returning_datetime
-    : 'CURRENT_DATE'
-    | 'CURRENT_TIME'
-    | 'CURRENT_TIMESTAMP'
-    | 'LOCAL' 'DATE'
+    : 'LOCAL' 'DATE'
     | 'LOCAL' 'TIME'
     | 'LOCAL' 'DATETIME'
     | extract_datetime_part
@@ -751,7 +733,6 @@ literal
     : string_literal
     | numeric_literal
     | boolean_literal
-    | date_time_timestamp_literal
     | enum_literal
     ;
 
@@ -760,8 +741,6 @@ numeric_literal : INTEGER | DOUBLE;
 string_literal : STRING;
 
 boolean_literal : 'TRUE' | 'FALSE' ;
-
-date_time_timestamp_literal : JDBC_ESCAPE ;
 
 enum_literal : IDENTIFIER ('.' IDENTIFIER)*;
 
