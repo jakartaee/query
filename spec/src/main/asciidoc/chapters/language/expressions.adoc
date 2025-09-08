@@ -52,14 +52,14 @@ When executed, an enum expression evaluates to the named member of the Java `enu
 [[path-expressions]]
 ==== Path expressions
 
-A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. Each identifier is interpreted as the name of an attribute of an entity or embeddable class. Each prefix of the list is assigned a Java type:
+A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. Each identifier is interpreted as the name of an attribute of an entity or embeddable type. Each prefix of the list is assigned a type:
 
 - the first element of the list is assigned the type of the named attribute of the entity being queried, and
 - each subsequent element is assigned the type of the named attribute of the type assigned to the previous element.
 
-The type of the whole path expression is the type of the last element of the list. For example, `pages` is assigned the type `int`, `address` is assigned the type `org.example.Address`, and `address.street` is assigned the type `java.lang.String`.
+The type of the whole path expression is the type of the last element of the list. For example, `pages` might be assigned the type `int`, `address` might be assigned the type `org.example.Address`, and `address.street` might be assigned the type `java.lang.String`.
 
-NOTE: Typically, the last element of a path expression is assigned an <<atomic-values,atomic value type>>. Non-terminal path elements are usually assigned an embeddable type, if the element references an <<Embedded attributes and embeddable classes,embedded attribute>>, or an entity type, if the element references an <<Entity associations,association attribute>>. However, since a Jakarta Query provider is not required to support embedded attributes or associations, the implementation is not required to support compound path expressions.
+NOTE: Typically, the last element of a path expression is assigned an <<atomic-values,atomic value type>>. Non-terminal path elements are assigned a <<structures-and-records,structure type>>, usually an embeddable type, if the element references an embeddable, or an entity type, if the element references an association. However, since a Jakarta Query provider is not required to support embedded attributes or associations, the implementation is not required to support compound path expressions.
 
 When a path expression is executed, each element of the path is evaluated in turn:
 
