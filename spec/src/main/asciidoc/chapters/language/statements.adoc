@@ -1,6 +1,6 @@
 == Statements and clauses
 
-Each JQL statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `select`, `set`, or `order`.
+Each statement is built from a sequence of _clauses_. The beginning of a clause is identified by a keyword: `from`, `where`, `select`, `set`, or `order`.
 
 === Clauses
 
@@ -80,7 +80,7 @@ The `set` clause, with syntax given by `set_clause`, specifies a list of updates
 
 The `order` clause (or `order by` clause), with syntax given by `orderby_clause`, specifies a lexicographic order for the query results, that is, a list of entity attributes used to sort the records which satisfy the restriction imposed by the `where` clause. The keywords `asc` and `desc` specify that a given attribute should be sorted in ascending or descending order respectively; when neither is specified, ascending order is the default.
 
-NOTE: An implementation of JQL is not required to support sorting by entity attributes which are not returned by the query. If a query returns the queried entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, a provider might require that an attribute which occurs in the `order` also occurs in the `select`.
+NOTE: An implementation of Jakarta Query is not required to support sorting by entity attributes which are not returned by the query. If a query returns the queried entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, a provider might require that an attribute which occurs in the `order` also occurs in the `select`.
 
 Entity attributes occurring earlier in the `order by` clause take precedence. That is, an attribute occurring later in the `order by` clause is only used to resolve "ties" between records which cannot be unambiguously ordered using only earlier attributes.
 

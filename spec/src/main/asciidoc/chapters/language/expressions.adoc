@@ -59,7 +59,7 @@ A _path expression_ is a period-separated list of Java identifiers, with syntax 
 
 The type of the whole path expression is the type of the last element of the list. For example, `pages` is assigned the type `int`, `address` is assigned the type `org.example.Address`, and `address.street` is assigned the type `java.lang.String`.
 
-NOTE: Typically, the last element of a path expression is assigned a <<Basic types,basic type>>. Non-terminal path elements are usually assigned an embeddable type, if the element references an <<Embedded attributes and embeddable classes,embedded attribute>>, or an entity type, if the element references an <<Entity associations,association attribute>>. However, since a Jakarta Query provider is not required to support embedded attributes or associations, a JQL implementation is not required to support compound path expressions.
+NOTE: Typically, the last element of a path expression is assigned an <<atomic-values,atomic value type>>. Non-terminal path elements are usually assigned an embeddable type, if the element references an <<Embedded attributes and embeddable classes,embedded attribute>>, or an entity type, if the element references an <<Entity associations,association attribute>>. However, since a Jakarta Query provider is not required to support embedded attributes or associations, the implementation is not required to support compound path expressions.
 
 When a path expression is executed, each element of the path is evaluated in turn:
 
@@ -74,7 +74,7 @@ An _identifier expression_, with syntax given by `id_expression`, is assigned th
 
 ==== Function calls
 
-A _function call_ is the name of a JQL function, followed by a parenthesized list of argument expressions, with syntax given by `function_expression`.
+A _function call_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by `function_expression`.
 
 - The `abs()` function is assigned the type of its numeric argument, and evaluates to the absolute value of the numeric value to which its argument evaluates. Its argument must be of numeric type.
 
@@ -110,7 +110,7 @@ The concatenation operator `||` is assigned the type `java.lang.String`. Its ope
 
 The numeric operators `+`, `-`, `*`, and `/` have the same meaning for primitive numeric types they have in Java, and operator expression involving these operators are assigned the types they would be assigned in Java.
 
-NOTE: As an exception, when the operands of `/` are both integers, a JQL implementation is not required to interpret the operator expression as integer division if that is not the native semantics of the database. However, portability is maximized when Jakarta Query providers _do_ interpret such an expression as integer division.
+NOTE: As an exception, when the operands of `/` are both integers, an implementation of Jakarta Query is not required to interpret the operator expression as integer division if that is not the native semantics of the database. However, portability is maximized when Jakarta Query providers _do_ interpret such an expression as integer division.
 
 The four numeric operators may also be applied to an operand of wrapper type, for example, to `java.lang.Integer` or `java.lang.Double`. In this case, the operator expression is assigned a wrapper type, and evaluates to a null value when either of its operands evaluates to a null value. When both operands are non-null, the semantics are identical to the semantics of an operator expression involving the corresponding primitive types.
 
@@ -134,7 +134,7 @@ The type assigned to an operator expression depends on the types of its operand 
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
 
-NOTE: JPQL defines the result of a conditional expression in terms of ternary logic. JQL does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
+NOTE: This Jakarta Persistence specification defines the result of a conditional expression in terms of ternary logic. This specification does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
 
 Conditional expressions may be categorized as:
 
@@ -215,17 +215,17 @@ When using NoSQL databases, there are limitations to the support of equality and
 
 Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of inequality comparisons, and the effect of the <<Order clause>>.
 
-For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. JQL implementations must sort these types according to their natural order, that is, the order in JQL must agree with the order defined by Java.
+For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order, that is, the order must agree with the order defined by Java.
 
 Boolean values must be ordered so that `false < true` is satisfied.
 
 For other types, there is at least some freedom in the choice of order. Usually, the order is determined by the native semantics of the database. Note that:
 
-- Textual data is represented in JQL as the type `java.lang.String`. Strings are in general ordered lexicographically, but the ordering also depends on the character set and collation used by the database server. Applications must not assume that the order agrees with the `compareTo()` method of `java.lang.String`. In evaluating an inequality involving string operands, an implementation of JQL is not required to emulate Java collation.
+- Textual data is represented in Java as the type `java.lang.String`. Strings are in general ordered lexicographically, but the ordering also depends on the character set and collation used by the database server. Applications must not assume that the order agrees with the `compareTo()` method of `java.lang.String`. In evaluating an inequality involving string operands, an implementation of Jakarta Query is not required to emulate Java collation.
 
-- Binary data is represented in JQL as the type `byte[]`. Binary data is in general ordered lexicographically with respect to the constituent bytes. However, since this ordering is rarely meaningful, this specification does not require implementations of JQL to respect it.
+- Binary data is represented in Java as the type `byte[]`. Binary data is in general ordered lexicographically with respect to the constituent bytes. However, since this ordering is rarely meaningful, this specification does not require implementations of Jakarta Query to respect it.
 
-- This specification does not define an order for the sorting of Java `enum` values, which is provider-dependent. A programming model for entity classes might allow control over the order of `enum` values. For example, Jakarta Persistence allows this via the `@Enumerated` annotation.
+- This specification does not define an order for the sorting of Java `enum` values, which is provider-dependent. An implementation of Jakarta Query might allow control over the order of `enum` values. For example, Jakarta Persistence allows this via the `@Enumerated` annotation.
 
 - This specification does not define an order for UUID values, which is provider-dependent.
 
@@ -257,7 +257,7 @@ The logical operators are `and`, `or`, and `not`.
 
 This specification leaves undefined the interpretation of the `not` operator when its operand _is not_ satisfied.
 
-CAUTION: A compliant implementation of JQL might feature SQL/JPQL-style ternary logic, where `not n > 0` is an unsatisfied logical expression when `n` evaluates to null, or it might feature binary logic where the same expression is considered satisfied. Application programmers should take great care when using the `not` operator with scalar expressions involving `null` values.
+CAUTION: A compliant implementation of Jakarta Query might feature SQL/JPQL-style ternary logic, where `not n > 0` is an unsatisfied logical expression when `n` evaluates to null, or it might feature binary logic where the same expression is considered satisfied. Application programmers should take great care when using the `not` operator with scalar expressions involving `null` values.
 
 Syntactically, logical operators are parsed with lower precedence than <<Equality and inequality operators,equality and inequality operators>> and other <<Conditional expressions,conditional expressions listed above>>. The `not` operator has higher precedence than `and` and `or`. The `and` operator has higher precedence than `or`.
 

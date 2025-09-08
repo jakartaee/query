@@ -13,11 +13,11 @@ Lexical analysis requires recognition of the following token types:
 
 An _identifier_ is any legal Java identifier which is not a keyword. Identifiers are case-sensitive: `hello`, `Hello`, and `HELLO` are distinct identifiers.
 
-In the JQL grammar, identifiers are labelled with the `IDENTIFIER` token type.
+In the <<syntax,grammar>>, identifiers are labelled with the `IDENTIFIER` token type.
 
 The following identifiers are _keywords_: `select`, `update`, `set`, `delete`, `from`, `where`, `order`, `by`, `asc`, `desc`, `not`, `and`, `or`, `between`, `like`, `in`, `null`, `local`, `true`, `false`. In addition, every reserved identifier listed in section 4.4.1 of the Jakarta Persistence specification version 3.2 is also considered a reserved identifier. Keywords and other reserved identifiers are case-insensitive: `null`, `Null`, and `NULL` are three ways to write the same keyword.
 
-NOTE: Use of a reserved identifier as a regular identifier in JQL might be accepted by a given Jakarta Query provider, but such usage is not guaranteed to be portable between providers.
+NOTE: Use of a reserved identifier as a regular identifier in a query might be accepted by a given Jakarta Query provider, but such usage is not guaranteed to be portable between providers.
 
 === Parameters
 
@@ -65,7 +65,7 @@ Numeric literals come in two flavors:
 
 In the grammar, integer and decimal literals are labelled with the `INTEGER` and `DOUBLE` token types respectively.
 
-NOTE: JQL does not require support for literals written in octal or hexadecimal.
+NOTE: Jakarta Query does not require support for literals written in octal or hexadecimal.
 
 === Whitespace
 
