@@ -120,14 +120,15 @@ A numeric operator expression is evaluated according to the native semantics of 
 
 ==== Numeric types and numeric type promotion
 
-The type assigned to an operator expression depends on the types of its operand expression, which need not be identical. The rules for numeric promotion are given in section 4.7 of the Jakarta Persistence specification version 3.2:
+The type assigned to an operator expression depends on the types of its operand expression, which need not be identical.
+Numeric type promotion is defined by the following rules:
 
-> * If there is an operand of type `Double` or `double`, the expression is of type `Double`;
-> * otherwise, if there is an operand of type `Float` or `float`, the expression is of type `Float`;
-> * otherwise, if there is an operand of type `BigDecimal`, the expression is of type `BigDecimal`;
-> * otherwise, if there is an operand of type `BigInteger`, the expression is of type `BigInteger`, unless the operator is `/` (division), in which case the expression type is not defined here;
-> * otherwise, if there is an operand of type `Long` or `long`, the expression is of type `Long`, unless the operator is `/` (division), in which case the expression type is not defined here;
-> * otherwise, if there is an operand of integral type, the expression is of type `Integer`, unless the operator is `/` (division), in which case the expression type is not defined here.
+* If there is an operand of type `Double` or `double`, the expression is of type `Double`.
+* Otherwise, if there is an operand of type `Float` or `float`, the expression is of type `Float`.
+* Otherwise, if there is an operand of type `BigDecimal`, the expression is of type `BigDecimal`.
+* Otherwise, if there is an operand of type `BigInteger`, the expression is of type `BigInteger`, unless the operator is `/` (division), in which case the expression type is not defined here.
+* Otherwise, if there is an operand of type `Long` or `long`, the expression is of type `Long`, unless the operator is `/` (division), in which case the expression type is not defined here.
+* Otherwise, if there is an operand of integral type, the expression is of type `Integer`, unless the operator is `/` (division), in which case the expression type is not defined here.
 
 [[predicates]]
 === Conditional expressions
