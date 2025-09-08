@@ -39,7 +39,7 @@ A parameter expression, with syntax given by `input_parameter`, is assigned a ty
 
 NOTE: This specification does not define how arguments are assigned to parameter expressions.
 
-When executed, a parameter expression evaluates to the argument assigned to the parameter..
+When executed, a parameter expression evaluates to the argument assigned to the parameter.
 
 NOTE: Positional and named parameters must not be mixed in a single query.
 
@@ -59,7 +59,7 @@ A _path expression_ is a period-separated list of Java identifiers, with syntax 
 
 The type of the whole path expression is the type of the last element of the list. For example, `pages` might be assigned the type `int`, `address` might be assigned the type `org.example.Address`, and `address.street` might be assigned the type `java.lang.String`.
 
-NOTE: Typically, the last element of a path expression is assigned an <<atomic-values,atomic value type>>. Non-terminal path elements are assigned a <<structures-and-records,structure type>>, usually an embeddable type, if the element references an embeddable, or an entity type, if the element references an association. However, since a Jakarta Query provider is not required to support embedded attributes or associations, the implementation is not required to support compound path expressions.
+NOTE: Typically, the last element of a path expression is assigned an <<atomic-values,atomic value type>>. Non-terminal path elements are assigned a <<structures-and-records,structure type>>, usually an embeddable type, if the element references an embeddable, or an entity type, if the element references an association. Jakarta EE specifications that use Jakarta Query determine whether a provider is required to support embedded attributes or associations, which require support for compound path expressions.
 
 When a path expression is executed, each element of the path is evaluated in turn:
 
@@ -135,7 +135,7 @@ Numeric type promotion is defined by the following rules:
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
 
-NOTE: This Jakarta Persistence specification defines the result of a conditional expression in terms of ternary logic. This specification does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
+NOTE: The Jakarta Persistence specification defines the result of a conditional expression in terms of ternary logic. This specification does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
 
 Conditional expressions may be categorized as:
 
