@@ -221,7 +221,7 @@ The result of the query might contain structures like:
 This time, `isbn` and `bookIsbn` agree.
 
 [[joins-nested]]
-==== Joins to nested entities, collections, or collections
+==== Joins to nested entities or collections
 
 Instead of named entity, a join may identify a structure or collection nested within the result list of the operation on which it acts:
 
