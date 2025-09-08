@@ -21,20 +21,18 @@ NOTE: The syntax of the `update` statement is irregular, with the `from` keyword
 
 The `from` clause is optional in `select` statements. When it is missing, the queried entity is determined by the return type of the repository method, or, if the return type is not an entity type, by the primary entity type of the repository.
 
-For example, this repository method declaration:
+For example, this query:
 
-[source,java]
+[source,sql]
 ----
-@Query("where title like :title")
-List<Book> booksByType(String title);
+where title like :title
 ----
 
 is equivalent to:
 
-[source,java]
+[source,sql]
 ----
-@Query("from Book where title like :title")
-List<Book> booksByType(String title);
+from Book where title like :title
 ----
 
 ==== Where clause
@@ -58,8 +56,6 @@ Alternatively, the `select` clause may contain either:
 A query beginning with `select count(this)` always returns a single result of type `Long`, no matter how many records satisfy the conditional expression in the `where` clause.
 
 NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Query provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
-
-If the JQL implementation does not support `count(this)`, it must throw `UnsupportedOperationException` when this aggregate expression occurs in a query.  Alternatively, the Jakarta Query provider is permitted to reject a repository method declaration at compilation time if its `@Query` annotation uses the unsupported aggregate expression.
 
 The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
 
