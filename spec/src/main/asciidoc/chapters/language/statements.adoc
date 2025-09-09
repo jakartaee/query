@@ -97,8 +97,6 @@ NOTE: An implementation of Jakarta Query might provide some other facility to sp
 
 NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
 
-If the Jakarta Query provider cannot satisfy a request for sorted query results, it must throw `DataException`.
-
 === Union, intersect, and except
 
 The semantics of union, intersection, and complementation of query result sets is specified by <<union-intersection>> above.
@@ -135,7 +133,7 @@ An `update` statement, with syntax given by `update_statement`, updates each rec
 
 [WARNING]
 ====
-If a NoSQL database is not capable of conditional updates or cannot determine the number of matching records reliably for an `update` operation that returns an `int` or `long`, the `update` operation must throw an `UnsupportedOperationException`.
+A NoSQL database might not be capable of conditional updates or might not be able to determine the number of matching records reliably for an `update` operation that returns an `int` or `long`.
 
 Additionally, in databases with **append-only semantics**—such as many time-series and wide-column databases—the `update` operation may behave more like an `insert`, and repeated updates to the same record might not overwrite previous values.
 ====
@@ -146,6 +144,6 @@ A `delete` statement, with syntax given by `delete_statement`, deletes each reco
 
 [WARNING]
 ====
-If a NoSQL database is not capable of the execution of conditional deletes or cannot determine the number of deleted records reliably for a `delete` operation that returns an `int` or `long`, the `delete` operation must throw an `UnsupportedOperationException`.
+A NoSQL database might not be capable of the execution of conditional deletes or might not be able to determine the number of deleted records reliably for a `delete` operation.
 ====
 
