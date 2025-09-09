@@ -52,6 +52,11 @@ A collection has no identity independent of the values it contains.
 - Two lists are identical if they contain exactly the same elements at exactly the same positions.
 - Two maps are identical if they contain exactly the same keys, and identical values for each key.
 
+As usual:
+
+- A set never contains two identical elements; a map never contains two identical keys.
+- On the other hand, a list may contain identical elements at different positions within the listfootnote:[When discussing query result lists, we sometimes say that identical elements belonging to a list are _duplicates_.]; a map may contain identical values when their keys are non-identical.
+
 [[structures-and-records]]
 === Structures and records
 
