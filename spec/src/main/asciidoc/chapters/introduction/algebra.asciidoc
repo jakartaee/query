@@ -589,5 +589,5 @@ Given a structure _r_ which occurs _n~L~_ times in _l~L~_ and _n~R~_ times in _l
 
 1. _r_ occurs _n~L~_ + _n~R~_ times in the final result list if the operator is `union all`,
 2. _r_ occurs min(_n~L~_, _n~R~_) times in the final result list if the operator is `intersect all`, or
-3.  _r_ occurs max(0, _n~L~_ - _n~R~_) times in the final result list if the operator is `except all`.
+3. _r_ occurs max(0, _n~L~_ - _n~R~_) times in the final result list if the operator is `except all`.
 
