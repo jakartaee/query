@@ -30,6 +30,8 @@ A join or root entity has access not only to the result list of its previous sta
 A query is executed against a specific database and any operation which ranges over an entity type ranges only over those records which belong to the database.
 From now on, the database itself will usually be implicit, and we will not explicitly specify that the records under consideration must belong to the database.
 
+Finally, the binary operations **union**, **intersection**, and **complementation** may be used to join the outputs of multiple pipelines.
+
 [[root-entity]]
 === The root entity
 
