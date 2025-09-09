@@ -517,3 +517,66 @@ select book.isbn as isbn, book.title as title, author.name as author
 order by book.isbn desc
 ----
 
+[[distinct]]
+=== Duplicate elimination
+
+**TODO** specify semantics of `select distinct`.
+
+[[union-intersection]]
+=== Union, intersection, and complement
+
+The results of two queries may be combined via union, intersection, or complementation of their result lists viewed as sets.
+The syntax of a _union_, _intersection_, or _complement_ is, respectively:
+
+[source,sql]
+----
+[query] union [query]
+----
+[source,sql]
+----
+[query] intersect [query]
+----
+[source,sql]
+----
+[query] except [query]
+----
+
+where each `[query]` is a complete query pipeline as described above.
+
+The `union`, `intersect`, and `except` operators are operators on sets.
+That is, they:
+
+- produce result lists with distinct elements, and
+- are not required to preserve any element ordering which might exist in the result lists being combined.
+
+Suppose a `union`, `intersect`, or `except` operator is applied to the result lists _l~L~_ and _l~R~_, with _l~L~_ occurring to the left.
+The final result list contains a structure _r_ if and only if:
+
+1. the operator is `union`, and _r_ occurs in either _l~L~_ or _l~R~_,
+2. the operator is `intersect`, and _r_ occurs in both _l~L~_ or _l~R~_, or
+3. the operator is `except`, and _r_ occurs in _l~L~_ but not in _l~R~_.
+
+The semantics of union, intersection, or complementation may be modified by the `all` keyword:
+
+[source,sql]
+----
+[query] union all [query]
+----
+[source,sql]
+----
+[query] intersect all [query]
+----
+[source,sql]
+----
+[query] except all [query]
+----
+
+When `all` occurs, the operation preserves duplicate results from the argument result lists and so the final result list might contain duplicate elements.
+
+Suppose a `union all`, `intersect all`, or `except all` operator is applied to the result lists _l~L~_ and _l~R~_, with _l~L~_ occurring to the left.
+Given a structure _r_ which occurs _n~L~_ times in _l~L~_ and _n~R~_ times in _l~R~_:
+
+1. _r_ occurs _n~L~_ + _n~R~_ times in the final result list if the operator is `union all`,
+2. _r_ occurs min(_n~L~_, _n~R~_) times in the final result list if the operator is `intersect all`, or
+3.  _r_ occurs _n~L~_ - _n~R~_ times in the final result list if the operator is `except all`.
+
