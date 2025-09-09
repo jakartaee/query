@@ -101,18 +101,18 @@ If the Jakarta Query provider cannot satisfy a request for sorted query results,
 
 === Union, intersect, and except
 
-The semantics of #union, intersection, and complementation# of query result sets is specified by <<union-intersection>> above.
+The semantics of union, intersection, and complementation of query result sets is specified by <<union-intersection>> above.
 
 NOTE: These operations are part of the extended language, and so support for union, intersection, and complementation is not required for an implementation of Jakarta Query core.
 
 ==== Union and complement
 
-The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `union` of the full grammar.
+The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `#union#` of the full grammar.
 The operands must produce result lists of the same shape (type).
 
 ==== Intersection
 
-The syntax of `#intersect#` and `#intersect all#` is given by the rule `intersection` of the full grammar.
+The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the full grammar.
 The operands must produce result lists of the same shape (type).
 
 === Statements

@@ -74,7 +74,7 @@ NOTE: Jakarta Query does not require support for literals written in octal or he
 
 === Single-character literals
 
-The `trim_character` and `escape_character` rules allow specification of a single literal character quoted using the `'` character.
+The `#trim_character#` and `#escape_character#` rules allow specification of a single literal character quoted using the `'` character.
 
 In the grammar, such single-character literals are labelled with the `CHARACTER` token type.
 
