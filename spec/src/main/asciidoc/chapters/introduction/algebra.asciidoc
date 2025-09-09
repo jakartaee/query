@@ -8,7 +8,8 @@ A query is a sequence of operations acting on lists of structures:
 - **restriction**,
 - **aggregation**,
 - more **restriction**,
-- **projection**, and
+- **projection**,
+- **duplicate elimination**, and
 - **ordering**.
 
 For queries without <<subqueries,nesting>>, these operations may be viewed as a pipeline.footnote:[Subqueries complicate the picture; a query involving subqueries is conceptually a tree.]
@@ -20,6 +21,7 @@ Each operation in the pipeline produces a _result list_.
 A result list is a list in the sense of the previous chapter.
 The elements of a result list are always structures.
 Thus, every result list has a well-defined type, according to the rules specified <<collections,above>>.
+A result list may contain two or more structures which are identical in the sense of <<structures-and-records>>.
 
 Each operation from the list above--except for the first operation, specification of the root entity--acts on the output of the previous stage.
 When evaluated, the operation produces its result list by transforming the result list produced by the previous stage.
@@ -330,7 +332,7 @@ For each structure _r_ of the result list of the operation on which the join act
 ==== Fetch joins
 
 A fetch join is a hint to the Jakarta Query implementation regarding which data in the query result set the application program will access.
-A fetch join does not affect the shape of the query result set, and therefore does not introduce a label.
+A fetch join does not affect the shape (type) of the query result set, and therefore does not introduce a label.
 Otherwise, the syntax is similar to a left join:
 
 [source,sql]
@@ -476,6 +478,18 @@ When projection is applied to a query involving aggregation, every value express
 
 In this case, the projection has the additional effect of collapsing the list of lists produced by aggregation, producing a single result structure for each nested list in the result list of the operation to which the projection applies.
 
+[[distinct]]
+=== Duplicate elimination
+
+The `distinct` keyword, placed after `select`, specifies that duplicate structures should be eliminated from the result list.
+Two structures are considered duplicates if they are identical in the sense defined in <<structures-and-records>>.
+
+Suppose the result list of a projection contains _n ≥ 0_ identical copies of a structure _r_.
+Then duplicate elimination produces a result list containing (exactly one instance of) the structure _r_ if and only _n ≥ 1_.
+Thus, any two structures belonging to the final result list are distinct (non-identical).
+
+Duplicate elimination does not change the shape (type) of the result list.
+
 [[ordering]]
 === Ordering
 
@@ -516,11 +530,6 @@ join book.authors as author
 select book.isbn as isbn, book.title as title, author.name as author
 order by book.isbn desc
 ----
-
-[[distinct]]
-=== Duplicate elimination
-
-**TODO** specify semantics of `select distinct`.
 
 [[union-intersection]]
 === Union, intersection, and complement
