@@ -79,13 +79,13 @@ range_join
     ;
 
 path_join
-    : join_spec join_association_path_expression
+    : join_spec join_association_expression
       'AS'? identification_variable
       join_condition?
     ;
 
 fetch_join
-    : join_spec 'FETCH' join_association_path_expression
+    : join_spec 'FETCH' join_association_expression
     ;
 
 join_spec
@@ -97,78 +97,78 @@ join_condition
     : 'ON' conditional_expression
     ;
 
-join_association_path_expression
-    : join_collection_valued_path_expression
-    | join_single_valued_path_expression
-    | 'TREAT' '(' join_collection_valued_path_expression 'AS' subtype ')'
-    | 'TREAT' '(' join_single_valued_path_expression 'AS' subtype ')'
+join_association_expression
+    : joinable_path_expression
+    | 'TREAT' '(' joinable_path_expression 'AS' subtype ')'
     ;
 
-join_collection_valued_path_expression
-    : (identification_variable '.')?
-      (single_valued_embeddable_object_field '.')*
-      collection_valued_field
+joinable_path_expression
+    : path_expression
     ;
 
-join_single_valued_path_expression
-    : (identification_variable '.')?
-      (single_valued_embeddable_object_field '.')*
-      single_valued_object_field
+map_entry_identification_variable
+    : 'ENTRY' '(' identification_variable ')'
     ;
 
-qualified_identification_variable
-    : map_field_identification_variable
-    | 'ENTRY' '(' identification_variable ')'
-    ;
-
-map_field_identification_variable
+map_keyvalue_identification_variable
     : 'KEY' '(' identification_variable ')'
-    | 'VALUE' '(' identification_variable ')';
+    | 'VALUE' '(' identification_variable ')'
+    ;
 
 single_valued_path_expression
-    : qualified_identification_variable
-    | 'TREAT' '(' qualified_identification_variable 'AS' subtype ')'
-    | state_field_path_expression
-    | single_valued_object_path_expression
+    : identification_variable  // added this here instead of in all usages of rule
+    | map_entry_identification_variable
+    | map_keyvalue_identification_variable
+    | 'TREAT' '(' map_keyvalue_identification_variable 'AS' subtype ')' // TODO: Why not also identification_variable?
+    | atomic_path_expression
+    | structure_path_expression
     ;
 
-general_identification_variable
+atomic_valued_path_expression
+    : atomic_path_expression
+    | map_keyvalue_identification_variable
+    ;
+
+general_path_expression
+    : path_expression
+    | map_keyvalue_path_expression
+    | treated_path_expression
+    ;
+
+path_expression
+    : (identification_variable '.')?
+      (field_name '.')*
+      field_name
+    ;
+
+map_keyvalue_path_expression
+    : (map_keyvalue_identification_variable '.')
+      (field_name '.')*
+      field_name
+    ;
+
+treatable_path_expression
     : identification_variable
-    | map_field_identification_variable
+    | map_keyvalue_identification_variable
+    | structure_path_expression
     ;
 
-general_subpath
-    : simple_subpath
-    | treated_subpath
-      ('.' single_valued_object_field)*
+treated_path_expression
+    : 'TREAT' '(' treatable_path_expression 'AS' subtype ')'
+      ('.' field_name)*
+      field_name
     ;
 
-simple_subpath
-    : general_identification_variable
-      ('.' single_valued_object_field)*
+atomic_path_expression
+    : general_path_expression
     ;
 
-treated_subpath
-    : 'TREAT' '(' general_subpath 'AS' subtype ')'
+structure_path_expression
+    : general_path_expression
     ;
 
-state_field_path_expression
-    : (general_subpath '.')?
-      state_field
-    ;
-
-state_valued_path_expression
-    : state_field_path_expression
-    | general_identification_variable
-    ;
-
-single_valued_object_path_expression
-    : general_subpath.single_valued_object_field
-    ;
-
-collection_valued_path_expression
-    : general_subpath
-      '.' collection_valued_field
+collection_path_expression
+    : general_path_expression
     ;
 
 update_clause
@@ -178,10 +178,11 @@ update_clause
     ;
 
 update_item
-    : (identification_variable '.')?
-      (single_valued_embeddable_object_field '.')*
-      (state_field | single_valued_object_field)
-      '=' new_value
+    : updatable_path_expression '=' new_value
+    ;
+
+updatable_path_expression
+    : path_expression
     ;
 
 new_value
@@ -208,7 +209,6 @@ select_expression
     : single_valued_path_expression
     | scalar_expression
     | aggregate_expression
-    | identification_variable
     | constructor_expression
     ;
 
@@ -221,17 +221,16 @@ constructor_item
     : single_valued_path_expression
     | scalar_expression
     | aggregate_expression
-    | identification_variable
     ;
 
 aggregate_expression
     : ('AVG' | 'MAX' | 'MIN' | 'SUM')
-      '(' 'DISTINCT'? state_valued_path_expression ')'
+      '(' 'DISTINCT'? atomic_valued_path_expression ')'
     | 'COUNT'
       '(' 'DISTINCT'?
       ( identification_variable
-      | state_valued_path_expression
-      | single_valued_object_path_expression
+      | atomic_valued_path_expression
+      | structure_path_expression
       ) ')'
     | function_invocation;
 
@@ -246,7 +245,6 @@ groupby_clause
 
 groupby_item
     : single_valued_path_expression
-    | identification_variable
     ;
 
 having_clause
@@ -265,8 +263,7 @@ orderby_item
     ;
 
 orderby_expression
-    : state_field_path_expression
-    | general_identification_variable
+    : atomic_valued_path_expression
     | result_variable
     | scalar_expression
     ;
@@ -290,23 +287,8 @@ subselect_identification_variable_declaration
     ;
 
 derived_path_expression
-    : general_derived_path '. 'single_valued_object_field
-    | general_derived_path '.' collection_valued_field
-    ;
-
-general_derived_path
-    : simple_derived_path
-    | treated_derived_path
-      ('.' single_valued_object_field)*
-    ;
-
-simple_derived_path
-    : superquery_identification_variable
-      ('.' single_valued_object_field)*
-    ;
-
-treated_derived_path
-    : 'TREAT' '(' general_derived_path 'AS' subtype ')'
+    : structure_path_expression
+    | collection_path_expression
     ;
 
 simple_select_clause
@@ -317,7 +299,6 @@ simple_select_expression
     : single_valued_path_expression
     | scalar_expression
     | aggregate_expression
-    | identification_variable
     ;
 
 scalar_expression
@@ -368,7 +349,7 @@ between_expression
     ;
 
 in_expression
-    : (state_valued_path_expression | type_discriminator)
+    : (atomic_valued_path_expression | type_discriminator)
       'NOT'? 'IN'
       ( '(' in_item (',' in_item)* ')'
       | '(' subquery ')'
@@ -398,24 +379,20 @@ null_comparison_expression
     ;
 
 empty_collection_comparison_expression
-    : collection_valued_path_expression
+    : collection_path_expression
       'IS' 'NOT'? 'EMPTY'
     ;
 
 collection_member_expression
     : entity_or_value_expression
       'NOT'? 'MEMBER' 'OF'?
-      collection_valued_path_expression
+      collection_path_expression
     ;
 
 entity_or_value_expression
-    : single_valued_object_path_expression
-    | state_field_path_expression
-    | simple_entity_or_value_expression
-    ;
-
-simple_entity_or_value_expression
-    : identification_variable
+    : structure_path_expression
+    | atomic_path_expression
+    | identification_variable // TODO: Why not also map_keyvalue_identification_variable?
     | input_parameter
     | literal
     ;
@@ -480,7 +457,7 @@ arithmetic_factor
     ;
 
 arithmetic_primary
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | numeric_literal
     | '(' arithmetic_expression ')'
     | input_parameter
@@ -493,7 +470,7 @@ arithmetic_primary
     ;
 
 string_expression
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | string_literal
     | input_parameter
     | functions_returning_strings
@@ -506,7 +483,7 @@ string_expression
     ;
 
 datetime_expression
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | input_parameter
     | functions_returning_datetime
     | aggregate_expression
@@ -516,7 +493,7 @@ datetime_expression
     ;
 
 boolean_expression
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | boolean_literal
     | input_parameter
     | case_expression
@@ -525,7 +502,7 @@ boolean_expression
     ;
 
 enum_expression
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | enum_literal
     | input_parameter
     | case_expression
@@ -533,7 +510,7 @@ enum_expression
     ;
 
 entity_expression
-    : single_valued_object_path_expression
+    : structure_path_expression
     | simple_entity_expression
     ;
 
@@ -550,8 +527,9 @@ entity_type_expression
 
 type_discriminator
     : 'TYPE'
-      '(' ( general_identification_variable
-          | single_valued_object_path_expression
+      '(' ( identification_variable
+          | map_keyvalue_identification_variable
+          | structure_path_expression
           | input_parameter
           ) ')'
     ;
@@ -574,7 +552,7 @@ functions_returning_numerics
     | 'MOD' '(' arithmetic_expression',' arithmetic_expression ')'
     | 'POWER' '(' arithmetic_expression',' arithmetic_expression ')'
     | 'ROUND' '(' arithmetic_expression',' arithmetic_expression ')'
-    | 'SIZE' '(' collection_valued_path_expression ')'
+    | 'SIZE' '(' collection_path_expression ')'
     | 'INDEX' '(' identification_variable ')'
     | extract_datetime_field
     ;
@@ -615,7 +593,7 @@ extract_datetime_field
     ;
 
 datetime_field
-    : identification_variable
+    : IDENTIFIER
     ;
 
 extract_datetime_part
@@ -624,12 +602,12 @@ extract_datetime_part
     ;
 
 datetime_part
-    : identification_variable
+    : IDENTIFIER
     ;
 
 function_arg
     : literal
-    | state_valued_path_expression
+    | atomic_valued_path_expression
     | input_parameter
     | scalar_expression
     ;
@@ -641,12 +619,18 @@ entity_id_or_version_function
 
 id_function
     : 'ID'
-      '(' (general_identification_variable | single_valued_object_path_expression) ')'
+      '(' entity_arg ')'
     ;
 
 version_function
     : 'VERSION'
-      '(' (general_identification_variable | single_valued_object_path_expression) ')'
+      '(' entity_arg ')'
+    ;
+
+entity_arg
+    : identification_variable
+    | map_keyvalue_identification_variable
+    | structure_path_expression
     ;
 
 case_expression
@@ -674,7 +658,7 @@ simple_case_expression
     ;
 
 case_operand
-    : state_valued_path_expression
+    : atomic_valued_path_expression
     | type_discriminator
     ;
 
@@ -695,8 +679,6 @@ nullif_expression
 
 identification_variable : IDENTIFIER;
 
-superquery_identification_variable : identification_variable;
-
 result_variable : IDENTIFIER;
 
 
@@ -713,13 +695,7 @@ constructor_name : IDENTIFIER;
 function_name : IDENTIFIER;
 
 
-single_valued_object_field : IDENTIFIER;
-
-single_valued_embeddable_object_field : IDENTIFIER;
-
-collection_valued_field : IDENTIFIER;
-
-state_field : IDENTIFIER;
+field_name : IDENTIFIER;
 
 
 input_parameter : ':' IDENTIFIER | '?' INTEGER;
