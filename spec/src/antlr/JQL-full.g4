@@ -238,7 +238,7 @@ groupby_clause
     ;
 
 groupby_item
-    : single_valued_path_expression
+    : single_valued_path_expression  // TODO: This doesn't look obviously correct
     ;
 
 having_clause
