@@ -525,7 +525,7 @@ entity_type_expression
 
 type_discriminator
     : 'TYPE'
-      '(' ( entity_valued_path_expression | input_parameter ) ')' // TODO: input_parameter should not be accepted here
+      '(' entity_valued_path_expression ')'
     ;
 
 arithmetic_cast_function:
