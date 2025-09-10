@@ -705,9 +705,6 @@ constructor_name : IDENTIFIER;
 function_name : IDENTIFIER;
 
 
-field_name : IDENTIFIER;
-
-
 input_parameter : ':' IDENTIFIER | '?' INTEGER;
 
 collection_valued_input_parameter : input_parameter;
