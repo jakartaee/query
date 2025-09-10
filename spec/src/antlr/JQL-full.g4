@@ -188,6 +188,11 @@ new_value
     | simple_entity_expression
     | 'NULL';
 
+simple_entity_expression
+    : identification_variable
+    | input_parameter
+    ;
+
 delete_clause
     : 'DELETE' 'FROM' entity_name
       ('AS'? identification_variable)?
@@ -503,12 +508,7 @@ enum_expression
     ;
 
 entity_expression
-    : structure_path_expression
-    | simple_entity_expression
-    ;
-
-simple_entity_expression
-    : identification_variable
+    : structure_valued_path_expression
     | input_parameter
     ;
 
