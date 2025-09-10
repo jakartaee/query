@@ -103,7 +103,7 @@ join_association_expression
     ;
 
 joinable_path_expression
-    : path_expression
+    : simple_path_expression  // must resolve to structure element of structure or collection type
     ;
 
 map_entry_identification_variable
@@ -134,12 +134,12 @@ structure_valued_path_expression
     ;
 
 general_path_expression
-    : path_expression
+    : simple_path_expression
     | map_keyvalue_path_expression
     | treated_path_expression
     ;
 
-path_expression
+simple_path_expression
     : (identification_variable '.')?
       (field_name '.')*
       field_name
@@ -158,15 +158,15 @@ treated_path_expression
     ;
 
 atomic_path_expression
-    : general_path_expression
+    : general_path_expression  // Must resolve to structure element of atomic type
     ;
 
 structure_path_expression
-    : general_path_expression
+    : general_path_expression  // Must resolve to structure element of structure type
     ;
 
 collection_path_expression
-    : general_path_expression
+    : general_path_expression  // Must resolve to structure element of collection type
     ;
 
 update_clause
@@ -180,7 +180,7 @@ update_item
     ;
 
 updatable_path_expression
-    : path_expression
+    : simple_path_expression  // must resolve to entity or atomic type (cannot have implicit joins)
     ;
 
 new_value
