@@ -343,7 +343,7 @@ between_expression
     ;
 
 in_expression
-    : (atomic_valued_path_expression | type_discriminator)
+    : (atomic_valued_path_expression | type_discriminator)  // TODO: Much too restrictive
       'NOT'? 'IN'
       ( '(' in_item (',' in_item)* ')'
       | '(' subquery ')'
