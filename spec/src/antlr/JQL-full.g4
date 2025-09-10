@@ -294,7 +294,8 @@ simple_select_clause
     ;
 
 simple_select_expression
-    : single_valued_path_expression  // TODO: are embeddables really allowed here?
+    : atomic_valued_path_expression
+    | entity_valued_path_expression
     | scalar_expression
     | aggregate_expression
     ;
