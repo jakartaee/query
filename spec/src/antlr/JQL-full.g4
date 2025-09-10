@@ -520,7 +520,7 @@ entity_type_expression
 
 type_discriminator
     : 'TYPE'
-      '(' ( structure_valued_path_expression | input_parameter ) ')'
+      '(' ( structure_valued_path_expression | input_parameter ) ')' // TODO: input_parameter should not be accepted here
     ;
 
 arithmetic_cast_function:
