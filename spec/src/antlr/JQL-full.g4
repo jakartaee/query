@@ -379,7 +379,6 @@ null_comparison_expression
 nullable_expression
     : atomic_valued_path_expression
     | entity_valued_path_expression
-    | map_entry_identification_variable
     | input_parameter
     ;
 
