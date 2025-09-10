@@ -11,20 +11,20 @@ from_clause : 'FROM' entity_name;
 where_clause : 'WHERE' conditional_expression;
 
 set_clause : 'SET' update_item (',' update_item)*;
-update_item : path_expression '=' (scalar_expression | 'NULL');
+update_item : simple_path_expression '=' (scalar_expression | 'NULL');
 
 select_clause : 'SELECT' (select_item | select_items);
 select_item
-    : path_expression
+    : simple_path_expression
     | id_expression
     | aggregate_expression
     ;
 select_items
-    : path_expression (',' path_expression)+
+    : simple_path_expression (',' simple_path_expression)+
     ;
 
 orderby_clause : 'ORDER' 'BY' orderby_item (',' orderby_item)*;
-orderby_item : (path_expression | id_expression) ('ASC' | 'DESC');
+orderby_item : (simple_path_expression | id_expression) ('ASC' | 'DESC');
 
 conditional_expression
     // highest to lowest precedence
@@ -43,10 +43,10 @@ comparison_expression : scalar_expression ('=' | '>' | '>=' | '<' | '<=' | '<>')
 between_expression : scalar_expression 'NOT'? 'BETWEEN' scalar_expression 'AND' scalar_expression;
 like_expression : scalar_expression 'NOT'? 'LIKE' STRING;
 
-in_expression : path_expression 'NOT'? 'IN' '(' in_item (',' in_item)* ')';
+in_expression : simple_path_expression 'NOT'? 'IN' '(' in_item (',' in_item)* ')';
 in_item : literal | enum_literal | input_parameter;
 
-null_comparison_expression : path_expression 'IS' 'NOT'? 'NULL';
+null_comparison_expression : simple_path_expression 'IS' 'NOT'? 'NULL';
 
 scalar_expression
     // highest to lowest precedence
@@ -62,7 +62,7 @@ primary_expression
     : function_expression
     | special_expression
     | id_expression
-    | path_expression
+    | simple_path_expression
     | enum_literal
     | input_parameter
     | literal
@@ -89,7 +89,7 @@ special_expression
     | 'FALSE'
     ;
 
-path_expression : IDENTIFIER ('.' IDENTIFIER)*;
+simple_path_expression : IDENTIFIER ('.' IDENTIFIER)*;
 
 entity_name : IDENTIFIER; // no ambiguity
 
