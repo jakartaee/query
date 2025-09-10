@@ -238,7 +238,8 @@ groupby_clause
     ;
 
 groupby_item
-    : single_valued_path_expression  // TODO: This doesn't look obviously correct
+    : atomic_valued_path_expression
+    | entity_valued_path_expression
     ;
 
 having_clause
