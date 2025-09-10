@@ -183,6 +183,7 @@ Then _s_ is a record of type `Y`.
 Any well-defined operation on records of type `Y` is also a well-defined operation on the restriction of a record to `Y`.
 We therefore adopt the principle that an operation which may be applied to a record of a given entity type may also be applied to a record of any entity type which inherits the first entity type.
 
+[[circularity]]
 === Circularity
 
 Our definitions above are intended to be descriptive rather than constructive.
@@ -223,4 +224,40 @@ This specification should not be interpreted to mandate an inefficient implement
 
 Since an attribute of an entity may be null, a JQL expression may evaluate to a null value.
 
+[[paths]]
+=== Paths
 
+Consider an arbitrary root structure constructed recursively using only atomic values and structures (and no collections).
+Such a structure may be viewed as a directed tree, where vertices are structures and atomic values, and edges are labelled structure elements.
+Then it is possible to uniquely assign a compound label to any given element of any structure in the tree by:
+
+1. tracing a directed path from the given element to the root structure, and
+2. collecting the labels of each element visited along the path.
+
+Conventionally, we write such a compound label in reverse order, beginning with the label of the element belonging to the root structure, and ending with the label of the most nested element, and we separate labels with periods.
+
+For example, given the structure:
+
+[source,json]
+----
+{
+    author: {
+        name: "Iain M. Banks",
+        born: {
+            day: 16, month: { name: 'February', number: 2 }, year: 1954
+        },
+        died: {
+            day: 9, month: { name: 'June', number: 6 }, year: 2013
+        }
+    }
+}
+----
+
+The compound label `author.born.month.name` refers to the element `name: 'February'`.
+
+It's not possible to uniquely assign compound labels to every element belonging to an arbitrary structure, since:
+
+- a generic structure contains collections, and
+- as discussed above in <<circularity>>, a database is not required to contain only trees.
+
+However, we may use such labelling within any subgraph that does not contain a collection, though in principle the compound labels might not be unique.
