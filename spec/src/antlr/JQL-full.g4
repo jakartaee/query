@@ -116,16 +116,20 @@ map_keyvalue_identification_variable
     ;
 
 single_valued_path_expression
-    : identification_variable  // added this here instead of in all usages of rule
+    : atomic_valued_path_expression
+    | structure_valued_path_expression
     | map_entry_identification_variable
-    | map_keyvalue_identification_variable
     | 'TREAT' '(' map_keyvalue_identification_variable 'AS' subtype ')' // TODO: Why not also identification_variable?
-    | atomic_path_expression
-    | structure_path_expression
     ;
 
 atomic_valued_path_expression
     : atomic_path_expression
+    | map_keyvalue_identification_variable
+    ;
+
+structure_valued_path_expression
+    : structure_path_expression
+    | identification_variable
     | map_keyvalue_identification_variable
     ;
 
@@ -147,14 +151,8 @@ map_keyvalue_path_expression
       field_name
     ;
 
-treatable_path_expression
-    : identification_variable
-    | map_keyvalue_identification_variable
-    | structure_path_expression
-    ;
-
 treated_path_expression
-    : 'TREAT' '(' treatable_path_expression 'AS' subtype ')'
+    : 'TREAT' '(' structure_valued_path_expression 'AS' subtype ')'
       ('.' field_name)*
       field_name
     ;
@@ -227,11 +225,7 @@ aggregate_expression
     : ('AVG' | 'MAX' | 'MIN' | 'SUM')
       '(' 'DISTINCT'? atomic_valued_path_expression ')'
     | 'COUNT'
-      '(' 'DISTINCT'?
-      ( identification_variable
-      | atomic_valued_path_expression
-      | structure_path_expression
-      ) ')'
+      '(' 'DISTINCT'? ( atomic_valued_path_expression | structure_valued_path_expression ) ')'
     | function_invocation;
 
 where_clause
@@ -527,11 +521,7 @@ entity_type_expression
 
 type_discriminator
     : 'TYPE'
-      '(' ( identification_variable
-          | map_keyvalue_identification_variable
-          | structure_path_expression
-          | input_parameter
-          ) ')'
+      '(' ( structure_valued_path_expression | input_parameter ) ')'
     ;
 
 arithmetic_cast_function:
@@ -619,18 +609,12 @@ entity_id_or_version_function
 
 id_function
     : 'ID'
-      '(' entity_arg ')'
+      '(' structure_valued_path_expression ')'
     ;
 
 version_function
     : 'VERSION'
-      '(' entity_arg ')'
-    ;
-
-entity_arg
-    : identification_variable
-    | map_keyvalue_identification_variable
-    | structure_path_expression
+      '(' structure_valued_path_expression ')'
     ;
 
 case_expression
