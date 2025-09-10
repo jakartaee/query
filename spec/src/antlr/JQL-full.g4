@@ -103,7 +103,12 @@ join_association_expression
     ;
 
 joinable_path_expression
-    : simple_path_expression  // must resolve to structure element of structure or collection type
+    // Note that unlike in derived_path_expression,
+    // JPQL does not allow use of TREAT() here
+    // TODO: Should we allow KEY(), VALUE() here?
+    : (identification_variable '.')?
+      (structure_field '.')*
+      (entity_field | collection_field)
     ;
 
 map_entry_identification_variable
@@ -117,7 +122,8 @@ map_keyvalue_identification_variable
 
 single_valued_path_expression
     : atomic_valued_path_expression
-    | structure_valued_path_expression
+    | embeddable_valued_path_expression
+    | entity_valued_path_expression
     | map_entry_identification_variable
     | 'TREAT' '(' map_keyvalue_identification_variable 'AS' subtype ')' // TODO: Why not also identification_variable?
     ;
@@ -127,46 +133,49 @@ atomic_valued_path_expression
     | map_keyvalue_identification_variable
     ;
 
-structure_valued_path_expression
-    : structure_path_expression
+embeddable_valued_path_expression
+    : embeddable_path_expression
+    | map_keyvalue_identification_variable
+    ;
+
+entity_valued_path_expression
+    : entity_path_expression
     | identification_variable
     | map_keyvalue_identification_variable
     ;
 
-general_path_expression
-    : simple_path_expression
-    | map_keyvalue_path_expression
-    | treated_path_expression
+collection_valued_path_expression
+    : collection_path_expression
     ;
 
-simple_path_expression
-    : (identification_variable '.')?
-      (field_name '.')*
-      field_name
-    ;
-
-map_keyvalue_path_expression
-    : (map_keyvalue_identification_variable '.')
-      (field_name '.')*
-      field_name
-    ;
-
-treated_path_expression
-    : 'TREAT' '(' structure_valued_path_expression 'AS' subtype ')' '.'
-      (field_name '.')*
-      field_name
+root_entity_expression
+    : identification_variable
+    | map_keyvalue_identification_variable
+    | 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')'
     ;
 
 atomic_path_expression
-    : general_path_expression  // Must resolve to structure element of atomic type
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      atomic_field
     ;
 
-structure_path_expression
-    : general_path_expression  // Must resolve to structure element of structure type
+entity_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      entity_field
+    ;
+
+embeddable_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      embedded_field
     ;
 
 collection_path_expression
-    : general_path_expression  // Must resolve to structure element of collection type
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      collection_field
     ;
 
 update_clause
@@ -180,7 +189,10 @@ update_item
     ;
 
 updatable_path_expression
-    : simple_path_expression  // must resolve to entity or atomic type (cannot have implicit joins)
+    // must resolve to entity or atomic type (cannot have implicit joins)
+    : (identification_variable '.')?
+      (embedded_field '.')*
+      (atomic_field | entity_field)
     ;
 
 new_value
@@ -209,7 +221,7 @@ select_item
     ;
 
 select_expression
-    : single_valued_path_expression
+    : single_valued_path_expression  // embeddables are allowed
     | scalar_expression
     | aggregate_expression
     | constructor_expression
@@ -221,7 +233,7 @@ constructor_expression
     ;
 
 constructor_item
-    : single_valued_path_expression
+    : single_valued_path_expression  // embeddables are allowed
     | scalar_expression
     | aggregate_expression
     ;
@@ -230,7 +242,7 @@ aggregate_expression
     : ('AVG' | 'MAX' | 'MIN' | 'SUM')
       '(' 'DISTINCT'? atomic_valued_path_expression ')'
     | 'COUNT'
-      '(' 'DISTINCT'? ( atomic_valued_path_expression | structure_valued_path_expression ) ')'
+      '(' 'DISTINCT'? ( atomic_valued_path_expression | entity_valued_path_expression ) ')'
     | function_invocation;
 
 where_clause
@@ -286,8 +298,12 @@ subselect_identification_variable_declaration
     ;
 
 derived_path_expression
-    : structure_path_expression
-    | collection_path_expression
+    // TODO: Is support for TREAT() here really a requirement?
+    //       We don't allow it in joinable_path_expression
+    // TODO: Should we allow KEY(), VALUE() here?
+    : ((identification_variable | 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')') '.')?
+      (structure_field '.')*
+      (entity_field | collection_field)
     ;
 
 simple_select_clause
@@ -295,7 +311,7 @@ simple_select_clause
     ;
 
 simple_select_expression
-    : single_valued_path_expression
+    : single_valued_path_expression  // TODO: are embeddables really allowed here?
     | scalar_expression
     | aggregate_expression
     ;
@@ -373,23 +389,23 @@ pattern_value
     ;
 
 null_comparison_expression
-    : (single_valued_path_expression | input_parameter)
+    : (single_valued_path_expression | input_parameter)  // TODO: Embeddables are not supported here!
       'IS' 'NOT'? 'NULL'
     ;
 
 empty_collection_comparison_expression
-    : collection_path_expression
+    : collection_valued_path_expression
       'IS' 'NOT'? 'EMPTY'
     ;
 
 collection_member_expression
     : entity_or_value_expression
       'NOT'? 'MEMBER' 'OF'?
-      collection_path_expression
+      collection_valued_path_expression
     ;
 
 entity_or_value_expression
-    : structure_valued_path_expression
+    : entity_valued_path_expression
     | atomic_valued_path_expression
     | input_parameter
     | literal
@@ -508,7 +524,7 @@ enum_expression
     ;
 
 entity_expression
-    : structure_valued_path_expression
+    : entity_valued_path_expression
     | input_parameter
     ;
 
@@ -520,7 +536,7 @@ entity_type_expression
 
 type_discriminator
     : 'TYPE'
-      '(' ( structure_valued_path_expression | input_parameter ) ')' // TODO: input_parameter should not be accepted here
+      '(' ( entity_valued_path_expression | input_parameter ) ')' // TODO: input_parameter should not be accepted here
     ;
 
 arithmetic_cast_function:
@@ -541,7 +557,7 @@ functions_returning_numerics
     | 'MOD' '(' arithmetic_expression',' arithmetic_expression ')'
     | 'POWER' '(' arithmetic_expression',' arithmetic_expression ')'
     | 'ROUND' '(' arithmetic_expression',' arithmetic_expression ')'
-    | 'SIZE' '(' collection_path_expression ')'
+    | 'SIZE' '(' collection_valued_path_expression ')'
     | 'INDEX' '(' identification_variable ')'
     | extract_datetime_field
     ;
@@ -608,12 +624,12 @@ entity_id_or_version_function
 
 id_function
     : 'ID'
-      '(' structure_valued_path_expression ')'
+      '(' entity_valued_path_expression ')'
     ;
 
 version_function
     : 'VERSION'
-      '(' structure_valued_path_expression ')'
+      '(' entity_valued_path_expression ')'
     ;
 
 case_expression
@@ -664,6 +680,27 @@ identification_variable : IDENTIFIER;
 
 result_variable : IDENTIFIER;
 
+
+entity_field
+    : IDENTIFIER
+    ;
+
+embedded_field
+    : IDENTIFIER
+    ;
+
+atomic_field
+    : IDENTIFIER
+    ;
+
+collection_field
+    : IDENTIFIER
+    ;
+
+structure_field
+    : embedded_field
+    | entity_field
+    ;
 
 entity_name : IDENTIFIER;
 
