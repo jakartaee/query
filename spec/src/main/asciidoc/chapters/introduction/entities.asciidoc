@@ -234,7 +234,7 @@ Then it is possible to uniquely assign a compound label to any given element of 
 1. tracing a directed path from the given element to the root structure, and
 2. collecting the labels of each element visited along the path.
 
-Conventionally, we write such a compound label in reverse order, beginning with the label of the element belonging to the root structure, and ending with the label of the most nested element, and we separate labels with periods.
+Conventionally, we write such a compound label in reverse order, beginning with the label of the element belonging to the root structure and ending with the label of the most nested element, and we separate labels with periods.
 
 For example, given the structure:
 
@@ -255,7 +255,7 @@ For example, given the structure:
 
 The compound label `author.born.month.name` refers to the element `name: 'February'`.
 
-It's not possible to uniquely assign compound labels to every element belonging to an arbitrary structure, since:
+It is not possible to uniquely assign compound labels to every element belonging to an arbitrary structure, since:
 
 - a generic structure contains collections, and
 - as discussed above in <<circularity>>, a database is not required to contain only trees.
