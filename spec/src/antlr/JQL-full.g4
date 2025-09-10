@@ -384,9 +384,8 @@ collection_member_expression
     ;
 
 entity_or_value_expression
-    : structure_path_expression
-    | atomic_path_expression
-    | identification_variable // TODO: Why not also map_keyvalue_identification_variable?
+    : structure_valued_path_expression
+    | atomic_valued_path_expression
     | input_parameter
     | literal
     ;
