@@ -152,8 +152,8 @@ map_keyvalue_path_expression
     ;
 
 treated_path_expression
-    : 'TREAT' '(' structure_valued_path_expression 'AS' subtype ')'
-      ('.' field_name)*
+    : 'TREAT' '(' structure_valued_path_expression 'AS' subtype ')' '.'
+      (field_name '.')*
       field_name
     ;
 
