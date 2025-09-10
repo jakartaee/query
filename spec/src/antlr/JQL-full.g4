@@ -125,7 +125,6 @@ single_valued_path_expression
     | embeddable_valued_path_expression
     | entity_valued_path_expression
     | map_entry_identification_variable
-    | 'TREAT' '(' map_keyvalue_identification_variable 'AS' subtype ')' // TODO: Why not also identification_variable?
     ;
 
 atomic_valued_path_expression
