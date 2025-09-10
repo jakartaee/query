@@ -93,7 +93,7 @@ simple_path_expression : IDENTIFIER ('.' IDENTIFIER)*;
 
 entity_name : IDENTIFIER; // no ambiguity
 
-enum_literal : IDENTIFIER ('.' IDENTIFIER)*; // ambiguity with state_field_path_expression resolvable semantically
+enum_literal : IDENTIFIER ('.' IDENTIFIER)*; // ambiguity with simple_path_expression resolvable semantically
 
 input_parameter : ':' IDENTIFIER | '?' INTEGER;
 
