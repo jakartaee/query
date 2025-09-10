@@ -52,7 +52,7 @@ When executed, an enum expression evaluates to the named member of the Java `enu
 [[path-expressions]]
 ==== Path expressions
 
-A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. Each identifier is interpreted as the name of an attribute of an entity or embeddable type. Each prefix of the list is assigned a type:
+A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. A path expression is a compound path identifying an element of a structure, as discussed above in <<paths>>. Each identifier is interpreted as the name of an attribute of an entity or embeddable type. Each prefix of the list is assigned a type:
 
 - the first element of the list is assigned the type of the named attribute of the entity being queried, and
 - each subsequent element is assigned the type of the named attribute of the type assigned to the previous element.
