@@ -336,7 +336,7 @@ simple_cond_expression
     | like_expression
     | null_comparison_expression
     | empty_collection_comparison_expression
-    | collection_member_expression
+    | collection_member_of_expression
     | exists_expression
     ;
 
@@ -372,8 +372,15 @@ pattern_value
     ;
 
 null_comparison_expression
-    : (single_valued_path_expression | input_parameter)  // TODO: Embeddables are not supported here!
+    : nullable_expression
       'IS' 'NOT'? 'NULL'
+    ;
+
+nullable_expression
+    : atomic_valued_path_expression
+    | entity_valued_path_expression
+    | map_entry_identification_variable
+    | input_parameter
     ;
 
 empty_collection_comparison_expression
@@ -381,13 +388,13 @@ empty_collection_comparison_expression
       'IS' 'NOT'? 'EMPTY'
     ;
 
-collection_member_expression
-    : entity_or_value_expression
+collection_member_of_expression
+    : collection_member_element_expression
       'NOT'? 'MEMBER' 'OF'?
       collection_valued_path_expression
     ;
 
-entity_or_value_expression
+collection_member_element_expression
     : entity_valued_path_expression
     | atomic_valued_path_expression
     | input_parameter
