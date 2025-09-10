@@ -129,53 +129,37 @@ single_valued_path_expression
     ;
 
 atomic_valued_path_expression
-    : atomic_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      atomic_field
     | map_keyvalue_identification_variable
     ;
 
 embeddable_valued_path_expression
-    : embeddable_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      embedded_field
     | map_keyvalue_identification_variable
     ;
 
 entity_valued_path_expression
-    : entity_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      entity_field
     | identification_variable
     | map_keyvalue_identification_variable
     ;
 
 collection_valued_path_expression
-    : collection_path_expression
+    : (root_entity_expression '.')?
+      (structure_field '.')*
+      collection_field
     ;
 
 root_entity_expression
     : identification_variable
     | map_keyvalue_identification_variable
     | 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')'
-    ;
-
-atomic_path_expression
-    : (root_entity_expression '.')?
-      (structure_field '.')*
-      atomic_field
-    ;
-
-entity_path_expression
-    : (root_entity_expression '.')?
-      (structure_field '.')*
-      entity_field
-    ;
-
-embeddable_path_expression
-    : (root_entity_expression '.')?
-      (structure_field '.')*
-      embedded_field
-    ;
-
-collection_path_expression
-    : (root_entity_expression '.')?
-      (structure_field '.')*
-      collection_field
     ;
 
 update_clause
