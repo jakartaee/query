@@ -12,18 +12,12 @@ Jakarta Query serves as a unifying specification that provides a common object-o
 
 ```mermaid
 graph LR
-  JQ([Jakarta Query]):::main
+    JP([Jakarta Persistence]):::spec -->|depends on| JQ([Jakarta Query]):::main
+    JD([Jakarta Data]):::spec -->|depends on| JQ
+    JN([Jakarta NoSQL]):::spec -->|depends on| JQ
 
-  JP([Jakarta Persistence]):::spec
-  JD([Jakarta Data]):::spec
-  JN([Jakarta NoSQL]):::spec
-
-  JQ --> JP
-  JQ --> JD
-  JQ --> JN
-
-  classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
-  classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
+    classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
+    classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
 ```
 
 To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Query distinguishes between two levels of the language: a core subset, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and an extended form, tailored for [Jakarta Persistence][] and other providers working with relational technologies.
