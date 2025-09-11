@@ -1,5 +1,5 @@
-Jakarta Query
-=============
+# Jakarta Query
+
 
 [Jakarta Persistence]: https://jakarta.ee/specifications/persistence/
 [Jakarta Data]: https://jakarta.ee/specifications/data/
