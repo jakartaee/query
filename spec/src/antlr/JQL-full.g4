@@ -25,7 +25,8 @@ intersection
     ;
 
 query_expression
-    : select_query | '(' union ')'
+    : select_query
+    | '(' union ')'
     ;
 
 select_query
@@ -38,7 +39,7 @@ select_query
     ;
 
 update_statement
-    : update_clause where_clause?
+    : update_clause set_clause where_clause?
     ;
 
 delete_statement
@@ -162,9 +163,14 @@ root_entity_expression
     ;
 
 update_clause
+    // TODO: Could be:
+    //       'UPDATE' (this_implicit_variable | range_variable_declaration)
     : 'UPDATE' entity_name
       ('AS'? identification_variable)?
-      'SET' update_item (',' update_item)*
+    ;
+
+set_clause
+    : 'SET' update_item (',' update_item)*
     ;
 
 update_item
@@ -185,7 +191,7 @@ new_value
 
 simple_entity_expression
     : identification_variable
-    | input_parameter
+    | single_valued_input_parameter
     ;
 
 delete_clause
@@ -222,10 +228,8 @@ constructor_item
     ;
 
 aggregate_expression
-    : ('AVG' | 'MAX' | 'MIN' | 'SUM')
-      '(' 'DISTINCT'? atomic_valued_path_expression ')'
-    | 'COUNT'
-      '(' 'DISTINCT'? ( atomic_valued_path_expression | entity_valued_path_expression ) ')'
+    : ('AVG' | 'MAX' | 'MIN' | 'SUM') '(' 'DISTINCT'? atomic_valued_path_expression ')'
+    | 'COUNT' '(' 'DISTINCT'? (atomic_valued_path_expression | entity_valued_path_expression) ')'
     | function_invocation;
 
 where_clause
@@ -263,6 +267,10 @@ orderby_expression
     | scalar_expression
     ;
 
+subquery_expression
+    : '(' subquery ')'
+    ;
+
 subquery
     : simple_select_clause
       subquery_from_clause
@@ -273,7 +281,7 @@ subquery
 
 subquery_from_clause
     : 'FROM' subselect_identification_variable_declaration
-      (',' subselect_identification_variable_declaration )*
+      (',' subselect_identification_variable_declaration)*
     ;
 
 subselect_identification_variable_declaration
@@ -327,11 +335,11 @@ conditional_factor
     ;
 
 conditional_primary
-    : simple_cond_expression
+    : simple_conditional_expression
     | '(' conditional_expression ')'
     ;
 
-simple_cond_expression
+simple_conditional_expression
     : comparison_expression
     | between_expression
     | in_expression
@@ -351,14 +359,17 @@ between_expression
 in_expression
     : (atomic_valued_path_expression | type_discriminator)  // TODO: Much too restrictive
       'NOT'? 'IN'
-      ( '(' in_item (',' in_item)* ')'
-      | '(' subquery ')'
-      | collection_valued_input_parameter
-      )
+      (in_item_list | subquery_expression | collection_valued_input_parameter)
+    ;
+
+in_item_list
+    : '(' in_item (',' in_item)* ')'
     ;
 
 in_item
     : literal
+    | enum_literal
+    | special_boolean_expression
     | single_valued_input_parameter
     ;
 
@@ -369,7 +380,7 @@ like_expression
     ;
 
 pattern_value
-    : string_literal
+    : literal_pattern
     | single_valued_input_parameter
     ;
 
@@ -381,7 +392,7 @@ null_comparison_expression
 nullable_expression
     : atomic_valued_path_expression
     | entity_valued_path_expression
-    | input_parameter
+    | single_valued_input_parameter
     ;
 
 empty_collection_comparison_expression
@@ -398,44 +409,36 @@ collection_member_of_expression
 collection_member_element_expression
     : entity_valued_path_expression
     | atomic_valued_path_expression
-    | input_parameter
+    | single_valued_input_parameter
     | literal
+    | enum_literal
+    | special_boolean_expression
     ;
 
 exists_expression
     : 'NOT'? 'EXISTS'
-      '(' subquery ')'
+      subquery_expression
     ;
 
 all_or_any_expression
     : ('ALL' | 'ANY' | 'SOME')
-      '(' subquery ')'
+      subquery_expression
     ;
 
 comparison_expression
-    : string_expression
-      comparison_operator
-      (string_expression | all_or_any_expression)
-    | boolean_expression
-      ('=' | '<>')
-      (boolean_expression | all_or_any_expression)
-    | enum_expression
-      ('=' | '<>')
-      (enum_expression | all_or_any_expression)
-    | datetime_expression
-      comparison_operator
-      (datetime_expression | all_or_any_expression)
-    | entity_expression
-      ('=' | '<>')
-      (entity_expression | all_or_any_expression)
-    | arithmetic_expression comparison_operator
-      (arithmetic_expression | all_or_any_expression)
-    | entity_id_or_version_function
-      ('=' | '<>')
-      input_parameter
-    | entity_type_expression
-      ('=' | '<>')
-      entity_type_expression
+    : string_expression comparison_operator (string_expression | all_or_any_expression)
+    | boolean_expression equality_operator (boolean_expression | all_or_any_expression)
+    | enum_expression equality_operator (enum_expression | all_or_any_expression)
+    | datetime_expression comparison_operator (datetime_expression | all_or_any_expression)
+    | entity_expression equality_operator (entity_expression | all_or_any_expression)
+    | arithmetic_expression comparison_operator (arithmetic_expression | all_or_any_expression)
+    | entity_id_or_version_function equality_operator single_valued_input_parameter
+    | entity_type_expression equality_operator entity_type_expression
+    ;
+
+equality_operator
+    : '='
+    | '<>'
     ;
 
 comparison_operator
@@ -465,74 +468,68 @@ arithmetic_primary
     : atomic_valued_path_expression
     | numeric_literal
     | '(' arithmetic_expression ')'
-    | input_parameter
+    | single_valued_input_parameter
     | functions_returning_numerics
     | aggregate_expression
     | case_expression
     | function_invocation
-    | arithmetic_cast_function
-    | '(' subquery ')'
+    | subquery_expression
     ;
 
 string_expression
     : atomic_valued_path_expression
     | string_literal
-    | input_parameter
+    | '(' string_expression ')'
+    | single_valued_input_parameter
     | functions_returning_strings
     | aggregate_expression
     | case_expression
     | function_invocation
-    | string_cast_function
     | string_expression '||' string_expression
-    | '(' subquery ')'
+    | subquery_expression
     ;
 
 datetime_expression
     : atomic_valued_path_expression
-    | input_parameter
+    | single_valued_input_parameter
     | functions_returning_datetime
+    | special_datetime_expression
     | aggregate_expression
     | case_expression
     | function_invocation
-    | '(' subquery ')'
+    | subquery_expression
     ;
 
 boolean_expression
     : atomic_valued_path_expression
-    | boolean_literal
-    | input_parameter
+    | special_boolean_expression
+    | single_valued_input_parameter
     | case_expression
     | function_invocation
-    | '(' subquery ')'
+    | subquery_expression
     ;
 
 enum_expression
     : atomic_valued_path_expression
     | enum_literal
-    | input_parameter
+    | single_valued_input_parameter
     | case_expression
-    | '(' subquery ')'
+    | subquery_expression
     ;
 
 entity_expression
     : entity_valued_path_expression
-    | input_parameter
+    | single_valued_input_parameter
     ;
 
 entity_type_expression
     : type_discriminator
     | entity_type_literal
-    | input_parameter
+    | single_valued_input_parameter
     ;
 
 type_discriminator
-    : 'TYPE'
-      '(' entity_valued_path_expression ')'
-    ;
-
-arithmetic_cast_function:
-    'CAST'
-    '(' string_expression 'AS' ('INTEGER' | 'LONG' | 'FLOAT' | 'DOUBLE') ')'
+    : 'TYPE' '(' entity_valued_path_expression ')'
     ;
 
 functions_returning_numerics
@@ -550,18 +547,12 @@ functions_returning_numerics
     | 'ROUND' '(' arithmetic_expression',' arithmetic_expression ')'
     | 'SIZE' '(' collection_valued_path_expression ')'
     | 'INDEX' '(' identification_variable ')'
-    | extract_datetime_field
+    | 'EXTRACT' '(' datetime_field 'FROM' datetime_expression ')'
+    | 'CAST' '(' string_expression 'AS' ('INTEGER' | 'LONG' | 'FLOAT' | 'DOUBLE') ')'
     ;
 
 functions_returning_datetime
-    : 'LOCAL' 'DATE'
-    | 'LOCAL' 'TIME'
-    | 'LOCAL' 'DATETIME'
-    | extract_datetime_part
-    ;
-
-string_cast_function
-    : 'CAST' '(' scalar_expression 'AS' 'STRING' ')'
+    : 'EXTRACT' '(' datetime_part 'FROM' datetime_expression ')'
     ;
 
 functions_returning_strings
@@ -570,6 +561,7 @@ functions_returning_strings
     | 'TRIM' '(' (trim_specification? trim_character? 'FROM')? string_expression ')'
     | 'LOWER' '(' string_expression ')'
     | 'UPPER' '(' string_expression ')'
+    | 'CAST' '(' scalar_expression 'AS' 'STRING' ')'
     ;
 
 trim_specification
@@ -579,48 +571,23 @@ trim_specification
     ;
 
 function_invocation
-    : 'FUNCTION'
-      '(' function_name (',' function_arg)* ')'
+    : 'FUNCTION' '(' function_name (',' scalar_expression)* ')'
     ;
 
-extract_datetime_field
-    : 'EXTRACT'
-      '(' datetime_field 'FROM' datetime_expression ')'
+special_boolean_expression
+    : 'TRUE'
+    | 'FALSE'
     ;
 
-datetime_field
-    : IDENTIFIER
-    ;
-
-extract_datetime_part
-    : 'EXTRACT'
-      '(' datetime_part 'FROM' datetime_expression ')'
-    ;
-
-datetime_part
-    : IDENTIFIER
-    ;
-
-function_arg
-    : literal
-    | atomic_valued_path_expression
-    | input_parameter
-    | scalar_expression
+special_datetime_expression
+    : 'LOCAL' 'DATE'
+    | 'LOCAL' 'TIME'
+    | 'LOCAL' 'DATETIME'
     ;
 
 entity_id_or_version_function
-    : id_function
-    | version_function
-    ;
-
-id_function
-    : 'ID'
-      '(' entity_valued_path_expression ')'
-    ;
-
-version_function
-    : 'VERSION'
-      '(' entity_valued_path_expression ')'
+    : 'ID' '(' entity_valued_path_expression ')'
+    | 'VERSION' '(' entity_valued_path_expression ')'
     ;
 
 case_expression
@@ -658,13 +625,11 @@ simple_when_clause
       ;
 
 coalesce_expression
-    : 'COALESCE'
-      '(' scalar_expression (',' scalar_expression)+ ')'
+    : 'COALESCE' '(' scalar_expression (',' scalar_expression)+ ')'
     ;
 
 nullif_expression
-    : 'NULLIF'
-      '(' scalar_expression ',' scalar_expression ')'
+    : 'NULLIF' '(' scalar_expression ',' scalar_expression ')'
     ;
 
 identification_variable : IDENTIFIER;
@@ -693,6 +658,16 @@ structure_field
     | entity_field
     ;
 
+
+datetime_field
+    : IDENTIFIER
+    ;
+
+datetime_part
+    : IDENTIFIER
+    ;
+
+
 entity_name : IDENTIFIER;
 
 subtype : entity_name;
@@ -713,18 +688,11 @@ collection_valued_input_parameter : input_parameter;
 single_valued_input_parameter : input_parameter;
 
 
-literal
-    : string_literal
-    | numeric_literal
-    | boolean_literal
-    | enum_literal
-    ;
+literal : string_literal | numeric_literal;
 
 numeric_literal : INTEGER | DOUBLE;
 
 string_literal : STRING;
-
-boolean_literal : 'TRUE' | 'FALSE' ;
 
 enum_literal : IDENTIFIER ('.' IDENTIFIER)*;
 
@@ -733,3 +701,4 @@ trim_character : CHARACTER;
 
 escape_character : CHARACTER;
 
+literal_pattern : STRING;

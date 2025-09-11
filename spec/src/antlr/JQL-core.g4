@@ -3,15 +3,23 @@ grammar JQLCore;
 statement : select_statement | update_statement | delete_statement;
 
 select_statement : select_clause? from_clause? where_clause? orderby_clause?;
-update_statement : 'UPDATE' entity_name set_clause where_clause?;
-delete_statement : 'DELETE' from_clause where_clause?;
+update_statement : update_clause set_clause where_clause?;
+delete_statement : delete_clause where_clause?;
 
-from_clause : 'FROM' entity_name;
+from_clause : 'FROM' this_implicit_variable;
+this_implicit_variable : entity_name;
 
 where_clause : 'WHERE' conditional_expression;
 
+update_clause : 'UPDATE' entity_name;
 set_clause : 'SET' update_item (',' update_item)*;
-update_item : simple_path_expression '=' (scalar_expression | 'NULL');
+update_item : simple_path_expression '=' new_value;
+new_value
+    : scalar_expression
+    | 'NULL'
+    ;
+
+delete_clause : 'DELETE' 'FROM' entity_name;
 
 select_clause : 'SELECT' (select_item | select_items);
 select_item
@@ -24,7 +32,11 @@ select_items
     ;
 
 orderby_clause : 'ORDER' 'BY' orderby_item (',' orderby_item)*;
-orderby_item : (simple_path_expression | id_expression) ('ASC' | 'DESC');
+orderby_item : orderby_expression ('ASC' | 'DESC');
+orderby_expression
+    : simple_path_expression
+    | id_expression
+    ;
 
 conditional_expression
     // highest to lowest precedence
@@ -39,11 +51,21 @@ conditional_expression
     | conditional_expression 'OR' conditional_expression
     ;
 
-comparison_expression : scalar_expression ('=' | '>' | '>=' | '<' | '<=' | '<>') scalar_expression;
+comparison_expression : scalar_expression comparison_operator scalar_expression;
 between_expression : scalar_expression 'NOT'? 'BETWEEN' scalar_expression 'AND' scalar_expression;
-like_expression : scalar_expression 'NOT'? 'LIKE' STRING;
+like_expression : scalar_expression 'NOT'? 'LIKE' literal_pattern;
 
-in_expression : simple_path_expression 'NOT'? 'IN' '(' in_item (',' in_item)* ')';
+comparison_operator
+    : '='
+    | '>'
+    | '>='
+    | '<'
+    | '<='
+    | '<>'
+    ;
+
+in_expression : simple_path_expression 'NOT'? 'IN' in_item_list;
+in_item_list : '(' in_item (',' in_item)* ')' ;
 in_item : literal | enum_literal | input_parameter;
 
 null_comparison_expression : simple_path_expression 'IS' 'NOT'? 'NULL';
@@ -82,11 +104,19 @@ function_expression
     ;
 
 special_expression
-    : 'LOCAL' 'DATE'
-    | 'LOCAL' 'DATETIME'
-    | 'LOCAL' 'TIME'
-    | 'TRUE'
+    : special_boolean_expression
+    | special_datetime_expression
+    ;
+
+special_boolean_expression
+    : 'TRUE'
     | 'FALSE'
+    ;
+
+special_datetime_expression
+    : 'LOCAL' 'DATE'
+    | 'LOCAL' 'TIME'
+    | 'LOCAL' 'DATETIME'
     ;
 
 simple_path_expression : IDENTIFIER ('.' IDENTIFIER)*;
@@ -98,4 +128,6 @@ enum_literal : IDENTIFIER ('.' IDENTIFIER)*; // ambiguity with simple_path_expre
 input_parameter : ':' IDENTIFIER | '?' INTEGER;
 
 literal : STRING | INTEGER | DOUBLE;
+
+literal_pattern : STRING;
 
