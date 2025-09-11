@@ -27,6 +27,12 @@ To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Que
 - an extended language tailored for Jakarta Persistence providers or other 
   persistence technologies backed by relational databases.
 
+> ⚠️ **Note**  
+> While [Jakarta Data][] primarily targets the Core language, it may also support  
+> the Extended language if its implementation is based on [Jakarta Persistence][].
+
+The language is closely based on the existing query languages defined by
+Jakarta Persistence and Jakarta Data, and is backward compatible with both.
 
 ```mermaid
 graph TB
@@ -46,13 +52,6 @@ graph TB
     classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:2px,color:#1D5183
     classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
 ```
-> ⚠️ **Note**  
-> While [Jakarta Data][] primarily targets the Core language, it may also support  
-> the Extended language if its implementation is based on [Jakarta Persistence][].
-
-
-The language is closely based on the existing query languages defined by 
-Jakarta Persistence and Jakarta Data, and is backward compatible with both.
 
 Jakarta Query prioritizes clients written in Java. However, it is not by 
 nature limited to Java, and implementations in other sufficiently Java-like 
