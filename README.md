@@ -30,26 +30,22 @@ To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Que
 
 ```mermaid
 graph TB
-  JQ([Jakarta Query]):::main
+    JQ([Jakarta Query]):::main
 
-  subgraph Core_Language["Core Language"]
-    Core([Core]):::core
+    Core([Core Language]):::core
+    Ext([Extended Language]):::ext
+
     Core --> JD[Jakarta Data]:::spec
     Core --> JN[Jakarta NoSQL]:::spec
-  end
-
-  subgraph Extended_Language["Extended Language"]
-    Ext([Extended]):::ext
     Ext --> JP[Jakarta Persistence]:::spec
-  end
 
-  JQ --> Core
-  JQ --> Ext
+    JQ --> Ext
+    Ext --> Core
 
-  classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
-  classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
-  classDef ext fill:#F8F7F7,stroke:#019DDC,stroke-width:1px,color:#019DDC
-  classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
+    classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
+    classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
+    classDef ext fill:#F8F7F7,stroke:#019DDC,stroke-width:1px,color:#019DDC
+    classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
 ```
 > ⚠️ **Note**  
 > While [Jakarta Data][] primarily targets the Core language, it may also support  
