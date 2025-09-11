@@ -9,7 +9,23 @@ Jakarta Query
 [JSR-220]: https://jcp.org/en/jsr/detail?id=220
 
 Jakarta Query defines an object-oriented query language designed for use with 
-[Jakarta Persistence][], [Jakarta Data][], and [Jakarta NoSQL][], with: 
+[Jakarta Persistence][], [Jakarta Data][], and [Jakarta NoSQL][], with:
+
+```mermaid
+graph LR
+  JQ([Jakarta Query]):::main
+
+  JP([Jakarta Persistence]):::spec
+  JD([Jakarta Data]):::spec
+  JN([Jakarta NoSQL]):::spec
+
+  JQ --> JP
+  JQ --> JD
+  JQ --> JN
+
+  classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
+  classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
+```
 
 - a core language that can be implemented by Jakarta Data and Jakarta NoSQL 
   providers using non-relational datastores, and 
