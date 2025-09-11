@@ -57,6 +57,10 @@ graph TB
   classDef ext fill:#F8F7F7,stroke:#019DDC,stroke-width:1px,color:#019DDC
   classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
 ```
+> ⚠️ **Note**  
+> While [Jakarta Data][] primarily targets the Core language, it may also support  
+> the Extended language if its implementation is based on [Jakarta Persistence][].
+
 
 The language is closely based on the existing query languages defined by 
 Jakarta Persistence and Jakarta Data, and is backward compatible with both.
