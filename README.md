@@ -26,6 +26,8 @@ graph LR
   classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
 ```
 
+To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Query distinguishes between two levels of the language: a core subset, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and an extended form, tailored for [Jakarta Persistence][] and other providers working with relational technologies.
+
 - a core language that can be implemented by Jakarta Data and Jakarta NoSQL 
   providers using non-relational datastores, and 
 - an extended language tailored for Jakarta Persistence providers or other 
