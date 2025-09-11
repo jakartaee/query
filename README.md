@@ -33,6 +33,31 @@ To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Que
 - an extended language tailored for Jakarta Persistence providers or other 
   persistence technologies backed by relational databases.
 
+
+```mermaid
+graph TB
+  JQ([Jakarta Query]):::main
+
+  subgraph Core_Language["Core Language"]
+    Core([Core]):::core
+    Core --> JD[Jakarta Data]:::spec
+    Core --> JN[Jakarta NoSQL]:::spec
+  end
+
+  subgraph Extended_Language["Extended Language"]
+    Ext([Extended]):::ext
+    Ext --> JP[Jakarta Persistence]:::spec
+  end
+
+  JQ --> Core
+  JQ --> Ext
+
+  classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
+  classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
+  classDef ext fill:#F8F7F7,stroke:#019DDC,stroke-width:1px,color:#019DDC
+  classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
+```
+
 The language is closely based on the existing query languages defined by 
 Jakarta Persistence and Jakarta Data, and is backward compatible with both.
 
