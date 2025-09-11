@@ -57,6 +57,26 @@ Jakarta Query prioritizes clients written in Java. However, it is not by
 nature limited to Java, and implementations in other sufficiently Java-like 
 programming languages are encouraged.
 
+## Core Language
+
+The **Core language** is the common subset of Jakarta Query, focusing on portable operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:  
+
+```json
+{
+  "id": "R-101",
+  "type": "DELUXE",
+  "status": "AVAILABLE",
+  "number": 42
+}
+````
+
+Using the Core language, a query might retrieve all deluxe rooms that are available, ordered by their number:
+
+```sql
+from Room where type = 'DELUXE' and status = 'AVAILABLE' order by number
+```
+
+
 ## Object-oriented query languages
 
 A data structure in an object-oriented language is a graph of objects 
