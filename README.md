@@ -23,8 +23,8 @@ Jakarta Query prioritizes clients written in Java. However, it is not by
 nature limited to Java, and implementations in other sufficiently Java-like 
 programming languages are encouraged.
 
-Object-oriented query languages
--------------------------------
+## Object-oriented query languages
+
 A data structure in an object-oriented language is a graph of objects 
 interconnected by unidirectional object references, which may be polymorphic. 
 Some non-relational databases support similar representations. On the other 
@@ -35,8 +35,8 @@ easily represented within the relational model, but are not present as
 first-class constructs in the SQL language. An object-oriented query language 
 is a dialect of SQL with support for associations and subtype polymorphism.
 
-Historical background
----------------------
+## Historical background
+
 Object-oriented dialects of SQL have existed since at least the early 90s. 
 The Object Query Language (OQL) was an early example, targeting object 
 databases, but was never widely used, since object databases were themselves 
