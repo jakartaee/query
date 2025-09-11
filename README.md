@@ -53,3 +53,13 @@ More recently, Jakarta Data 1.0 introduced the [Jakarta Data Query Language][]
 It is now inconvenient that JDQL and JPQL are maintained separately by different 
 groups, and so the Jakarta Query project has taken on responsibility for their 
 evolution.
+
+```mermaid
+timeline
+  title Evolution of Object-Oriented Query Languages in Java
+  1990s : OQL introduced for object databases (never widely adopted)
+  2001  : HQL (Hibernate Query Language) and EJB-QL introduced
+  2006  : JPQL standardized in JSR-220 (Jakarta Persistence)
+  2023  : JDQL released with Jakarta Data 1.0 for non-relational databases
+  2025  : Jakarta Query unifies JPQL and JDQL into one specification
+```
