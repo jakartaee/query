@@ -76,6 +76,32 @@ Using the Core language, a query might retrieve all deluxe rooms that are availa
 from Room where type = 'DELUXE' and status = 'AVAILABLE' order by number
 ```
 
+## Extended Language
+
+The **Extended language** is a superset of the Core. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
+
+```json
+{
+  "id": "H-200",
+  "name": "Grand Hotel",
+  "rooms": [
+    { "id": "R-101", "status": "OCCUPIED" },
+    { "id": "R-102", "status": "OCCUPIED" },
+    { "id": "R-103", "status": "AVAILABLE" }
+  ]
+}
+```
+
+With the Extended language, a query could count the number of occupied rooms per hotel, returning only those with more than ten:
+
+```sql
+select h.name, count(r)
+from Hotel h join h.rooms r
+where r.status = 'OCCUPIED'
+group by h.name
+having count(r) > 10
+order by count(r) desc
+```
 
 ## Object-oriented query languages
 
