@@ -8,8 +8,7 @@ Jakarta Query
 [Jakarta Data Query Language]: https://jakarta.ee/specifications/data/1.0/jakarta-data-1.0#_jakarta_data_query_language
 [JSR-220]: https://jcp.org/en/jsr/detail?id=220
 
-Jakarta Query defines an object-oriented query language designed for use with 
-[Jakarta Persistence][], [Jakarta Data][], and [Jakarta NoSQL][], with:
+Jakarta Query serves as a unifying specification that provides a common object-oriented query language for the Jakarta ecosystem. It establishes a shared foundation that can be used consistently across [Jakarta Persistence][], [Jakarta Data][], and [Jakarta NoSQL][], ensuring that developers rely on a single query model rather than separate, independently evolving languages.
 
 ```mermaid
 graph LR
