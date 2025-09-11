@@ -32,19 +32,18 @@ To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Que
 graph TB
     JQ([Jakarta Query]):::main
 
-    Core([Core Language]):::core
-    Ext([Extended Language]):::ext
+    subgraph Extended["Extended Language"]
+        Core((Core Language)):::core
+    end
 
     Core --> JD[Jakarta Data]:::spec
     Core --> JN[Jakarta NoSQL]:::spec
-    Ext --> JP[Jakarta Persistence]:::spec
+    Extended --> JP[Jakarta Persistence]:::spec
 
-    JQ --> Ext
-    Ext --> Core
+    JQ --> Extended
 
     classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
-    classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
-    classDef ext fill:#F8F7F7,stroke:#019DDC,stroke-width:1px,color:#019DDC
+    classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:2px,color:#1D5183
     classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
 ```
 > ⚠️ **Note**  
