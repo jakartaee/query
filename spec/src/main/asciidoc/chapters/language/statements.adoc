@@ -8,8 +8,8 @@ As discussed in <<algebra>>, there is a logical ordering of clauses, reflecting 
 
 1. `from`
 2. `where`,
-3. `group`
-4. `having`,
+3. `#group#`
+4. `#having#`,
 5. `select` or `set`,
 6. `order`.
 
@@ -17,7 +17,7 @@ The interpretation and effect of each clause in this list is influenced by claus
 
 ==== From clause
 
-The `from` clause, with syntax given by `from_clause`, specifies an _entity name_ which identifies the queried entity. Path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<Entity names>>.
+The `from` clause, with syntax given by `from_clause`, specifies an _entity name_ which identifies the queried entity. Path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-embeddables>>.
 
 NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
 
@@ -97,21 +97,26 @@ NOTE: An implementation of Jakarta Query might provide some other facility to sp
 
 NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
 
+[[union-intersect-except]]
 === Union, intersect, and except
 
 The semantics of union, intersection, and complementation of query result sets is specified by <<union-intersection>> above.
 
 NOTE: These operations are part of the extended language, and so support for union, intersection, and complementation is not required for an implementation of Jakarta Query core.
 
+Each of these operations is treated as an infix binary operator acting on query result lists of identical shape (type), and producing a new query result set of the same shape as the operands.
+
 ==== Union and complement
 
 The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `#union#` of the full grammar.
-The operands must produce result lists of the same shape (type).
+The operands must produce result lists of the same type.
+The type of the union or complement expression is the same as the type of its operands.
 
 ==== Intersection
 
 The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the full grammar.
-The operands must produce result lists of the same shape (type).
+The operands must produce result lists of the same type.
+The type of the interaction expression is the same as the type of its operands.
 
 === Statements
 
@@ -125,11 +130,31 @@ The clauses which can appear in a statement are given by the grammar for each ki
 
 ==== Select statements
 
-A `select` statement, with syntax given by `select_statement`, returns data to the client. For each record which satisfies the restriction imposed by the `where` clause, a result is returned containing the value obtained by evaluating the path expression in the `select` clause. Alternatively, for the case of `select count(this)`, the query returns the number of records which satisfied the restriction.
+A `select` statement, with syntax given by `select_statement`, returns data to the client.
+
+In the core language, a `select` statement may contain one of more of the following clauses:
+
+- `select`
+- `from`
+- `where`
+- `order`.
+
+A `select` statement is a pipeline as defined in <<algebra>>.
+The result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
+
+In the extended language, a `select` statement may contain, in addition, a `#group#` and/or a `#having#` clause, with syntax specified by `#select_query#`.
+Each `#select_query#` is a pipeline as defined in <<algebra>>.
+A `#select_statement#` in the full grammar may contain union, intersection, and complement operations, as defined in <<union-intersect-except>>.
+
+- If the `#select_statement#` is a `#union#` or `#intersection#`, the result list of the whole `select` statement is the same as the result list of the union or intersection.
+- Otherwise, if the `#select_statement#` is just a `#select_query#`, result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
 
 ==== Update statements
 
-An `update` statement, with syntax given by `update_statement`, updates each record which satisfies the restriction imposed by the `where` clause, and returns the number of updated records to the client.
+An `update` statement, with syntax given by `update_statement`, updates each record belonging to the entity type named in the `update` clause which satisfies the restriction imposed by the `where` clause, if any.
+
+An `update` statement does not have a well-defined result, but implementations typically return the number of deleted records to the client.
+Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
@@ -140,7 +165,10 @@ Additionally, in databases with **append-only semantics**—such as many time-se
 
 ==== Delete statements
 
-A `delete` statement, with syntax given by `delete_statement`, deletes each record which satisfies the restriction imposed by the `where` clause, and returns the number of deleted records to the client.
+A `delete` statement, with syntax given by `delete_statement`, deletes each record  belonging to the entity type named in the `update` clause which satisfies the restriction imposed by the `where` clause, if any.
+
+A `delete` statement does not have a well-defined result, but implementations typically return the number of deleted records to the client.
+Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
