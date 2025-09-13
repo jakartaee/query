@@ -214,15 +214,15 @@ When Jakarta Query is used from within the Java programming language:
 - An atomic value type typically corresponds to a Java primitive type, class, or enumerated type.
 - Every expression in a JQL query is assigned a Java type.
 
-The interpretation of an operator expression or literal expression of a given type is given by the interpretation of the equivalent expression in Java.
+The interpretation of an <<operator-expressions,operator expression>> or <<literal-expressions,literal expression>> of a given type is given by the interpretation of the equivalent expression in Java.
 However, the precise behavior of some queries might vary depending on the native semantics of queries on the underlying datastore. For example, numeric precision and overflow, string collation, and integer division are permitted to depart from the semantics of the Java language.
 
 [NOTE]
 ====
-This specification should not be interpreted to mandate an inefficient implementation of query language constructs in cases where the native behavior of the database varies from Java in such minor ways. That said, portability between Jakarta Query providers is maximized when their behavior is closest to the Java language.
+This specification should not be interpreted to mandate an inefficient implementation of query language constructs in cases where the native behavior of the database varies from Java in such minor ways. That said, portability between implementations of Jakarta Query is maximized when their behavior is closest to the Java language.
 ====
 
-Since an attribute of an entity may be null, a JQL expression may evaluate to a null value.
+Since an attribute of an entity may be null, an expression in the query language may evaluate to a null value.
 
 [[paths]]
 === Paths
@@ -257,7 +257,7 @@ The compound label `author.born.month.name` refers to the element `name: 'Februa
 
 It is not possible to uniquely assign compound labels to every element belonging to an arbitrary structure, since:
 
-- a generic structure contains collections, and
+- a generic structure contains sets, whose elements cannot be assigned labelsfootnote:[It would be possible, of course, to assign labels to elements of a list or map.], and
 - as discussed above in <<circularity>>, a database is not required to contain only trees.
 
-However, we may use such labelling within any subgraph that does not contain a collection, though in principle the compound labels might not be unique.
+However, we may use such labelling within any subtree that does not contain a collection, though in principle the compound labels might not be unique.

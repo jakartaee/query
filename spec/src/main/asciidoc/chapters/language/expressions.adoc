@@ -14,6 +14,7 @@ Expressions may be categorized as:
 - function calls, and
 - operator expressions.
 
+[[literal-expressions]]
 ==== Literal expressions
 
 A string, integer, or decimal literal is assigned the type it would be assigned in Java. So, for example, `'Hello'` is assigned the type `java.lang.String`, `123` is assigned the type `int`, `1e4` is assigned the type `double`, and `1.23f` is assigned the type `float`.
@@ -94,6 +95,7 @@ NOTE: These functions cannot be emulated on every datastore. When a function can
 
 NOTE: On the other hand, an implementation of Jakarta Query might provide additional built-in functions, and might even allow invocation of user-defined functions.
 
+[[operator-expressions]]
 ==== Operator expressions
 
 The syntax of an _operator expression_ is given by the `scalar_expression` rule. Within an operator expression, parentheses indicate grouping.
