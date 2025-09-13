@@ -17,9 +17,29 @@ The interpretation and effect of each clause in this list is influenced by claus
 
 ==== From clause
 
-The `from` clause, with syntax given by `from_clause`, specifies an _entity name_ which identifies the queried entity. Path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-embeddables>>.
+In the core language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
+This entity is always assigned the implicit alias `this`.
 
-NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
+In the core language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-embeddables>>.
+
+NOTE: The core language does not have joins, and so the `from` clause is always trivial.
+
+In the extended language, the `from` clause might enumerate multiple steps of the basic operation pipeline.
+The `#from_clause#` of the full grammar allows:
+
+1. A root entity, as defined in <<root-entity>>, which may either:
+   - explicitly specify its alias according to the syntax given by `#range_variable_declaration#`, or
+   - let the alias default to `this`, by using the syntax given by `#this_implicit_variable#`.
+2. Optionally, one or more join clauses, as defined in <<joins>>, with syntax given by `#join#`.
+
+When a `from` clause has multiple elements in the  `#identification_variable_declarations#` list, the root entity is always the first `#identification_variable_declaration#` to occur in the list.
+Each subsequent `#identification_variable_declaration#` is considered a <<joins-entities,join to a named entity>>.
+Join clauses are discussed <<join-clauses,below>>.
+
+Since a `from` clause may introduce multiple distinct labels, paths in the extended language may begin with the label of an entity.
+Alternatively, a path which does not begin with the label of an entity is interpreted as beginning with the implicit label `this`.
+
+// NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
 
 The `from` clause is optional in `select` statements when a mechanism from an external specification is used to identify the queried entity. For example:
 
@@ -39,6 +59,11 @@ is equivalent to:
 ----
 from Book where title like :title
 ----
+
+[[join-clauses]]
+==== Join clauses
+
+**TODO**
 
 ==== Where clause
 
