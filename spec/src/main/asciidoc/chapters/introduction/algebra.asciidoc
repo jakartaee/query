@@ -591,3 +591,9 @@ Given a structure _r_ which occurs _n~L~_ times in _l~L~_ and _n~R~_ times in _l
 2. _r_ occurs min(_n~L~_, _n~R~_) times in the final result list if the operator is `intersect all`, or
 3. _r_ occurs max(0, _n~L~_ - _n~R~_) times in the final result list if the operator is `except all`.
 
+[NOTE]
+====
+In principle, a union may act on result lists of distinct type, producing a result list containing structures of heterogeneous type.
+Many data stores do not allow such operations, and so this specification limits union, intersection, or complementation to apply to lists of identical type.
+Some implementations allow unions of lists containing entities of distinct type when the entity types are related by <<inheritance,inheritance>>, but that functionality is not required by this specification.
+====
