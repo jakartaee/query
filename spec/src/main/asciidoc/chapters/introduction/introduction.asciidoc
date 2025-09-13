@@ -114,8 +114,19 @@ Jakarta Persistence defines an interpretation compatible with SQL.
 
 === Conventions
 
+_Italics_ are used to highlight a word or phrase which is being defined by the text in which it occurs.
+
+*Bold* text is occasionally used to draw attention to important words or phrases.
+
+`Monospace` font indicates a keyword or fragment of text from the query language itself, or from the grammar for the language.
+When a keyword or name of a grammar rule is not part of the core language, the keyword or rule name is `#highlighted#`.
+
 ANTLR 4-style BNF is used to define the syntax of the language.
 
+Admonitions are used to set apart:
+
+- explanatory text which is not prescriptive or not part of the definition of the language, and
+- information relating to compatibility between implementations of Jakarta Query, and to differences between the core language and the extended language.
 
 include::project_team.adoc[]
 
