@@ -73,21 +73,16 @@ The `where` clause is always optional. When it is missing, there is no restricti
 
 ==== Select clause
 
-The `select` clause, with syntax given by `select_clause`, specifies one or more path expressions which determine the values returned by the query. Each path expression is evaluated for each record which satisfies the restriction imposed by the `where` clause, as specified in <<Path expressions>>, and a tuple containing the resulting values is added to the query results.
-
-NOTE: When a `select` clause contains more than one item, the query return type must be a Java `record` type, and the elements of the tuple are repackaged as an instance of the query return type by calling a constructor of the `record`, passing the elements in the same order they occur in the `select` list.
-When the `select` clause contains only one item, the query directly returns the values of the path expression.
+In the core language, the `select` clause, with syntax given by `select_clause`, specifies one or more path expressions with syntax `simple_path_expression`, which are collectively interpreted as a projection with automatically assigned aliases, as specified in <<projection>>.
 
 Alternatively, the `select` clause may contain either:
 
-- a single `count(this)` aggregate expression, which evaluates to the number of records which satisfy the restriction, or
-- a single <<Identifier expressions,identifier expression>>, which evaluates to the unique identifier of each record.
+- a single `count(this)` <<aggregate-functions,aggregate function invocation>>, or
+- a single <<Identifier expressions,identifier expression>>.
 
-A query beginning with `select count(this)` always returns a single result of type `Long`, no matter how many records satisfy the conditional expression in the `where` clause.
+A query beginning with `select count(this)` performs aggregation (without grouping), as specified by <<projection-and-aggregation>> and always returns a result list of unit length.
 
-NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Query provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
-
-The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
+// NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Query provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
 
 [WARNING]
 ====
@@ -98,9 +93,17 @@ Key-value databases:: These databases generally do not support `select` clauses 
 Wide-column databases:: The ability to use a `select` clause may depend on the presence of secondary indexes. Without secondary indexes, selection is often restricted to key-based operations. Support for `count(this)` is not required.
 
 Graph and document databases:: Support for flexible `select` clauses, including path expressions and aggregate functions like `count(this)` is required. Performance might vary based on the size and indexing of the dataset.
-
-It is advisable to review your NoSQL provider's documentation to confirm the support and performance implications of `select` clauses and aggregate functions in your queries.
 ====
+
+In the extended language, the `select` clause is much more flexible.
+Its syntax, given by `#select_clause#`, permits:
+
+- one or more expressions, with optional labels, as given by `#select_item#`, where `#select_expression#` is the expression, and `#result_variable#` is the label, and
+- optionally, the `#distinct#` keyword.
+
+The list of expressions is interpreted as a projection, as specified by <<projection>>, and, if at least one of the expressions is an <<aggregate-functions,aggregate function>>, also aggregation, as specified in <<projection-and-aggregation>>.
+
+If the `#distinct#` keyword occurs, then projection is followed by duplicate elimination, as specified by <<distinct>>.
 
 ==== Set clause
 
@@ -173,6 +176,14 @@ A `#select_statement#` in the full grammar may contain union, intersection, and 
 
 - If the `#select_statement#` is a `#union#` or `#intersection#`, the result list of the whole `select` statement is the same as the result list of the union or intersection.
 - Otherwise, if the `#select_statement#` is just a `#select_query#`, result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
+
+The `select` clause is optional in a `select` statement.
+A query with a missing `select` clause is interpreted as if it had the following single-item `select` clause:
+[sourrce,sql]
+----
+select this
+----
+where `this` is the implicit alias.
 
 ==== Update statements
 
