@@ -404,7 +404,7 @@ Aggregation follows a root entity or join:
 
 where each `[expression]` is a value expression, as defined later in <<value-expressions>>.
 
-1. For each structure _r_ of the result list of the operation on which the aggregation acts, a _grouping tuple_ is constructed by evaluating each of the value expressions specified by the aggregation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
+1. For each structure _r_ of the result list of the operation on which the ordering operation acts, a _grouping tuple_ is constructed by evaluating each of the value expressions specified by the aggregation in the context of the structure _r_, and packaging the resulting atomic values in a structure _t_ where each value is labeled by the position of the value expression in the `group by` clause.
 
 2. For each distinct resulting value _t_ of the grouping tuple, a nested list _l~t~_ is constructed containing every structure _r_ which produced that value of the grouping tuple.
 
