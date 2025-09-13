@@ -20,7 +20,7 @@ The only required stage is the first stage: specification of the root entity.
 Each operation in the pipeline produces a _result list_.
 A result list is a list in the sense of the previous chapter.
 The elements of a result list are always structures.
-Thus, every result list has a well-defined type, according to the rules specified <<collections,above>>.
+Thus, every result list has a well-defined type, which we sometimes call its _shape_, according to the rules specified <<collections,above>>.
 A result list may contain two or more structures which are identical in the sense of <<structures-and-records>>.
 
 Each operation from the list above--except for the first operation, specification of the root entity--acts on the output of the previous stage.
