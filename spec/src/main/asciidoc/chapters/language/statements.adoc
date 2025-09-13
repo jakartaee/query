@@ -8,8 +8,8 @@ As discussed in <<algebra>>, there is a logical ordering of clauses, reflecting 
 
 1. `from`
 2. `where`,
-3. `group`
-4. `having`,
+3. `#group#`
+4. `#having#`,
 5. `select` or `set`,
 6. `order`.
 
@@ -17,9 +17,29 @@ The interpretation and effect of each clause in this list is influenced by claus
 
 ==== From clause
 
-The `from` clause, with syntax given by `from_clause`, specifies an _entity name_ which identifies the queried entity. Path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<Entity names>>.
+In the core language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
+This entity is always assigned the implicit alias `this`.
 
-NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
+In the core language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-embeddables>>.
+
+NOTE: The core language does not have joins, and so the `from` clause is always trivial.
+
+In the extended language, the `from` clause might enumerate multiple steps of the basic operation pipeline.
+The `#from_clause#` of the full grammar allows:
+
+1. A root entity, as defined in <<root-entity>>, which may either:
+   - explicitly specify its alias according to the syntax given by `#range_variable_declaration#`, or
+   - let the alias default to `this`, by using the syntax given by `#this_implicit_variable#`.
+2. Optionally, one or more join clauses, as defined in <<joins>>, with syntax given by `#join#`.
+
+When a `from` clause has multiple elements in the  `#identification_variable_declarations#` list, the root entity is always the first `#identification_variable_declaration#` to occur in the list.
+Each subsequent `#identification_variable_declaration#` is considered a <<joins-entities,join to a named entity>>.
+Join clauses are discussed <<join-clauses,below>>.
+
+Since a `from` clause may introduce multiple distinct labels, paths in the extended language may begin with the label of an entity.
+Alternatively, a path which does not begin with the label of an entity is interpreted as beginning with the implicit label `this`.
+
+// NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
 
 The `from` clause is optional in `select` statements when a mechanism from an external specification is used to identify the queried entity. For example:
 
@@ -40,6 +60,11 @@ is equivalent to:
 from Book where title like :title
 ----
 
+[[join-clauses]]
+==== Join clauses
+
+**TODO**
+
 ==== Where clause
 
 The `where` clause, with syntax given by `where_clause`, specifies a conditional expression used to restrict the records returned, deleted, or updated by the query. Only records for which the conditional expression is satisfied are returned, deleted, or updated.
@@ -48,21 +73,16 @@ The `where` clause is always optional. When it is missing, there is no restricti
 
 ==== Select clause
 
-The `select` clause, with syntax given by `select_clause`, specifies one or more path expressions which determine the values returned by the query. Each path expression is evaluated for each record which satisfies the restriction imposed by the `where` clause, as specified in <<Path expressions>>, and a tuple containing the resulting values is added to the query results.
-
-NOTE: When a `select` clause contains more than one item, the query return type must be a Java `record` type, and the elements of the tuple are repackaged as an instance of the query return type by calling a constructor of the `record`, passing the elements in the same order they occur in the `select` list.
-When the `select` clause contains only one item, the query directly returns the values of the path expression.
+In the core language, the `select` clause, with syntax given by `select_clause`, specifies one or more path expressions with syntax `simple_path_expression`, which are collectively interpreted as a projection with automatically assigned aliases, as specified in <<projection>>.
 
 Alternatively, the `select` clause may contain either:
 
-- a single `count(this)` aggregate expression, which evaluates to the number of records which satisfy the restriction, or
-- a single <<Identifier expressions,identifier expression>>, which evaluates to the unique identifier of each record.
+- a single `count(this)` <<aggregate-functions,aggregate function invocation>>, or
+- a single <<Identifier expressions,identifier expression>>.
 
-A query beginning with `select count(this)` always returns a single result of type `Long`, no matter how many records satisfy the conditional expression in the `where` clause.
+A query beginning with `select count(this)` performs aggregation (without grouping), as specified by <<projection-and-aggregation>> and always returns a result list of unit length.
 
-NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Query provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
-
-The `select` clause is optional in `select` statements. When it is missing, the query returns the queried entity.
+// NOTE: If a datastore does not natively provide the ability to count query results, the Jakarta Query provider is strongly encouraged, but not required, to implement this operation by counting the query results in Java.
 
 [WARNING]
 ====
@@ -73,9 +93,17 @@ Key-value databases:: These databases generally do not support `select` clauses 
 Wide-column databases:: The ability to use a `select` clause may depend on the presence of secondary indexes. Without secondary indexes, selection is often restricted to key-based operations. Support for `count(this)` is not required.
 
 Graph and document databases:: Support for flexible `select` clauses, including path expressions and aggregate functions like `count(this)` is required. Performance might vary based on the size and indexing of the dataset.
-
-It is advisable to review your NoSQL provider's documentation to confirm the support and performance implications of `select` clauses and aggregate functions in your queries.
 ====
+
+In the extended language, the `select` clause is much more flexible.
+Its syntax, given by `#select_clause#`, permits:
+
+- one or more expressions, with optional labels, as given by `#select_item#`, where `#select_expression#` is the expression, and `#result_variable#` is the label, and
+- optionally, the `#distinct#` keyword.
+
+The list of expressions is interpreted as a projection, as specified by <<projection>>, and, if at least one of the expressions is an <<aggregate-functions,aggregate function>>, also aggregation, as specified in <<projection-and-aggregation>>.
+
+If the `#distinct#` keyword occurs, then projection is followed by duplicate elimination, as specified by <<distinct>>.
 
 ==== Set clause
 
@@ -97,21 +125,26 @@ NOTE: An implementation of Jakarta Query might provide some other facility to sp
 
 NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
 
+[[union-intersect-except]]
 === Union, intersect, and except
 
 The semantics of union, intersection, and complementation of query result sets is specified by <<union-intersection>> above.
 
 NOTE: These operations are part of the extended language, and so support for union, intersection, and complementation is not required for an implementation of Jakarta Query core.
 
+Each of these operations is treated as an infix binary operator acting on query result lists of identical shape (type), and producing a new query result set of the same shape as the operands.
+
 ==== Union and complement
 
 The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `#union#` of the full grammar.
-The operands must produce result lists of the same shape (type).
+The operands must produce result lists of the same type.
+The type of the union or complement expression is the same as the type of its operands.
 
 ==== Intersection
 
 The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the full grammar.
-The operands must produce result lists of the same shape (type).
+The operands must produce result lists of the same type.
+The type of the interaction expression is the same as the type of its operands.
 
 === Statements
 
@@ -125,11 +158,39 @@ The clauses which can appear in a statement are given by the grammar for each ki
 
 ==== Select statements
 
-A `select` statement, with syntax given by `select_statement`, returns data to the client. For each record which satisfies the restriction imposed by the `where` clause, a result is returned containing the value obtained by evaluating the path expression in the `select` clause. Alternatively, for the case of `select count(this)`, the query returns the number of records which satisfied the restriction.
+A `select` statement, with syntax given by `select_statement`, returns data to the client.
+
+In the core language, a `select` statement may contain one of more of the following clauses:
+
+- `select`
+- `from`
+- `where`
+- `order`.
+
+A `select` statement is a pipeline as defined in <<algebra>>.
+The result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
+
+In the extended language, a `select` statement may contain, in addition, a `#group#` and/or a `#having#` clause, with syntax specified by `#select_query#`.
+Each `#select_query#` is a pipeline as defined in <<algebra>>.
+A `#select_statement#` in the full grammar may contain union, intersection, and complement operations, as defined in <<union-intersect-except>>.
+
+- If the `#select_statement#` is a `#union#` or `#intersection#`, the result list of the whole `select` statement is the same as the result list of the union or intersection.
+- Otherwise, if the `#select_statement#` is just a `#select_query#`, result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
+
+The `select` clause is optional in a `select` statement.
+A query with a missing `select` clause is interpreted as if it had the following single-item `select` clause:
+[sourrce,sql]
+----
+select this
+----
+where `this` is the implicit alias.
 
 ==== Update statements
 
-An `update` statement, with syntax given by `update_statement`, updates each record which satisfies the restriction imposed by the `where` clause, and returns the number of updated records to the client.
+An `update` statement, with syntax given by `update_statement`, updates each record belonging to the entity type named in the `update` clause which satisfies the restriction imposed by the `where` clause, if any.
+
+An `update` statement does not have a well-defined result, but implementations typically return the number of deleted records to the client.
+Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
@@ -140,7 +201,10 @@ Additionally, in databases with **append-only semantics**—such as many time-se
 
 ==== Delete statements
 
-A `delete` statement, with syntax given by `delete_statement`, deletes each record which satisfies the restriction imposed by the `where` clause, and returns the number of deleted records to the client.
+A `delete` statement, with syntax given by `delete_statement`, deletes each record  belonging to the entity type named in the `update` clause which satisfies the restriction imposed by the `where` clause, if any.
+
+A `delete` statement does not have a well-defined result, but implementations typically return the number of deleted records to the client.
+Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
