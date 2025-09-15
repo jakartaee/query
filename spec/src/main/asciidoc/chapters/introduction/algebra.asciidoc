@@ -124,8 +124,7 @@ Every join has a _target_, which must be:
 - an embeddable type.
 
 A join introduces a new labelled element to a result list.
-Evaluating a sequence of joins produces a result list in which each structure contains a
-labelled element corresponding to each join.
+Evaluating a sequence of joins produces a result list in which each structure contains a labelled element corresponding to each join.
 The label of this element is often called the _alias_ or _identification variable_ of the join.
 
 [[joins-entities]]
