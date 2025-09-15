@@ -594,6 +594,6 @@ Given a structure _r_ which occurs _n~L~_ times in _l~L~_ and _n~R~_ times in _l
 [NOTE]
 ====
 In principle, a union may act on result lists of distinct type, producing a result list containing structures of heterogeneous type.
-Many data stores do not allow such operations, and so this specification limits union, intersection, or complementation to apply to lists of identical type.
+This specification requires union, intersection, or complementation only for lists of identical type because many data stores are not capable of unions that produce lists of heterogeneous type.
 Some implementations allow unions of lists containing entities of distinct type when the entity types are related by <<inheritance,inheritance>>, but that functionality is not required by this specification.
 ====
