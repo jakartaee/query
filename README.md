@@ -121,7 +121,7 @@ from Room where type = 'DELUXE' and status = 'AVAILABLE' order by number
 
 ### Extended Language
 
-The **Extended language** is a superset of the Core. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
+The **Extended language** is the full query language defined by the Jakarta Query specification. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
 
 ```json
 {
