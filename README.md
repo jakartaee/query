@@ -102,7 +102,7 @@ timeline
 
 ### Core Language
 
-The **Core language** is the common subset of Jakarta Query, focusing on portable operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
+The **Core language** is a subset of the full Jakarta Query language, focusing on portable operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
 
 ```json
 {
