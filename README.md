@@ -98,8 +98,6 @@ timeline
   2025  : Jakarta Query unifies JPQL and JDQL into one specification
 ```
 
-Here’s the markdown version:
-
 ## Language Levels in Jakarta Query  
 
 ### Core Language
