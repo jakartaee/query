@@ -67,9 +67,38 @@ from Book where title like :title
 
 ==== Where clause
 
-The `where` clause, with syntax given by `where_clause`, specifies a conditional expression used to restrict the records returned, deleted, or updated by the query. Only records for which the conditional expression is satisfied are returned, deleted, or updated.
+The `where` clause, with syntax given by `#here_clause`, specifies a restriction on a result list, as specified by <<restriction>>.
 
-The `where` clause is always optional. When it is missing, there is no restriction, and all records of the queried entity type are returned, deleted, or updated.
+The `where` clause specifies a `conditional_expression`, interpreted as the logical predicate of the restriction.
+
+A restriction specified using `where` is applied after every join and before any aggregation or projection.
+
+// The `where` clause, with syntax given by `where_clause`, specifies a conditional expression used to restrict the records returned, deleted, or updated by the query. Only records for which the conditional expression is satisfied are returned, deleted, or updated.
+//
+// The `where` clause is always optional. When it is missing, there is no restriction, and all records of the queried entity type are returned, deleted, or updated.
+
+==== Group clause
+
+The `#group#` clause in the extended language, with syntax given by `#groupby_clause#`, specifies a list of grouping items, which are collectively interpreted as an aggregation, as specified in <<aggregation>>.
+
+According to the rule `#groupby_item#`, each item must be either:
+
+- an atomic-valued path expression, with syntax given by `#atomic_valued_path_expression#`, or
+- an entity-valued path expression, with syntax given by `#entity_valued_path_expression#`.
+
+Each such path expression is interpreted as a value expression producing an element of the grouping tuple of the aggregation.
+
+NOTE: An implementation of Jakarta Query might treat the entity-valued path expression as an expression referring to the identifier of the entity.
+
+==== Having clause
+
+The `#having#` clause in the extended language, with syntax given by `#having_clause#`, specifies a restriction on the result list of an aggregation, as specified by <<restriction>>.
+
+The `#having#` clause specifies a `conditional_expression`, interpreted as the logical predicate of the restriction.
+
+The `#having#` clause must follow a `#group#` clause.
+A query with no group clause may not have a having clause.
+A restriction specified using `having` is applied after aggregation and before any projection.
 
 ==== Select clause
 
