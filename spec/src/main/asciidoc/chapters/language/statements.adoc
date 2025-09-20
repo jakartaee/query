@@ -63,7 +63,18 @@ from Book where title like :title
 [[join-clauses]]
 ==== Join clauses
 
-**TODO**
+In the extended language, an `#identification_variable_declaration#` might include a list of:
+
+- joins, with syntax given by `#join#` and semantics specified by <<joins>>, and
+- fetch joins, with syntax given by `#fetch_join#` and semantics specified by <<fetch-joins>>.
+
+Each `#join#` is in turn either a `#range_join#`, with semantics given by <<joins-entities>> or a `#path_join#`, with semantics given by <<joins-nested>>.
+In either case, a `#join_condition#` may occur, specifying a restriction which is applied to the result list of the join.
+
+Every `#join#` or `#fetch_join#` begins with a `#join_spec#`:
+
+- ff the keyword `#left#` occurs in the `#join_spec#`, then the join is interpreted as a left (outer) join, as specified by <<left-joins>>, or
+- otherwise, if the keyword `#left#` is missing, the join is interpreted as a regular (inner) join.
 
 ==== Where clause
 
