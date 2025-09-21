@@ -31,7 +31,7 @@ The `#from_clause#` of the full grammar allows:
    - explicitly specify its alias according to the syntax given by `#range_variable_declaration#`, or
    - let the alias default to `this`, by using the syntax given by `#this_implicit_variable#`.
 2. Optionally, a list of additional ``#range_variable_declaration#``s interpreted as <<joins-entities,joins to named entities>>.
-3. Optionally, one or more join clauses, as defined in <<joins>>, with syntax given by `#join#`, which may each contain a restriction with syntax given by `#join_condition#`.
+3. Optionally, one or more join clauses, as defined in <<joins>>, with syntax given by `#join#`, each interpreted as a join to a named entity or as a <<joins-nested,join to a nested structure or collection>>, which may each optionally also contain a restriction with syntax given by `#join_condition#`.
 
 When the root entity is declared using the rule `#this_implicit_variable#`, the query may not have joins.
 A query with joins must use an `#identification_variable_declarations#` list to specify the root entity and joins.
