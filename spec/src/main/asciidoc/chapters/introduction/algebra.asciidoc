@@ -293,6 +293,18 @@ Notice that this kind of join has the effect of duplicating nested structures or
 This picture should not be taken too literally.
 Implementations of Jakarta Query do not, in practice, always return the entire result of a query to the client, but instead replace some branches of the graph with some sort of proxy object.
 
+A join to a structure or collection may be immediately followed by a <<restriction,restriction>>.
+
+[source,sql]
+----
+[from] inner join [path] as y on [predicate]
+----
+
+where `[predicate]` is a predicate, as defined later in <<predicates>>.
+
+This kind of join is interpreted as a sequence of two operations, a join of the previous kind, with no `on`, followed by a <<restriction,restriction>> with the given predicate.
+
+
 [[left-joins]]
 ==== Left joins
 
@@ -328,6 +340,16 @@ For each structure _r_ of the result list of the operation on which the join act
 - If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the structure _s_ labelled by the alias `y`.
 - If the path expression resolves to a nonempty collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
 - Otherwise, if a path expression resolves to no structure, or to an empty collection, the result list contains a structure _r'_ containing only the labelled elements of _r_.
+
+Just like regular joins, a left join may be followed by a restriction:
+
+[source,sql]
+----
+[from] left outer join [path] as y on [predicate]
+----
+
+In this case, however, the restriction is only evaluated for elements of the result list which contain structures labelled by the alias `y`.
+Any elements of the result list of the join which does not contain a structure labelled by the alias `y` is taken to satisfy the restriction, even when the predicate would not be satisfied by that element.
 
 [[fetch-joins]]
 ==== Fetch joins
