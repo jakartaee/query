@@ -101,7 +101,7 @@ The joins belonging to a query are evaluated in the order in which they occur in
 
 ==== Where clause
 
-The `where` clause, with syntax given by `#here_clause`, specifies a restriction on a result list, as specified by <<restriction>>.
+The `where` clause, with syntax given by `where_clause`, specifies a restriction on a result list, as specified by <<restriction>>.
 
 The `where` clause specifies a `conditional_expression`, interpreted as the logical predicate of the restriction.
 
