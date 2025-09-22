@@ -302,7 +302,7 @@ A join to a structure or collection may be immediately followed by a <<restricti
 
 where `[predicate]` is a predicate, as defined later in <<predicates>>.
 
-This kind of join is interpreted as a sequence of two operations, a join of the previous kind, with no `on`, followed by a <<restriction,restriction>> with the given predicate.
+This kind of join is interpreted as a sequence of two operations: a join of the previous kind, with no `on`, followed by a <<restriction,restriction>> with the given predicate.
 
 
 [[left-joins]]
@@ -349,7 +349,7 @@ Just like regular joins, a left join may be followed by a restriction:
 ----
 
 In this case, however, the restriction is only evaluated for elements of the result list which contain structures labelled by the alias `y`.
-Any elements of the result list of the join which does not contain a structure labelled by the alias `y` is taken to satisfy the restriction, even when the predicate would not be satisfied by that element.
+Any element of the result list of the join which does not contain a structure labelled by the alias `y` is taken to satisfy the restriction, even when the predicate would not be satisfied by that element.
 
 [[fetch-joins]]
 ==== Fetch joins

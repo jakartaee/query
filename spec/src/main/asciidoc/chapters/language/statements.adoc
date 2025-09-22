@@ -33,7 +33,7 @@ The `#from_clause#` of the full grammar allows:
 2. Optionally, a list of additional ``#range_variable_declaration#``s interpreted as <<joins-entities,joins to named entities>>.
 3. Optionally, one or more join clauses, as defined in <<joins>>, with syntax given by `#join#`, each interpreted as a join to a named entity or as a <<joins-nested,join to a nested structure or collection>>, which may each optionally also contain a restriction with syntax given by `#join_condition#`.
 
-When the root entity is declared using the rule `#this_implicit_variable#`, the query may not have joins.
+When the root entity is declared using the rule `#this_implicit_variable#`, the query must not have joins.
 A query with joins must use an `#identification_variable_declarations#` list to specify the root entity and joins.
 
 When a `from` clause has multiple elements in the  `#identification_variable_declarations#` list, the root entity is always the first `#identification_variable_declaration#` to occur in the list.
@@ -195,7 +195,7 @@ The semantics of union, intersection, and complementation of query result sets i
 
 NOTE: These operations are part of the extended language, and so support for union, intersection, and complementation is not required for an implementation of Jakarta Query core.
 
-Each of these operations is treated as an infix binary operator acting on query result lists of identical shape (type), and producing a new query result set of the same shape as the operands.
+Each of these operations is treated as an infix binary operator acting on query result lists of identical shape (type) and producing a new query result set of the same shape as the operands.
 
 ==== Union and complement
 
@@ -207,7 +207,7 @@ The type of the union or complement expression is the same as the type of its op
 
 The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the full grammar.
 The operands must produce result lists of the same type.
-The type of the interaction expression is the same as the type of its operands.
+The type of the intersection expression is the same as the type of its operands.
 
 === Statements
 
@@ -252,7 +252,7 @@ where `this` is the implicit alias.
 
 An `update` statement, with syntax given by `update_statement`, updates each record belonging to the entity type named in the `update` clause which satisfies the restriction imposed by the `where` clause, if any.
 
-An `update` statement does not have a well-defined result, but implementations typically return the number of deleted records to the client.
+An `update` statement does not have a well-defined result, but implementations typically return the number of matching records to the client.
 Such functionality falls outside the scope of this specification.
 
 [WARNING]
