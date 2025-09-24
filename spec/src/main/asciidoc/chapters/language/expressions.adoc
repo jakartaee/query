@@ -79,6 +79,24 @@ A _function call_ is the name of a function recognized by the Jakarta Query impl
 
 - The `abs()` function is assigned the type of its numeric argument, and evaluates to the absolute value of the numeric value to which its argument evaluates. Its argument must be of numeric type.
 
+- The `#sign()#` function is assigned the type `java.lang.Integer`, and evaluates to the sign of the numeric value to which its argument evaluates. Its argument must be of numeric type.
+
+- The `#mod()#` function is assigned the type `java.lang.Integer` and evaluates to the remainder when its first integer argument is divided by its second integer argument.
+
+- The `#sqrt()#` function is assigned the type `java.lang.Double`, and evaluates to the positive square root of its numeric argument.
+
+- The `#exp()#` function is assigned the type `java.lang.Double`, and evaluates to the natural exponential of its numeric argument.
+
+- The `#ln()#` function is assigned the type `java.lang.Double`, and evaluates to the natural logarithm of its numeric argument.
+
+- The `#power()#` function is assigned the type `java.lang.Double`, and evaluates to the value produced by raising its first numeric argument to the power specified by its second numeric argument.
+
+- The `#ceiling()#` function is assigned the type of its numeric argument, and evaluates to the smallest integral value at least as large as its argument.
+
+- The `#floor()#` functions is assigned the type of its first numeric argument, and evaluates to the largest integral value at least as small as its argument.
+
+- The `#round()#` functions is assigned the type of its first numeric argument, and returns the value produced by rounding its first argument to the nearest number with the precision given by its second integer argument.
+
 - The `length()` function is assigned the type `java.lang.Integer`, and evaluates to the length of string to which its argument evaluates. Its argument must be of type `java.lang.String`.
 
 - The `lower()` function is assigned the type `java.lang.String`, and evaluates to the lowercase form of the string to which its argument evaluates. Its argument must be of type `java.lang.String`.
@@ -89,11 +107,26 @@ A _function call_ is the name of a function recognized by the Jakarta Query impl
 
 - The `right()` function is assigned the type `java.lang.String`, and evaluates to a suffix of the string to which its first argument evaluates. The length of the suffix is given by the integer value to which its second argument evaluates. The first argument must be of type `java.lang.String`, and the second argument must be of integral numeric type.
 
+- The `#concat()#` function is assigned the type `java.lang.String`, and evaluates to the concatenation of its arguments, all of which must be of type `java.lang.String`. There must be at least one argument.
+
+- The `#substring()#` function is assigned the type `java.lang.String`. The second and third arguments of the `substring()` function denote the starting position and length of the substring to be returned. These arguments are integers. The third argument is optional. If it is not specified, the substring from the start position to the end of the string is returned. The first position of a string is denoted by 1.
+
+- The `#trim()#` function is assigned the type `java.lang.String`. The `TRIM` function trims a specified character from a string. If the character to be trimmed is not specified, it will be assumed to be space (or blank). The optional `trim_character` is a single-character string literal or a character-valued input parameter (i.e., `char` or `Character`).
+
+- The `#replace()#` function is assigned the type `java.lang.String`. It replaces all occurrences within the first argument
+string of the second argument string with the third argument string.
+
+- The `#locate()#` function is assigned the type `java.lang.Integer`. It returns the position at which one string occurs within a second string, optionally ignoring any occurrences that begin before a specified character position in the second string. It returns the first character position within the second string (after the specified character position, if any) at which the first string occurs, as an integer, where the first character of the second string is denoted by 1. That is, the first argument is the string to be searched for; the second argument is the string to be searched in; the optional third argument is an integer representing the character position at which the search starts (by default, 1, the first character of the second string). If the first string does not occur within the second string, 0 is returned.
+
+- The `#size()#` function is assigned the type `java.lang.Integer` and evaluates to the number of elements of the collection produced by evaluating its argument.
+
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
 
 NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, an implementation of Jakarta Query is not required to provide the function.
 
 NOTE: On the other hand, an implementation of Jakarta Query might provide additional built-in functions, and might even allow invocation of user-defined functions.
+
+**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`,
 
 [[operator-expressions]]
 ==== Operator expressions
