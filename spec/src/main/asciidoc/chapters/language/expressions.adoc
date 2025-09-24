@@ -75,58 +75,57 @@ An _identifier expression_, with syntax given by `id_expression`, is assigned th
 
 ==== Function calls
 
-A _function call_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by `function_expression`.
+A _function call_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by:
 
-- The `abs()` function is assigned the type of its numeric argument, and evaluates to the absolute value of the numeric value to which its argument evaluates. Its argument must be of numeric type.
+- `function_expression` in the core language, or
+- `#functions_returning_strings#`, `#functions_returning_datetime#`, and `#functions_returning_numerics#` in the full grammar of the extended language.
 
-- The `#sign()#` function is assigned the type `java.lang.Integer`, and evaluates to the sign of the numeric value to which its argument evaluates. Its argument must be of numeric type.
+This specification defines the standard functions listed in the table below.
 
-- The `#mod()#` function is assigned the type `java.lang.Integer` and evaluates to the remainder when its first integer argument is divided by its second integer argument.
+NOTE: Functions highlighted in yellow belong to the extended language and are not required for an implementation of the core language.
 
-- The `#sqrt()#` function is assigned the type `java.lang.Double`, and evaluates to the positive square root of its numeric argument.
+[cols="15,15,15,15,~"]
+|===
+| Function name | Parameters | Parameter types | Type | Semantics
 
-- The `#exp()#` function is assigned the type `java.lang.Double`, and evaluates to the natural exponential of its numeric argument.
-
-- The `#ln()#` function is assigned the type `java.lang.Double`, and evaluates to the natural logarithm of its numeric argument.
-
-- The `#power()#` function is assigned the type `java.lang.Double`, and evaluates to the value produced by raising its first numeric argument to the power specified by its second numeric argument.
-
-- The `#ceiling()#` function is assigned the type of its numeric argument, and evaluates to the smallest integral value at least as large as its argument.
-
-- The `#floor()#` functions is assigned the type of its first numeric argument, and evaluates to the largest integral value at least as small as its argument.
-
-- The `#round()#` functions is assigned the type of its first numeric argument, and returns the value produced by rounding its first argument to the nearest number with the precision given by its second integer argument.
-
-- The `length()` function is assigned the type `java.lang.Integer`, and evaluates to the length of string to which its argument evaluates. Its argument must be of type `java.lang.String`.
-
-- The `lower()` function is assigned the type `java.lang.String`, and evaluates to the lowercase form of the string to which its argument evaluates. Its argument must be of type `java.lang.String`.
-
-- The `upper()` function is assigned the type `java.lang.String`, and evaluates to the uppercase form of the string to which its argument evaluates. Its argument must be of type `java.lang.String`.
-
-- The `left()` function is assigned the type `java.lang.String`, and evaluates to a prefix of the string to which its first argument evaluates. The length of the prefix is given by the integer value to which its second argument evaluates. The first argument must be of type `java.lang.String`, and the second argument must be of integral numeric type.
-
-- The `right()` function is assigned the type `java.lang.String`, and evaluates to a suffix of the string to which its first argument evaluates. The length of the suffix is given by the integer value to which its second argument evaluates. The first argument must be of type `java.lang.String`, and the second argument must be of integral numeric type.
-
-- The `#concat()#` function is assigned the type `java.lang.String`, and evaluates to the concatenation of its arguments, all of which must be of type `java.lang.String`. There must be at least one argument.
-
-- The `#substring()#` function is assigned the type `java.lang.String`. The second and third arguments of the `substring()` function denote the starting position and length of the substring to be returned. These arguments are integers. The third argument is optional. If it is not specified, the substring from the start position to the end of the string is returned. The first position of a string is denoted by 1.
-
-- The `#trim()#` function is assigned the type `java.lang.String`. The `TRIM` function trims a specified character from a string. If the character to be trimmed is not specified, it will be assumed to be space (or blank). The optional `trim_character` is a single-character string literal or a character-valued input parameter (i.e., `char` or `Character`).
-
-- The `#replace()#` function is assigned the type `java.lang.String`. It replaces all occurrences within the first argument
-string of the second argument string with the third argument string.
-
-- The `#locate()#` function is assigned the type `java.lang.Integer`. It returns the position at which one string occurs within a second string, optionally ignoring any occurrences that begin before a specified character position in the second string. It returns the first character position within the second string (after the specified character position, if any) at which the first string occurs, as an integer, where the first character of the second string is denoted by 1. That is, the first argument is the string to be searched for; the second argument is the string to be searched in; the optional third argument is an integer representing the character position at which the search starts (by default, 1, the first character of the second string). If the first string does not occur within the second string, 0 is returned.
-
-- The `#size()#` function is assigned the type `java.lang.Integer` and evaluates to the number of elements of the collection produced by evaluating its argument.
+| `abs` | 1 | Any numeric type | Same as argument | Evaluates to the absolute value of the numeric value to which its argument evaluates.
+| `#sign#` | 1 | Numeric | Integer | Evaluates to the sign of the numeric value of its argument.
+| `#mod#` | 2 | Both integer | Integer | Evaluates to the remainder when its first integer argument is divided by its second integer argument.
+| `#sqrt#` | 1 | Numeric | Double precision | Evaluates to the positive square root of its numeric argument.
+| `#exp#` | 1 | Numeric | Double precision | Evaluates to the natural exponential of its numeric argument.
+| `#ln#` | 1 | Numeric | Double precision | Evaluates to the natural logarithm of its numeric argument.
+| `#power#` | 2 | Both numeric | Double precision | Evaluates to the value produced by raising its first numeric argument to the power specified by its second numeric argument.
+| `#ceiling#` | 1 | Any numeric type | Same as argument | Evaluates to the smallest integral value at least as large as its argument.
+| `#floor#` | 1 | Any numeric type | Same as argument | Evaluates to the largest integral value at least as small as its argument.
+| `#round#` | 2 | Any numeric type, integer | Same as first argument | Evaluates to the value produced by rounding its first numeric argument with the precision given by its second integer argument.
+| `length` | 1 | String | Integer | Evaluates to the length of string to which its argument evaluates.
+| `lower` | 1 | String | String | Evaluates to the lowercase form of the string to which its argument evaluates.
+| `upper` | 1 | String | String | Evaluates to the uppercase form of the string to which its argument evaluates.
+| `left` | 2 | String, integer | String | Evaluates to a prefix of the string to which its first argument evaluates. The length of the prefix is given by the integer value to which its second argument evaluates.
+| `right` | 2 | String, integer | String | Evaluates to a suffix of the string to which its first argument evaluates. The length of the suffix is given by the integer value to which its second argument evaluates.
+| `#concat#` | At least one | All strings | String | Evaluates to the concatenation of its arguments.
+| `#substring#` | 2 or 3 | String, integer, integer | String | Evaluates to a specified substring of the first argument. The second and third arguments specify the starting position and length of the substring. The third argument is optional. If it is not specified, the substring from the starting position to the end of the string is returned. The first character of the string is at position `1`.
+| `#trim#` | 1^*^ | String | String | Trims a specified character from its last argument. If the character to be trimmed is not specified, the space character is trimmed. The optional `#trim_character#` specifies the character to be trimmed. The optional `#trim_specification#` controls whether the character is trimmed from the start and/or end of the string. By default, the character is trimmed from both start and end.
+| `#replace#` | 3 | All strings | String | Evaluates to a new string formed by replacing every occurrence of the second argument string within the first argument string with the third argument string.
+| `#locate#` | 2 or 3 | String, string, integer | Integer | Evaluates to the position at which one string occurs within a second string, optionally ignoring any occurrences that begin before a specified character position in the second string. It returns the first character position within the second string (after the specified character position, if any) at which the first string occurs, as an integer, where the first character of the second string is denoted by 1. That is, the first argument is the string to be searched for; the second argument is the string to be searched in; the optional third argument is an integer representing the character position at which the search starts (by default, 1, the first character of the second string). If the first string does not occur within the second string, 0 is returned.
+| `#size#` | 1 | Collection | Integer | Evaluates to the number of elements of the collection produced by evaluating its argument.
+|===
 
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
 
-NOTE: These functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, an implementation of Jakarta Query is not required to provide the function.
+NOTE: Some of these functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, an implementation of Jakarta Query is not required to provide the function.
 
 NOTE: On the other hand, an implementation of Jakarta Query might provide additional built-in functions, and might even allow invocation of user-defined functions.
 
-**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`,
+An implementation of Jakarta Query for clients written in Java must assign:
+
+- the type `java.lang.String` to every function of type "String",
+- the type `java.lang.Integer` to every function of type "Integer", and
+- the type `java.lang.Double` to every function of type "Double precision".
+
+The primitive types `double`, `float`, `long`, `int`, `short`, `byte`, wrappers for these primitive types, `BigInteger`, and `BigDecimal` are all considered "Numeric" types.
+
+**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`, `FUNCTION()`
 
 [[operator-expressions]]
 ==== Operator expressions
