@@ -90,7 +90,7 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 
 | `abs` | 1 | Any numeric type | Same as argument | Evaluates to the absolute value of the numeric value to which its argument evaluates.
 | `#sign#` | 1 | Numeric | Integer | Evaluates to the sign (-1, 0, or 1) of the numeric value of its argument.
-| `#mod#` | 2 | Both integer | Integer | Evaluates to the remainder when its first integer argument is divided by its second integer argument.
+| `#mod#` | 2 | Both integer | Integer | Evaluates to the remainder when its first integer argument is divided by its second integer argument. The behavior is undefined when either or both of the arguments are negative and depends on the data store that is used.
 | `#sqrt#` | 1 | Numeric | Double precision | Evaluates to the positive square root of its numeric argument.
 | `#exp#` | 1 | Numeric | Double precision | Evaluates to the natural exponential of its numeric argument.
 | `#ln#` | 1 | Numeric | Double precision | Evaluates to the natural logarithm of its numeric argument.
