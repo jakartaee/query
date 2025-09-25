@@ -242,7 +242,7 @@ A `#select_statement#` in the full grammar may contain union, intersection, and 
 
 The `select` clause is optional in a `select` statement.
 A query with a missing `select` clause is interpreted as if it had the following single-item `select` clause:
-[sourrce,sql]
+[source,sql]
 ----
 select this
 ----
