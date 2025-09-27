@@ -20,3 +20,97 @@ This much longer grammar is the grammar for the full language.
 ----
 include::../../../../antlr/JQL-full.g4[]
 ----
+
+=== Language Levels and Feature Summary
+
+The Core and Full grammars together define two levels of Jakarta Query: *Core* and *Extended*.
+The Core level represents the minimal, portable subset, while the Extended level is a superset that introduces SQL-oriented features such as joins, grouping, and subqueries.
+This subsection summarizes the differences between them, based on the syntax defined in in the <<Core language grammar>> and the <<Full language grammar>> sections.
+
+[NOTE]
+====
+✅ = Feature available at this level
+❌ = Feature not available at this level
+====
+
+==== Clauses and Constructs
+
+Core supports the essential query pipeline: `from → where → select → order`.
+Extended adds relational constructs such as joins, grouping, subqueries, and set operations.
+
+[cols="3,1,1",options="header"]
+|===
+| Feature / Construct        | Core | Extended
+
+| `FROM` clause              | ✅ | ✅
+| `WHERE` clause             | ✅ | ✅
+| `ORDER BY` clause          | ✅ | ✅
+| `SELECT` paths/id/count    | ✅ | ✅
+| Update (`UPDATE ... SET`)  | ✅ | ✅
+| Delete (`DELETE FROM`)     | ✅ | ✅
+| Joins (inner/left/fetch)   | ❌ | ✅
+| Grouping (`GROUP BY`)      | ❌ | ✅
+| Having (`HAVING`)          | ❌ | ✅
+| Aggregates (`SUM`, `AVG`)  | ❌ | ✅
+| Distinct in `SELECT`       | ❌ | ✅
+| Constructor expressions    | ❌ | ✅
+| Subqueries (`EXISTS`, `IN`)| ❌ | ✅
+| Set operations (`UNION`, `INTERSECT`, `EXCEPT`) | ❌ | ✅
+|===
+
+==== Special Expressions and Functions
+
+Special expressions are divided into categories.
+Core defines a portable baseline (system dates, booleans, basic arithmetic, and string operations).
+Extended introduces advanced SQL-oriented functions for richer queries.
+
+===== Datetime Expressions
+
+[cols="3,1,1",options="header"]
+|===
+| Expression                 | Core | Extended
+
+| `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_TIMESTAMP` | ✅ | ✅
+| `EXTRACT(field FROM x)`    | ❌ | ✅
+|===
+
+===== Boolean Expressions
+
+[cols="3,1,1",options="header"]
+|===
+| Expression                 | Core | Extended
+
+| Literals `TRUE`, `FALSE`   | ✅ | ✅
+| `EXISTS`                   | ❌ | ✅
+|===
+
+===== Numeric Expressions
+
+[cols="3,1,1",options="header"]
+|===
+| Expression                 | Core | Extended
+
+| Basic operators (+, -, *, /) | ✅ | ✅
+| `ABS`                      | ✅ | ✅
+| `ROUND`, `MOD`             | ❌ | ✅
+|===
+
+===== String Expressions
+
+[cols="3,1,1",options="header"]
+|===
+| Expression                 | Core | Extended
+
+| Concatenation (`||`)       | ✅ | ✅
+| `LENGTH`, `LOWER`, `UPPER` | ✅ | ✅
+| `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | ❌ | ✅
+|===
+
+==== Guidelines
+
+* The *Core level* defines the minimal portable subset.
+* The *Extended level* expands on Core with SQL-oriented features such as joins, grouping, and subqueries.
+* Providers targeting non-relational stores are expected to support the Core level. Relational providers are expected to support both Core and Extended.
+* Developers seeking portability across providers should restrict themselves to the Core level.
+```
+
