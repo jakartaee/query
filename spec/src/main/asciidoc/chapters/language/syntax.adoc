@@ -27,12 +27,12 @@ include::../../../../antlr/JQL-full.g4[]
 
 The Core and Full grammars together define two levels of Jakarta Query: *Core* and *Extended*.
 The Core level represents the minimal, portable subset, while the Extended level is a superset that introduces SQL-oriented features such as joins, grouping, and subqueries.
-This subsection summarizes the differences between them, based on the syntax defined in in the <<Core language grammar>> and the <<Full language grammar>> sections.
+This subsection summarizes the differences between them, based on the syntax defined in the <<Core language grammar>> and the <<Full language grammar>> sections.
 
 [NOTE]
 ====
-✅ = Feature available at this level
-❌ = Feature not available at this level
+Yes = Feature available at this level
+No  = Feature not available at this level
 ====
 
 ==== Clauses and Constructs
@@ -43,20 +43,20 @@ Extended adds relational constructs such as joins, grouping, subqueries, and set
 [cols="3,1,1",options="header"]
 |===
 | Feature / Construct                               | Core | Extended
-| `FROM` clause                                     | ✅ | ✅
-| `WHERE` clause                                    | ✅ | ✅
-| `ORDER BY` clause                                 | ✅ | ✅
-| `SELECT` paths/id/count                           | ✅ | ✅
-| Update (`UPDATE ... SET`)                         | ✅ | ✅
-| Delete (`DELETE FROM`)                            | ✅ | ✅
-| Joins (inner/left/fetch)                          | ❌ | ✅
-| Grouping (`GROUP BY`)                             | ❌ | ✅
-| Having (`HAVING`)                                 | ❌ | ✅
-| Aggregates (`SUM`, `AVG`)                         | ❌ | ✅
-| Distinct in `SELECT`                              | ❌ | ✅
-| Constructor expressions                           | ❌ | ✅
-| Subqueries (`EXISTS`, `IN`)                       | ❌ | ✅
-| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | ❌ | ✅
+| `FROM` clause                                     | Yes | Yes
+| `WHERE` clause                                    | Yes | Yes
+| `ORDER BY` clause                                 | Yes | Yes
+| `SELECT` paths/id/count                           | Yes | Yes
+| Update (`UPDATE ... SET`)                         | Yes | Yes
+| Delete (`DELETE FROM`)                            | Yes | Yes
+| Joins (inner/left/fetch)                          | No  | Yes
+| Grouping (`GROUP BY`)                             | No  | Yes
+| Having (`HAVING`)                                 | No  | Yes
+| Aggregates (`SUM`, `AVG`)                         | No  | Yes
+| Distinct in `SELECT`                              | No  | Yes
+| Constructor expressions                           | No  | Yes
+| Subqueries (`EXISTS`, `IN`)                       | No  | Yes
+| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | No  | Yes
 |===
 
 ==== Special Expressions and Functions
@@ -70,8 +70,8 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                                          | Core | Extended
-| `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_TIMESTAMP` | ✅ | ✅
-| `EXTRACT(field FROM x)`                             | ❌ | ✅
+| `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_TIMESTAMP` | Yes | Yes
+| `EXTRACT(field FROM x)`                             | No  | Yes
 |===
 
 ===== Boolean Expressions
@@ -79,8 +79,8 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                 | Core | Extended
-| Literals `TRUE`, `FALSE`   | ✅ | ✅
-| `EXISTS`                   | ❌ | ✅
+| Literals `TRUE`, `FALSE`   | Yes | Yes
+| `EXISTS`                   | No  | Yes
 |===
 
 ===== Numeric Expressions
@@ -88,9 +88,9 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                   | Core | Extended
-| Basic operators (+, -, *, /) | ✅ | ✅
-| `ABS`                        | ✅ | ✅
-| `ROUND`, `MOD`               | ❌ | ✅
+| Basic operators (+, -, *, /) | Yes | Yes
+| `ABS`                        | Yes | Yes
+| `ROUND`, `MOD`               | No  | Yes
 |===
 
 ===== String Expressions
@@ -98,8 +98,7 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                             | Core | Extended
-| &#124;&#124; concatenation             | ✓ | ✓
-| `LENGTH`, `LOWER`, `UPPER`             | ✓ | ✓
-| `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | ✗ | ✓
+| &#124;&#124; concatenation             | Yes | Yes
+| `LENGTH`, `LOWER`, `UPPER`             | Yes | Yes
+| `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | No  | Yes
 |===
-
