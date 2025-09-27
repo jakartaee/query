@@ -31,13 +31,14 @@ This subsection summarizes the differences between them, based on the syntax def
 
 [NOTE]
 ====
-Yes = Feature available at this level
-No  = Feature not available at this level
+In the following tables:
+* Yes = Feature available at this level
+* No  = Feature not available at this level
 ====
 
 ==== Clauses and Constructs
 
-Core supports the essential query pipeline: `from → where → select → order`.
+Core supports the essential query pipeline.
 Extended adds relational constructs such as joins, grouping, subqueries, and set operations.
 
 [cols="3,1,1",options="header"]
