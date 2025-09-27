@@ -98,8 +98,8 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                             | Core | Extended
-| &#124;&#124; concatenation             | ✅ | ✅
-| `LENGTH`, `LOWER`, `UPPER`             | ✅ | ✅
-| `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | ❌ | ✅
+| &#124;&#124; concatenation             | ✓ | ✓
+| `LENGTH`, `LOWER`, `UPPER`             | ✓ | ✓
+| `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | ✗ | ✓
 |===
 
