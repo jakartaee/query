@@ -3,6 +3,7 @@
 
 The following grammars define the syntax of the Jakarta Query language, via ANTLR4-style BNF.
 
+[[core-grammar]]
 === Core language grammar
 
 The following grammar is the grammar for the core language.
@@ -12,6 +13,7 @@ The following grammar is the grammar for the core language.
 include::../../../../antlr/JQL-core.g4[]
 ----
 
+[[full-grammar]]
 === Full language grammar
 
 This much longer grammar is the grammar for the full language.
@@ -91,26 +93,17 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 | Expression                 | Core | Extended
 
 | Basic operators (+, -, *, /) | ✅ | ✅
-| `ABS`                      | ✅ | ✅
-| `ROUND`, `MOD`             | ❌ | ✅
+| `ABS`                        | ✅ | ✅
+| `ROUND`, `MOD`               | ❌ | ✅
 |===
 
 ===== String Expressions
 
 [cols="3,1,1",options="header"]
 |===
-| Expression                 | Core | Extended
-
-| Concatenation (`||`)       | ✅ | ✅
-| `LENGTH`, `LOWER`, `UPPER` | ✅ | ✅
+| Expression                             | Core | Extended
+| Concatenation (||)                     | ✅ | ✅
+| `LENGTH`, `LOWER`, `UPPER`             | ✅ | ✅
 | `LOCATE`, `SUBSTRING`, `LEFT`, `RIGHT` | ❌ | ✅
 |===
-
-==== Guidelines
-
-* The *Core level* defines the minimal portable subset.
-* The *Extended level* expands on Core with SQL-oriented features such as joins, grouping, and subqueries.
-* Providers targeting non-relational stores are expected to support the Core level. Relational providers are expected to support both Core and Extended.
-* Developers seeking portability across providers should restrict themselves to the Core level.
-```
 
