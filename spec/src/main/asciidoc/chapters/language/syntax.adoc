@@ -42,22 +42,21 @@ Extended adds relational constructs such as joins, grouping, subqueries, and set
 
 [cols="3,1,1",options="header"]
 |===
-| Feature / Construct        | Core | Extended
-
-| `FROM` clause              | ✅ | ✅
-| `WHERE` clause             | ✅ | ✅
-| `ORDER BY` clause          | ✅ | ✅
-| `SELECT` paths/id/count    | ✅ | ✅
-| Update (`UPDATE ... SET`)  | ✅ | ✅
-| Delete (`DELETE FROM`)     | ✅ | ✅
-| Joins (inner/left/fetch)   | ❌ | ✅
-| Grouping (`GROUP BY`)      | ❌ | ✅
-| Having (`HAVING`)          | ❌ | ✅
-| Aggregates (`SUM`, `AVG`)  | ❌ | ✅
-| Distinct in `SELECT`       | ❌ | ✅
-| Constructor expressions    | ❌ | ✅
-| Subqueries (`EXISTS`, `IN`)| ❌ | ✅
-| Set operations (`UNION`, `INTERSECT`, `EXCEPT`) | ❌ | ✅
+| Feature / Construct                               | Core | Extended
+| `FROM` clause                                     | ✅ | ✅
+| `WHERE` clause                                    | ✅ | ✅
+| `ORDER BY` clause                                 | ✅ | ✅
+| `SELECT` paths/id/count                           | ✅ | ✅
+| Update (`UPDATE ... SET`)                         | ✅ | ✅
+| Delete (`DELETE FROM`)                            | ✅ | ✅
+| Joins (inner/left/fetch)                          | ❌ | ✅
+| Grouping (`GROUP BY`)                             | ❌ | ✅
+| Having (`HAVING`)                                 | ❌ | ✅
+| Aggregates (`SUM`, `AVG`)                         | ❌ | ✅
+| Distinct in `SELECT`                              | ❌ | ✅
+| Constructor expressions                           | ❌ | ✅
+| Subqueries (`EXISTS`, `IN`)                       | ❌ | ✅
+| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | ❌ | ✅
 |===
 
 ==== Special Expressions and Functions
@@ -70,10 +69,9 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 
 [cols="3,1,1",options="header"]
 |===
-| Expression                 | Core | Extended
-
+| Expression                                          | Core | Extended
 | `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_TIMESTAMP` | ✅ | ✅
-| `EXTRACT(field FROM x)`    | ❌ | ✅
+| `EXTRACT(field FROM x)`                             | ❌ | ✅
 |===
 
 ===== Boolean Expressions
@@ -81,7 +79,6 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 [cols="3,1,1",options="header"]
 |===
 | Expression                 | Core | Extended
-
 | Literals `TRUE`, `FALSE`   | ✅ | ✅
 | `EXISTS`                   | ❌ | ✅
 |===
@@ -90,8 +87,7 @@ Extended introduces advanced SQL-oriented functions for richer queries.
 
 [cols="3,1,1",options="header"]
 |===
-| Expression                 | Core | Extended
-
+| Expression                   | Core | Extended
 | Basic operators (+, -, *, /) | ✅ | ✅
 | `ABS`                        | ✅ | ✅
 | `ROUND`, `MOD`               | ❌ | ✅
