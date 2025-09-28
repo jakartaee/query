@@ -11,25 +11,36 @@ Expressions may be categorized as:
 - parameters,
 - enum literals,
 - paths,
-- function calls, and
+- function calls,
+- quantifiers,
+- case expressions, and
 - operator expressions.
 
 [[literal-expressions]]
 ==== Literal expressions
 
-A string, integer, or decimal literal is assigned the type it would be assigned in Java. So, for example, `'Hello'` is assigned the type `java.lang.String`, `123` is assigned the type `int`, `1e4` is assigned the type `double`, and `1.23f` is assigned the type `float`.
+The syntax for literal expressions is given by the rules `string_literal` and `numeric_literal`, and in the previous section titled <<Lexical structure>>.
 
-The syntax for literal expressions is given by the `literal` grammar rule, and in the previous section titled <<Lexical structure>>.
+In an implementation of Jakarta Query for clients written in Java, a string, integer, or decimal literal is assigned the type it would be assigned in Java.
+So, for example, `'Hello'` is assigned the type `java.lang.String`, `123` is assigned the type `int`, `1e4` is assigned the type `double`, and `1.23f` is assigned the type `float`.
+In the extended language:
+
+- arbitrary-precision integer literals (with suffix `BI`) are assigned the type `java.math.BigInteger`, and
+- arbitrary-precision decimal literals (with suffix `BD`) are assigned the type `java.math.BigDecimal`.
 
 When executed, a literal expression evaluates to its literal value.
 
 ==== Special values
 
-The special values `true` and `false` are assigned the type `boolean`, and evaluate to their literal values.
+The syntax for _special values_ is given by the rules `special_boolean_expression` and `special_datetime_expression`.
 
-The special values `local date`, `local time`, and `local datetime` are assigned the types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`, and evaluate to the current date and current datetime of the database server, respectively.
+In an implementation of Jakarta Query for clients written in Java:
 
-The syntax for special values is given by the `special_expression` grammar rule.
+- the special values `true` and `false` are assigned the type `boolean`, and
+- the special values `local date`, `local time`, and `local datetime` are assigned the types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`.
+
+The expression `true` and `false` evaluate to their literal values.
+The expressions `local date`, `local time`, and `local datetime` evaluate to the current date, current time, and current datetime of the database server, respectively.
 
 ==== Parameter expressions
 
@@ -42,13 +53,24 @@ NOTE: This specification does not define how arguments are assigned to parameter
 
 When executed, a parameter expression evaluates to the argument assigned to the parameter.
 
-NOTE: Positional and named parameters must not be mixed in a single query.
+Positional and named parameters must not be mixed in a single query.
 
 ==== Enum literals
 
-An _enum literal expression_ is a Java identifier, with syntax specified by `enum_literal`, and may only occur as the right operand of a `set` assignment or `=`/`<>` equality comparison. It is assigned the type of the left operand of the assignment or comparison. The type must be a Java `enum` type, and the identifier must be the name of an enumerated value of the `enum` type including the fully qualified Java enum class name. For example, `day <> java.time.DayOfWeek.MONDAY` is a legal comparison expression.
+An _enum literal expression_ is a sequence of identifiers, with syntax specified by `enum_literal`, and must refer to a member of some sort of enumerated type.
+An enum literal may only occur as:
 
-When executed, an enum expression evaluates to the named member of the Java `enum` type.
+- the right operand of an `update_item` belonging to a `set` assignment,
+- the right operand of an `=` or `<>` equality comparison, or
+- an `in_item` element of an `in_item_list` occurring as the right operand of the <<in-expressions,`in` operator>>.
+
+In each case, the enum literal expression is assigned the type of the left operand of the assignment, comparison, or `in` operator.
+
+In an implementation of Jakarta Query for clients written in Java, the type assigned must be a Java `enum` type, and the identifier must be the name of an enumerated value of the `enum` type including the fully qualified Java enum class name. For example, `day <> java.time.DayOfWeek.MONDAY` is a legal comparison expression.
+
+When executed, the enum literal expression evaluates to the named member of the enumerated type.
+
+**TODO** allow `day <> MONDAY`, since the `enum` type can be inferred.
 
 [[path-expressions]]
 ==== Path expressions
@@ -69,9 +91,11 @@ When a path expression is executed, each element of the path is evaluated in tur
 
 If any element of a path expression evaluates to a null value, the whole path expression evaluates to a null value.
 
-==== Identifier expressions
+==== Identifier and version expressions
 
-An _identifier expression_, with syntax given by `id_expression`, is assigned the type of the unique identifier of the queried entity and evaluates to the unique identifier of a given record. An identifier expression is a synonym for a path expression with one element matching the identifier attribute of the queried entity type. An identifier expression may occur in the `select` clause, in the `order` clause, or as a scalar expression in the `where` clause.
+In the core language, an _identifier expression_, with syntax given by `id_expression`, is assigned the type of the unique identifier of the queried entity and evaluates to the unique identifier of a given record. An identifier expression is a synonym for a path expression with one element matching the identifier attribute of the queried entity type. An identifier expression may occur in the `select` clause, in the `order` clause, or as a scalar expression in the `where` clause.
+
+In the extended language, the grammar rule `#entity_id_or_version_function#` gives the syntax of the special functions `id` and `version`, which accept a path expression whose last element ia assigned an entity type, and evaluate to, respectively, the identifier or version element of the record to which the path expression evaluates when executed.
 
 ==== Function calls
 
@@ -125,7 +149,17 @@ An implementation of Jakarta Query for clients written in Java must assign:
 
 The primitive types `double`, `float`, `long`, `int`, `short`, `byte`, wrappers for these primitive types, `BigInteger`, and `BigDecimal` are all considered "Numeric" types.
 
-**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`, `FUNCTION()`
+**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`, `TYPE()`, `FUNCTION()`, `COALESCE()`, `NULLIF()`
+
+[[quantifiers]]
+==== Quantifiers
+
+**TODO** `EXISTS()`, `ALL()`, `ANY()`, `SOME()`
+
+[[case-expressions]]
+==== Case expressions
+
+**TODO**
 
 [[operator-expressions]]
 ==== Operator expressions
@@ -189,6 +223,7 @@ A `null` comparison, with syntax given by `null_comparison_expression` is satisf
 - the `not` keyword is missing, and its operand evaluates to a null value, or
 - the `not` keyword occurs, and its operand evaluates to any non-null value.
 
+[[in-expressions]]
 ==== In expressions
 
 An `in` expression, with syntax given by `in_expression` is satisfied when its leftmost operand evaluates to a non-null value, and:

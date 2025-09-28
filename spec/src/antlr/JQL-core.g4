@@ -127,7 +127,11 @@ enum_literal : IDENTIFIER ('.' IDENTIFIER)*; // ambiguity with simple_path_expre
 
 input_parameter : ':' IDENTIFIER | '?' INTEGER;
 
-literal : STRING | INTEGER | DOUBLE;
+literal : string_literal | numeric_literal;
+
+numeric_literal : INTEGER | DOUBLE;
+
+string_literal : STRING;
 
 literal_pattern : STRING;
 
