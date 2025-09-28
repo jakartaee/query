@@ -63,14 +63,38 @@ In the grammar, literal strings are labelled with the `STRING` token type.
 
 === Numeric literals
 
-Numeric literals come in two flavors:
+In the core language, numeric literals come in two flavors:
 
 - any legal Java decimal literal of type `int` or `long` is an _integer literal_, and
 - any legal Java literal of type `float` or `double` is a _decimal literal_.
 
+A suffix `L`, `D`, or `F` may be used to indicate a specific numeric
+type:
+
+- `L` means a 64-bit integer,
+- `D` means a 64-bit floating-point value, and
+- `F` means a 32-bit floating-point value
+
+The suffix is not case-sensitive.
+
+The literal numeric value preceding the suffix must conform to the rules for Java numeric literals established by the Java
+Language Specification.
+
+When the suffix is absent:
+
+- a literal with neither exponent nor decimal point is interpreted as a 32-bit integer value, and
+- a literal with either an exponent or decimal point is interpreted as a 64-bit floating-point value.
+
+An implementation of Jakarta Query which targets a language other than Java is not required to respect the suffix in a numeric literal.
+
 In the grammar, integer and decimal literals are labelled with the `INTEGER` and `DOUBLE` token types respectively.
 
 NOTE: Jakarta Query does not require support for literals written in octal or hexadecimal.
+
+In the extended language, arbitrary-precision numeric literals are also provided:
+
+- an arbitrary-precision integer literal follows the format of a Java integer literal, but with the explicit suffix `BI`, and with no limit on the number of decimal digits, and
+- an arbitrary-precision decimal literal follows the format of a Java floating-point literal, but with the explicit suffix `BD`, and with no limit on the number of decimal digits.
 
 === Single-character literals
 
