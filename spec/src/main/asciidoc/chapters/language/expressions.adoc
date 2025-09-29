@@ -95,7 +95,7 @@ If any element of a path expression evaluates to a null value, the whole path ex
 
 In the core language, an _identifier expression_, with syntax given by `id_expression`, is assigned the type of the unique identifier of the queried entity and evaluates to the unique identifier of a given record. An identifier expression is a synonym for a path expression with one element matching the identifier attribute of the queried entity type. An identifier expression may occur in the `select` clause, in the `order` clause, or as a scalar expression in the `where` clause.
 
-In the extended language, the grammar rule `#entity_id_or_version_function#` gives the syntax of the special functions `id` and `version`, which accept a path expression whose last element ia assigned an entity type, and evaluate to, respectively, the identifier or version element of the record to which the path expression evaluates when executed.
+In the extended language, the grammar rule `#entity_id_or_version_function#` gives the syntax of the special functions `id` and `version`, which accept a path expression whose last element is assigned an entity type, and evaluate to, respectively, the identifier or version element of the record to which the path expression evaluates when executed.
 
 ==== Function calls
 
