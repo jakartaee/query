@@ -84,7 +84,8 @@ In the following tables:
 | Expression                   | Core | Extended
 | Basic operators (+, -, *, /) | Yes | Yes
 | `ABS`                        | Yes | Yes
-| `ROUND`, `MOD`               | No  | Yes
+| `MOD`                        | No  | Yes
+| `ROUND`                      | No  | Yes
 |===
 
 ===== String Expressions
