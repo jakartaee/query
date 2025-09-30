@@ -39,7 +39,7 @@ A collection may not contain both atomic values and structures.
 
 - If a collection contains atomic values, then every atomic value has the same type.
 - If a collection contains structures, then every structure has the same type.
-- As an exception to the previous rule, a collection may contain structures belonging to distinct <<entities-embeddables,entity types>> if there is some entity type which is <<inheritance,inherited>> by the type of every structure contained in the collection.
+- As an exception to the previous rule, a collection may contain structures belonging to distinct <<entities-and-embeddables,entity types>> if there is some entity type which is <<inheritance,inherited>> by the type of every structure contained in the collection.
 - Every key of a map has the same atomic value type.
 
 A collection therefore has a type derived from the type of the atomic values or structures it contains--and, for a map, from the type of its keys.
@@ -99,7 +99,7 @@ The identifier must be a subset of the labelled elements of the structure.
 
 For example, `{ isbn: "1-85723-235-6" }` might be an identifier of the structure given above.
 
-[[entities-embeddables]]
+[[entities-and-embeddables]]
 === Entities and embeddable types
 
 A structure type might be assigned a static name.footnote:[That is, the name is assigned to the type before the program using Jakarta Query is compiled and executed.]

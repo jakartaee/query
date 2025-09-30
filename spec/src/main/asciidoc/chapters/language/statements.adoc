@@ -20,7 +20,7 @@ The interpretation and effect of each clause in this list is influenced by claus
 In the core language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
 This entity is always assigned the implicit alias `this`.
 
-In the core language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-embeddables>>.
+In the core language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-and-embeddables>>.
 
 NOTE: The core language does not have joins, and so the `from` clause is always trivial.
 
@@ -141,7 +141,7 @@ In the core language, the `select` clause, with syntax given by `select_clause`,
 Alternatively, the `select` clause may contain either:
 
 - a single `count(this)` <<aggregate-functions,aggregate function invocation>>, or
-- a single <<Identifier expressions,identifier expression>>.
+- a single <<identifier-version-expressions,identifier expression>>.
 
 A query beginning with `select count(this)` performs aggregation (without grouping), as specified by <<projection-and-aggregation>> and always returns a result list of unit length.
 
