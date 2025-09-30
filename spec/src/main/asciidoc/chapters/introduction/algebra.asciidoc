@@ -501,6 +501,11 @@ When projection is applied to a query involving aggregation, every value express
 
 In this case, the projection has the additional effect of collapsing the list of lists produced by aggregation, producing a single result structure for each nested list in the result list of the operation to which the projection applies.
 
+Alternatively, if every value expression in the `select` list is an aggregate function, and if the query does _not_ have a `group by` clause, then aggregation over all elements of the result list is implied.footnote:[That is, the query functions as if it had an empty `group by` clause with no value expressions, so that every element of the result list was assigned a grouping tuple of length zero, resulting in a result list containing a single nested list.]
+Such a query produces a result list with a single element.
+
+A query with no `group by` clause may not mix aggregate function expressions with other value expressions.
+
 [[distinct]]
 === Duplicate elimination
 

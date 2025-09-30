@@ -249,9 +249,31 @@ The `#type()#` function accepts an expression assigned an entity type, and, when
 An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
 
 [[aggregate-functions]]
-==== Aggregate functions
+==== Aggregate functions calls
 
-**TODO** `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`
+An _aggregate function call_ may only occur in the `select` or `having` clause of a query involving <<aggregation,aggregation>>.
+Such a clause operates on a list of nested result lists, as specified above in <<projection-and-aggregation>> and <<restriction-and-aggregation>>.
+An aggregate function call is evaluated in the context of such a nested list.
+
+This specification defines the standard aggregate functions listed in the table below.
+
+NOTE: Functions highlighted in yellow belong to the extended language and are not required for an implementation of the core language.
+
+[cols="15,15,15,15,~"]
+|===
+| Function name | Parameters | Parameter types | Type | Semantics
+
+| `count` | 1 | Any type | Long integer | The number of nested list elements for which the argument expression evaluates to a non-null value
+| `#min#` | 1 | Any ordered type `O` | `O` | The largest non-null value of the argument expression over all nested list elements
+| `#max#` | 1 | Any ordered type `O` | `O` | The largest non-null value of the argument expression over all nested list elements
+| `#sum#` | 1 | Any numeric type `N` | `N` | The sum of non-null values of the argument expression over all nested list elements
+| `#avg#` | 1 | Any numeric type `N` | `N` | The average of non-null values of the argument expression over all nested list elements
+|===
+
+In the core language, the only allowed aggregate function call is the expression `count(this)`, as specified below in <<select-clause>>.
+
+In the extended language, the syntax for aggregate functions is given by `#aggregate_expression#`.
+An aggregate function invocation may specify the keyword `#distinct#`, in which case <<distinct,duplicate elimination>> is applied to the list of values produced by evaluating the argument expression over all elements of the nested list before counting or summing the values.footnote:[Use of `min(distinct ...)` or `max(distinct ...)` is allowed but redundant.]
 
 [[quantifiers]]
 ==== Quantifiers
