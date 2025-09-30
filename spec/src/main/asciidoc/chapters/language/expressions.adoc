@@ -72,6 +72,14 @@ When executed, the enum literal expression evaluates to the named member of the 
 
 **TODO** allow `day <> MONDAY`, since the `enum` type can be inferred.
 
+==== Entity type literals
+
+In the extended language, an entity type literal, with syntax given by `#entity_type_literal#` is just the name of an entity type.
+When executed, it evaluates to a value which represents the named entity type.
+
+An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<E>` to an entity type literal, where `E` is the Java class mapping the named entity type.
+When executed, the literal evaluates to an instance of `Class` representing the Java class `E`.
+
 [[path-expressions]]
 ==== Path expressions
 
@@ -133,6 +141,8 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#replace#` | 3 | All strings | String | Evaluates to a new string formed by replacing every occurrence of the second argument string within the first argument string with the third argument string.
 | `#locate#` | 2 or 3 | String, string, integer | Integer | Evaluates to the position at which one string occurs within a second string, optionally ignoring any occurrences that begin before a specified character position in the second string. It returns the first character position within the second string (after the specified character position, if any) at which the first string occurs, as an integer, where the first character of the second string is denoted by 1. That is, the first argument is the string to be searched for; the second argument is the string to be searched in; the optional third argument is an integer representing the character position at which the search starts (by default, 1, the first character of the second string). If the first string does not occur within the second string, 0 is returned.
 | `#size#` | 1 | Collection | Integer | Evaluates to the number of elements in the collection to which its argument evaluates.
+| `#coalesce#` | At least two | Any atomic type `T` | `T` | Evaluates to the value of the first argument expression which evaluates to a non-null value.
+| `#nullif#` | 2 | Any atomic type `T` | `T` | Evaluates to the value of the first argument expression if both argument expressions evaluate to the same value, or to the null value otherwise.
 |===
 
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
@@ -149,7 +159,58 @@ An implementation of Jakarta Query for clients written in Java must assign:
 
 The primitive types `double`, `float`, `long`, `int`, `short`, `byte`, wrappers for these primitive types, `BigInteger`, and `BigDecimal` are all considered "Numeric" types.
 
-**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `CAST()`, `TREAT()`, `TYPE()`, `FUNCTION()`, `COALESCE()`, `NULLIF()`
+**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `FUNCTION()`
+
+==== Types and typecasts
+
+The extended language provides three special functions for working with subtype polymorphism.
+
+===== Treated path expressions
+
+A _treated path expression_ is an invocation of the special `#treat()#` function, with syntax given by `#treated_entity_path_expression#` and `#treated_joinable_path_expression#`.
+The `#treat()#` function accepts:
+
+1. a <<path-expressions,path expression>> whose last element is assigned an entity type, and
+2. the name of an entity type -- called the _treated type_ -- which must be a subtype of the entity type assigned to the path expression.
+
+A treated path expression is assigned the treated type.
+
+When a treated path expression is executed, the record produced by evaluating the path expression is compared to the treated type.
+
+- If the record is an <<entities-embeddables,instance of>> the treated type, the treated path expression evaluates to the record.
+- Otherwise, if the record is not an instance of the treated type, the treated path expression evaluates to the null value.
+
+===== Coercion expressions
+
+A _coercion expression_ is an invocation of the special `#cast()#` function, with syntax given by the last alternatives of `#functions_returning_numerics#` and `#functions_returning_strings#`.
+The `#cast()#` function accepts:
+
+1. an expression assigned an atomic type, and
+2. the name of an atomic type.
+
+A coerced expression is assigned the named atomic type.
+
+When a coercion expression is executed, the atomic value produced by evaluating the path expression is coerced to the named atomic type.
+
+[IMPORTANT]
+====
+This specification places no specific requirements on the types which are allowed as arguments of the `#cast()#` function, nor on the behavior of coercion between types.
+As suggested by the grammar for `#functions_returning_numerics#` and `#functions_returning_strings#`, implementations of the extended language are strongly encouraged to support at least:
+
+- coercion from string to any numeric type, and
+- coercion from any atomic type to string.
+
+However, this part of the grammar should be read as indicative of what should be supported in implementations of Jakarta Query which target clients written in Java, and, more specifically, what is required for an implementation of Jakarta Persistence.
+
+The capabilities of the `#cast()#` function vary between client programming languages and between databases.
+====
+
+===== Entity type expressions
+
+An _entity type expression_ is an invocation of the special `#type()#` function, with syntax given by `#type_discriminator#`.
+The `#type()#` function accepts an expression assigned an entity type, and, when executed, evaluates to a value which represents the type of the record to which the argument expression evaluates.
+
+An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
 
 [[quantifiers]]
 ==== Quantifiers
