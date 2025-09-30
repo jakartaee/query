@@ -143,6 +143,7 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#size#` | 1 | Collection | Integer | Evaluates to the number of elements in the collection to which its argument evaluates.
 | `#coalesce#` | At least two | Any atomic type `T` | `T` | Evaluates to the value of the first argument expression which evaluates to a non-null value.
 | `#nullif#` | 2 | Any atomic type `T` | `T` | Evaluates to the null value if both argument expressions evaluate to the same value, or, otherwise, to the value of the first argument expression.
+| `#extract#` | 2 | Any date or time type | See text | See text
 |===
 
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
@@ -159,7 +160,36 @@ An implementation of Jakarta Query for clients written in Java must assign:
 
 The primitive types `double`, `float`, `long`, `int`, `short`, `byte`, wrappers for these primitive types, `BigInteger`, and `BigDecimal` are all considered "Numeric" types.
 
-**TODO** `EXTRACT()`, `INDEX()`, `VALUE()`, `KEY()`, `FUNCTION()`
+In the extended language, the `#extract()#` function accepts an expression assigned a date, time, or datetime type, along with an identifier -- a `#datetime_field#` or `#datetime_part#` -- indicating a specific part of the date, time, or datetime to extract, and evaluates to the specified part of the value to which its argument expression evaluates.
+
+Like keywords, `#datetime_field#` and `#datetime_part#` identifiers are case-insensitive.
+
+[NOTE]
+====
+As mentioned above in <<atomic-values>>, an implementation of Jakarta Persistence targeting clients written in Java usually supports at least the date/time types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`.
+Such implementations are encouraged to also support:
+
+- the `#datetime_field#` identifiers `#YEAR#`, `#QUARTER#`, `#MONTH#`, `#WEEK#`, `#DAY#`, `#HOUR#`, `#MINUTE#`,
+`#SECOND#`, and
+- the `#datetime_part#` identifiers `#DATE#` and `#TIME#`.
+
+If the first argument of `#extract()#` is a `#datetime_field#` identifier, the function call is assigned the type `Integer`.
+If the first argument of `#extract()#` is `#DATE#`, the function call is assigned the type `LocalDate`. If the first argument of `#extract()#` is `#TIME#`, the function call is assigned the type `LocalTime`.
+
+The `#datetime_field#` or `#datetime_part#` must be compatible with the type of the second argument expression.
+For example, `extract(day from local date)` is well-typed; `extract(year from local time)` is not.
+====
+
+[NOTE]
+====
+Jakarta Persistence requires support for the `#function()#` function, with syntax given by `#function_invocation#`, allowing invocation of a native or user-defined database function from a query written in JPQL.
+On the other hand, an implementation of Jakarta Query might simply allow direct invocation of such functions -- without the requirement to use the `#function()#` syntax -- as an extension to the functionality required by this specification.
+This specification does not, therefore, require support for `#function()#`, not even in an implementation of the extended language.
+
+**TODO** Should we simply deprecate it? Remove it?
+====
+
+**TODO** `INDEX()`, `VALUE()`, `KEY()`
 
 ==== Types and typecasts
 
@@ -211,6 +241,11 @@ An _entity type expression_ is an invocation of the special `#type()#` function,
 The `#type()#` function accepts an expression assigned an entity type, and, when executed, evaluates to a value which represents the type of the record to which the argument expression evaluates.
 
 An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
+
+[[aggregate-functions]]
+==== Aggregate functions
+
+**TODO** `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`
 
 [[quantifiers]]
 ==== Quantifiers
