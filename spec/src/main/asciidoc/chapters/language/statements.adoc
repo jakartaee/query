@@ -134,6 +134,7 @@ The `#having#` clause must follow a `#group#` clause.
 A query with no group clause may not have a having clause.
 A restriction specified using `having` is applied after aggregation and before any projection.
 
+[[select-clause]]
 ==== Select clause
 
 In the core language, the `select` clause, with syntax given by `select_clause`, specifies one or more path expressions with syntax `simple_path_expression`, which are collectively interpreted as a projection with automatically assigned aliases, as specified in <<projection>>.
