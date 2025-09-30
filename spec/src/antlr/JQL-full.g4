@@ -100,7 +100,11 @@ join_condition
 
 join_association_expression
     : joinable_path_expression
-    | 'TREAT' '(' joinable_path_expression 'AS' subtype ')'
+    | treated_joinable_path_expression
+    ;
+
+treated_joinable_path_expression
+    : 'TREAT' '(' joinable_path_expression 'AS' subtype ')'
     ;
 
 joinable_path_expression
@@ -159,7 +163,11 @@ collection_valued_path_expression
 root_entity_expression
     : identification_variable
     | map_keyvalue_identification_variable
-    | 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')'
+    | treated_entity_path_expression
+    ;
+
+treated_entity_path_expression
+    : 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')'
     ;
 
 update_clause
@@ -293,7 +301,7 @@ derived_path_expression
     // TODO: Is support for TREAT() here really a requirement?
     //       We don't allow it in joinable_path_expression
     // TODO: Should we allow KEY(), VALUE() here?
-    : ((identification_variable | 'TREAT' '(' entity_valued_path_expression 'AS' subtype ')') '.')?
+    : ((identification_variable | treated_entity_path_expression) '.')?
       (structure_field '.')*
       (entity_field | collection_field)
     ;
