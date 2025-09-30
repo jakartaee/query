@@ -142,7 +142,7 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#locate#` | 2 or 3 | String, string, integer | Integer | Evaluates to the position at which one string occurs within a second string, optionally ignoring any occurrences that begin before a specified character position in the second string. It returns the first character position within the second string (after the specified character position, if any) at which the first string occurs, as an integer, where the first character of the second string is denoted by 1. That is, the first argument is the string to be searched for; the second argument is the string to be searched in; the optional third argument is an integer representing the character position at which the search starts (by default, 1, the first character of the second string). If the first string does not occur within the second string, 0 is returned.
 | `#size#` | 1 | Collection | Integer | Evaluates to the number of elements in the collection to which its argument evaluates.
 | `#coalesce#` | At least two | Any atomic type `T` | `T` | Evaluates to the value of the first argument expression which evaluates to a non-null value.
-| `#nullif#` | 2 | Any atomic type `T` | `T` | Evaluates to the value of the first argument expression if both argument expressions evaluate to the same value, or to the null value otherwise.
+| `#nullif#` | 2 | Any atomic type `T` | `T` | Evaluates to the null value if both argument expressions evaluate to the same value, or, otherwise, to the value of the first argument expression.
 |===
 
 When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
