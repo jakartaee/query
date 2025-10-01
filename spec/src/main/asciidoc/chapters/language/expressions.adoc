@@ -345,14 +345,21 @@ All three operands must have the same type.
 
 ==== Like expressions
 
-A `like` expression is satisfied when its left operand evaluates to a non-null value and:
+A `like` expression, with syntax given by `like_expression` is satisfied when its left operand evaluates to a non-null value and:
 
 - the `not` keyword is missing, and this value matches the pattern, or
 - the `not` keyword occurs, and the value does not match the pattern.
 
 The left operand must have type `java.lang.String`.
 
+Matching is lexicographic.
 Within the pattern, `_` matches any single character, and `%` matches any sequence of characters.
+Any other character occurring in the pattern is interpreted literally and matches only itself.
+
+In the extended language, a `like_expression` may specify an `#escape_character#`.
+An escape character may be used to suppress the interpretation as a wildcard of a particular `_` or `%` character in the pattern.
+
+That is, if the escape character is `c`, then the character bigram `c_` is interpreted literally as the character `_`, the bigram `c%` as the character `%`, and the bigram `cc` as the character `c`.
 
 ==== Equality and inequality operators
 
