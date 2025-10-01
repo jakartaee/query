@@ -270,10 +270,10 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | Function name | Parameters | Parameter types | Type | Semantics
 
 | `count` | 1 | Any type | Long integer | The number of nested list elements for which the argument expression evaluates to a non-null value
-| `#min#` | 1 | Any ordered type `O` | `O` | The largest non-null value of the argument expression over all nested list elements
+| `#min#` | 1 | Any ordered type `O` | `O` | The smallest non-null value of the argument expression over all nested list elements
 | `#max#` | 1 | Any ordered type `O` | `O` | The largest non-null value of the argument expression over all nested list elements
 | `#sum#` | 1 | Any numeric type `N` | `N` | The sum of non-null values of the argument expression over all nested list elements
-| `#avg#` | 1 | Any numeric type `N` | `N` | The average of non-null values of the argument expression over all nested list elements
+| `#avg#` | 1 | Any numeric type `N` | `N` | The average (arithmetic mean) of non-null values of the argument expression over all nested list elements
 |===
 
 In the core language, the only allowed aggregate function call is the expression `count(this)`, as specified below in <<select-clause>>.
@@ -304,7 +304,7 @@ When a general case expression is executed, each `conditional_expression` is eva
 A `#simple_case_expression#` has:
 
 1. a `#case_operand#`, which must be an atomic valued path expression or an <<type-discriminator,entity type expression>>,
-2. a list of one or more ``#simple_when_clause#``s, each of has a tested `scalar_expression` paired with a result `scalar_expression`, and
+2. a list of one or more ``#simple_when_clause#``s, each of which has a tested `scalar_expression` paired with a result `scalar_expression`, and
 3. a default `scalar_expression`.
 
 
