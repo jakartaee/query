@@ -313,6 +313,8 @@ When a simple case expression is executed, the `#case_operand#` is evaluated, an
 - If some tested `scalar_expression` evaluates to the value of the `#case_operand#`, then then its `scalar_expression` is evaluated, and its value is the value of the whole case expression.
 - Otherwise, if no `conditional_expression` is satisfied, the default `scalar_expression` is evaluated, and its value is the value of the whole case expression.
 
+**TODO** make the `else` clause optional, as in SQL.
+
 [[operator-expressions]]
 ==== Operator expressions
 
