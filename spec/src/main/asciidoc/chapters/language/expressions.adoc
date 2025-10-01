@@ -6,15 +6,14 @@
 An expression is a sequence of tokens to which a type can be assigned, and which evaluates to a well-defined value when the query is executed.
 Expressions may be categorized as:
 
-- literals,
-- special values,
-- parameters,
-- enum literals,
-- paths,
-- function calls,
-- quantifiers,
-- case expressions, and
-- operator expressions.
+- <<literal-expressions,literal atomic values>>, <<enum-literals,enum literals>>, and <<special-values,special values>>,
+- <<parameters,parameters>>,
+- <<path-expressions,paths>>,
+- <<function-calls,function calls>> and <<aggregate-functions,aggregate function calls>>,
+- <<types-and-typecasts,typecasts>>, <<type-discriminator,type expressions>>, and <<entity-type-literals,literal entity types>>,
+- <<quantifiers,quantifiers>>,
+- <<case-expressions,case expressions>>, and
+- <<operator-expressions,operator expressions>>.
 
 [[literal-expressions]]
 ==== Literal expressions
@@ -30,6 +29,7 @@ In the extended language:
 
 When executed, a literal expression evaluates to its literal value.
 
+[[special-values]]
 ==== Special values
 
 The syntax for _special values_ is given by the rules `special_boolean_expression` and `special_datetime_expression`.
@@ -42,6 +42,7 @@ In an implementation of Jakarta Query for clients written in Java:
 The expression `true` and `false` evaluate to their literal values.
 The expressions `local date`, `local time`, and `local datetime` evaluate to the current date, current time, and current datetime of the database server, respectively.
 
+[[parameters]]
 ==== Parameter expressions
 
 A parameter expression, with syntax given by `input_parameter`, is assigned a type and value either:
@@ -55,6 +56,7 @@ When executed, a parameter expression evaluates to the argument assigned to the 
 
 Positional and named parameters must not be mixed in a single query.
 
+[[enum-literals]]
 ==== Enum literals
 
 An _enum literal expression_ is a sequence of identifiers, with syntax specified by `enum_literal`, and must refer to a member of some sort of enumerated type.
@@ -72,6 +74,7 @@ When executed, the enum literal expression evaluates to the named member of the 
 
 **TODO** allow `day <> MONDAY`, since the `enum` type can be inferred.
 
+[[entity-type-literals]]
 ==== Entity type literals
 
 In the extended language, an entity type literal, with syntax given by `#entity_type_literal#` is just the name of an entity type.
@@ -111,6 +114,7 @@ This specification leaves the notion of a _version_ undefined.
 Implementations of Jakarta Query are free to interpret this notion in terms of concepts defined externally to this specification.
 For example, Jakarta Persistence specifies the notion of a version field or property of an entity.
 
+[[function-calls]]
 ==== Function calls
 
 A _function call_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by:
@@ -197,6 +201,7 @@ This specification does not, therefore, require support for `#function()#`, not 
 
 **TODO** `INDEX()`, `VALUE()`, `KEY()`
 
+[[types-and-typecasts]]
 ==== Types and typecasts
 
 The extended language provides three special functions for working with subtype polymorphism.
