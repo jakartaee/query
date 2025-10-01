@@ -60,7 +60,7 @@ As usual:
 [[structures-and-records]]
 === Structures and records
 
-A _structure_ is a finite set of labelled elements, each of which is an atomic value, a nested structure, or a collection.
+A _structure_ is a finite set of labeled elements, each of which is an atomic value, a nested structure, or a collection.
 
 Structures are inhomogeneous.
 Elements with distinct labels may have distinct types.
@@ -69,9 +69,9 @@ Every structure has a type derived from the types of its elements.
 We consider that two structures have the same type if:
 
 - they contain the same labels, and
-- for each label, the labelled elements have the same type.
+- for each label, the labeled elements have the same type.
 
-A structure has no identity independent of the labelled elements it contains.
+A structure has no identity independent of the labeled elements it contains.
 Two structures are identical if they contain exactly the same labels, and identical atomic values, collections, or nested structures for each label.
 
 For example--borrowing a convenient notation--the following structure might represent a book:
@@ -95,7 +95,7 @@ For example--borrowing a convenient notation--the following structure might repr
 
 A _record_ is a special kind of structure.
 Every record must have an _identifier_ which uniquely distinguishes it from other structures with the same type.
-The identifier must be a subset of the labelled elements of the structure.
+The identifier must be a subset of the labeled elements of the structure.
 
 For example, `{ isbn: "1-85723-235-6" }` might be an identifier of the structure given above.
 
@@ -166,17 +166,17 @@ Such mappings are completely outside the scope of this specification.
 ==== Entity type inheritance
 
 _Inheritance_ is a relationship between entity types.
-An entity `X` inherits an entity `Y` if and only if for every type labelled `y` in `Y`, there is a corresponding type labelled `y` in `X` and either:
+An entity `X` inherits an entity `Y` if and only if for every type labeled `y` in `Y`, there is a corresponding type labeled `y` in `X` and either:
 
 - the two types with label `y` are identical, or
-- the type labelled `y` in `Y` is an entity type `T`, the type labelled `y` in `X` is an entity type `S`, and `S` inherits `T`.
+- the type labeled `y` in `Y` is an entity type `T`, the type labeled `y` in `X` is an entity type `S`, and `S` inherits `T`.
 
 Thus, there is a simple mapping from records of type `X` to records of type `Y`.
-Given a record _r_ of type `X`, the _restriction_ of _r_ to a type `Y` inherited by `X` is a structure _s_ containing an element labelled `y` for each type with label `y` occurring in the type `Y`:
+Given a record _r_ of type `X`, the _restriction_ of _r_ to a type `Y` inherited by `X` is a structure _s_ containing an element labeled `y` for each type with label `y` occurring in the type `Y`:
 
-- If the type of the element _e_ of `X` with label `y` is identical to the type with label `y` in `Y`, then _s_ contains _e_ labelled `y`.
+- If the type of the element _e_ of `X` with label `y` is identical to the type with label `y` in `Y`, then _s_ contains _e_ labeled `y`.
 - Otherwise, the type of the element _e_ of `X` must be an entity type `S`, the type with the label `y` in `Y` must be an entity type `T`, and `S` must inherit `T`.
-Then _s_ contains the restriction of _e_ to `T`, labelled `y`.
+Then _s_ contains the restriction of _e_ to `T`, labeled `y`.
 
 Then _s_ is a record of type `Y`.
 
@@ -210,7 +210,7 @@ Such questions are the domain of our sister-specifications.
 
 When Jakarta Query is used from within the Java programming language:
 
-- An entity or embeddable type typically corresponds to a Java class or record type, and the labelled elements of an entity or embeddable typically correspond to fields or properties of the class or record type.
+- An entity or embeddable type typically corresponds to a Java class or record type, and the labeled elements of an entity or embeddable typically correspond to fields or properties of the class or record type.
 - An atomic value type typically corresponds to a Java primitive type, class, or enumerated type.
 - Every expression in a JQL query is assigned a Java type.
 
@@ -228,7 +228,7 @@ Since an attribute of an entity may be null, an expression in the query language
 === Paths
 
 Consider an arbitrary root structure constructed recursively using only atomic values and structures (and no collections).
-Such a structure may be viewed as a directed tree, where vertices are structures and atomic values, and edges are labelled structure elements.
+Such a structure may be viewed as a directed tree, where vertices are structures and atomic values, and edges are labeled structure elements.
 Then it is possible to uniquely assign a compound label to any given element of any structure in the tree by:
 
 1. tracing a directed path from the given element to the root structure, and
