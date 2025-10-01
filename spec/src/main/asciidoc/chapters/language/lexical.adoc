@@ -13,7 +13,7 @@ Lexical analysis requires recognition of the following token types:
 
 An _identifier_ is any legal Java identifier which is not a keyword. Identifiers are case-sensitive: `hello`, `Hello`, and `HELLO` are distinct identifiers.
 
-In the <<syntax,grammar>>, identifiers are labelled with the `IDENTIFIER` token type.
+In the <<syntax,grammar>>, identifiers are labeled with the `IDENTIFIER` token type.
 
 The following identifiers are _keywords_: `abs`, `all`, `and`, `any`, `as`, `asc`, `avg`, `between`, `both`, `by`, `case`, `ceiling`, `class`, `coalesce`, `concat`, `count`, `current_date`, `current_time`, `current_timestamp`, `delete`, `desc`, `distinct`, `else`, `empty`, `end`, `entry`, `escape`, `except`, `exists`, `exp`, `extract`, `false`, `fetch`, `first`, `floor`, `from`, `function`, `group`, `having`, `in`, `index`, `inner`, `intersect`, `is`, `join`, `key`, `leading`, `last`, `left`, `length`, `like`, `local`, `ln`, `locate`, `lower`, `max`, `member`, `min`, `mod`, `new`, `not`, `null`, `nulls`, `nullif`, `object`, `of`, `on`, `or`, `order`, `outer`, `position`, `power`, `replace`, `right`, `round`, `select`, `set`, `sign`, `size`, `some`, `sqrt`, `substring`, `sum`, `then`, `trailing`, `treat`, `trim`, `true`, `type`, `union`, `update`, `upper`, `value`, `when`, `where`.footnote:[Jakarta Persistence reserves the following additional keywords for
 future use: `BIT_LENGTH`, `CHAR_LENGTH`, `CHARACTER_LENGTH`, and `UNKNOWN`.].
@@ -59,7 +59,7 @@ A _literal string_ is a character sequence quoted using the character `'`.
 
 A single literal `'` character may be included within a string literal by self-escaping it, that is, by writing `''`. For example, the string literal ``'Furry''s theorem has nothing to do with furries.'`` evaluates to the string `pass:[Furry's theorem has nothing to do with furries.]`.
 
-In the grammar, literal strings are labelled with the `STRING` token type.
+In the grammar, literal strings are labeled with the `STRING` token type.
 
 === Numeric literals
 
@@ -87,7 +87,7 @@ When the suffix is absent:
 
 An implementation of Jakarta Query which targets a language other than Java is not required to respect the suffix in a numeric literal.
 
-In the grammar, integer and decimal literals are labelled with the `INTEGER` and `DOUBLE` token types respectively.
+In the grammar, integer and decimal literals are labeled with the `INTEGER` and `DOUBLE` token types respectively.
 
 NOTE: Jakarta Query does not require support for literals written in octal or hexadecimal.
 
@@ -100,7 +100,7 @@ In the extended language, arbitrary-precision numeric literals are also provided
 
 The `#trim_character#` and `#escape_character#` rules allow specification of a single literal character quoted using the `'` character.
 
-In the grammar, such single-character literals are labelled with the `CHARACTER` token type.
+In the grammar, such single-character literals are labeled with the `CHARACTER` token type.
 
 === Whitespace
 

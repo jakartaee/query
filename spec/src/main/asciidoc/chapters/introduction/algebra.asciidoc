@@ -67,9 +67,9 @@ This label is often called an _alias_ or _identification variable_.
 When no label is explicitly specified, the root entity is assigned the implicit label `this`.
 
 A root entity specification evaluates to a result list containing a structure for each record of the root entity type or of any entity type which inherits the root entity type.
-Each structure contains a single labelled element: the record, labelled by the alias `x`.
+Each structure contains a single labeled element: the record, labeled by the alias `x`.
 
-That is, for each record _r_ in the database, the result list has a structure _s_ containing _r_ labelled by `x` if and only if the type of _r_ <<inheritance,inherits>> the root entity type.
+That is, for each record _r_ in the database, the result list has a structure _s_ containing _r_ labeled by `x` if and only if the type of _r_ <<inheritance,inherits>> the root entity type.
 The structure _s_ contains no other elements.
 
 For example, the query `from Book` might return a list containing structures like:
@@ -123,8 +123,8 @@ Every join has a _target_, which must be:
 - a collection, or
 - an embeddable type.
 
-A join introduces a new labelled element to a result list.
-Evaluating a sequence of joins produces a result list in which each structure contains a labelled element corresponding to each join.
+A join introduces a new labeled element to a result list.
+Evaluating a sequence of joins produces a result list in which each structure contains a labeled element corresponding to each join.
 The label of this element is often called the _alias_ or _identification variable_ of the join.
 
 [[joins-entities]]
@@ -141,7 +141,7 @@ where `Y` is the name of the entity, `y` is the label (alias) assigned to it, an
 As before, the keyword `as` is optional.
 
 This kind of join produces a cartesian product.
-For each structure _r_ of the result list of the operation on which the join acts, and for each record _y_ of any entity type which inherits `Y`, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the record _y_ labelled by the alias `y`.
+For each structure _r_ of the result list of the operation on which the join acts, and for each record _y_ of any entity type which inherits `Y`, the result list contains a structure _r'_ containing all labeled elements of _r_ together with the record _y_ labeled by the alias `y`.
 
 For example, this query is a cartesian product:
 
@@ -151,7 +151,7 @@ from Book as book, Loan as loan
 ----
 
 This query evaluates to a result list containing a structure for each pairing of a record of entity `Book` with a record of entity `Loan`.
-The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `loan`, respectively.
+The structure contains two labeled elements, one for each entity, each labeled by its corresponding alias, `book`, and `loan`, respectively.
 The list might contain structures this:
 
 [source,json]
@@ -256,11 +256,11 @@ The path expression identifies a structure nested within the result list of the 
 
 For each structure _r_ of the result list of the operation on which the join acts:
 
-- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the structure _s_ labelled by the alias `y`.
-- If the path expression resolves to a collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
+- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labeled elements of _r_ together with the structure _s_ labeled by the alias `y`.
+- If the path expression resolves to a collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labeled elements of _r_ together with the structure _e_ labeled by the alias `y`.
 
 The previous example evaluates to a list containing a structure for each `Author` of each `Book`.
-The structure contains two labelled elements, one for each entity, each labelled by its corresponding alias, `book`, and `author`, respectively.
+The structure contains two labeled elements, one for each entity, each labeled by its corresponding alias, `book`, and `author`, respectively.
 The list might contain structures like this:
 
 [source,json]
@@ -337,9 +337,9 @@ The path expression identifies a structure nested within the result list of the 
 
 For each structure _r_ of the result list of the operation on which the join acts:
 
-- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labelled elements of _r_ together with the structure _s_ labelled by the alias `y`.
-- If the path expression resolves to a nonempty collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labelled elements of _r_ together with the structure _e_ labelled by the alias `y`.
-- Otherwise, if a path expression resolves to no structure, or to an empty collection, the result list contains a structure _r'_ containing only the labelled elements of _r_.
+- If the path expression resolves to a structure _s_, the result list contains a structure _r'_ containing all labeled elements of _r_ together with the structure _s_ labeled by the alias `y`.
+- If the path expression resolves to a nonempty collection _c_, the result list contains, for each element _e_ of _c_, a structure _r'_ containing all labeled elements of _r_ together with the structure _e_ labeled by the alias `y`.
+- Otherwise, if a path expression resolves to no structure, or to an empty collection, the result list contains a structure _r'_ containing only the labeled elements of _r_.
 
 Just like regular joins, a left join may be followed by a restriction:
 
@@ -348,8 +348,8 @@ Just like regular joins, a left join may be followed by a restriction:
 [from] left outer join [path] as y on [predicate]
 ----
 
-In this case, however, the restriction is only evaluated for elements of the result list which contain structures labelled by the alias `y`.
-Any element of the result list of the join which does not contain a structure labelled by the alias `y` is taken to satisfy the restriction, even when the predicate would not be satisfied by that element.
+In this case, however, the restriction is only evaluated for elements of the result list which contain structures labeled by the alias `y`.
+Any element of the result list of the join which does not contain a structure labeled by the alias `y` is taken to satisfy the restriction, even when the predicate would not be satisfied by that element.
 
 [[fetch-joins]]
 ==== Fetch joins
@@ -469,7 +469,7 @@ Such defaulted labels may not be referred to in the query language except--again
 
 Projection produces a new structure _r'_ for each structure _r_ in the result list of the operation on which the projection acts.
 The new structure  _r'_ is built by evaluating the value expressions specified by the projection in the context of the corresponding element structure _r_, according to semantics given later in <<value-expressions>>.
-For each value expression with label `x` in the given `select` list, _r'_ contains a element labelled `x` obtained by evaluating the value expression in the context of _r_.
+For each value expression with label `x` in the given `select` list, _r'_ contains a element labeled `x` obtained by evaluating the value expression in the context of _r_.
 
 For example:
 
