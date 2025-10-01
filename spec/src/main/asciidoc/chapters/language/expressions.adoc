@@ -396,7 +396,7 @@ A `between` expression, with syntax given by `between_expression` is satisfied w
 
 Or, if the `not` keyword occurs, the left operand must evaluate to a value which is:
 
-- strictly smaller than to the value taken by its middle operand, or
+- strictly smaller than the value taken by its middle operand, or
 - strictly larger than the value taken by its right operand.
 
 All three operands must have the same type.
