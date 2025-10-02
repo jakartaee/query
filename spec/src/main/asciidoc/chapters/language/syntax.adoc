@@ -50,7 +50,7 @@ In the following tables:
 | Joins (inner/left/fetch)                          | No  | Yes
 | Grouping (`GROUP BY`)                             | No  | Yes
 | Having (`HAVING`)                                 | No  | Yes
-| Aggregates (`SUM`, `AVG`)                         | No  | Yes
+| Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`)                         | No  | Yes
 | Distinct in `SELECT`                              | No  | Yes
 | Constructor expressions                           | No  | Yes
 | Subqueries (`EXISTS`, `IN`)                       | No  | Yes
