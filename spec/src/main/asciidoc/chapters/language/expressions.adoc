@@ -10,7 +10,7 @@ Expressions may be categorized as:
 - <<parameters,parameters>>,
 - <<path-expressions,paths>>,
 - <<function-calls,function calls>> and <<aggregate-functions,aggregate function calls>>,
-- <<types-and-typecasts,typecasts>>, <<type-discriminator,type expressions>>, and <<entity-type-literals,literal entity types>>,
+- <<types-and-typecasts,typecasts>>, <<entity-type-expressions,type expressions>>, and <<entity-type-literals,literal entity types>>,
 - <<case-expressions,case expressions>>,
 - <<operator-expressions,operator expressions>>, and
 - <<subquery-expressions>>.
@@ -246,7 +246,7 @@ However, this part of the grammar should be read as indicative of what should be
 The capabilities of the `#cast()#` function vary between client programming languages and between databases.
 ====
 
-[[type-discriminator]]
+[[entity-type-expressions]]
 ===== Entity type expressions
 
 An _entity type expression_ is an invocation of the special `#type()#` function, with syntax given by `#type_discriminator#`.
@@ -300,7 +300,7 @@ The whole case expression evaluates to the value produced by the result or defau
 
 A `#simple_case_expression#` has:
 
-1. a `#case_operand#`, which must be an atomic valued path expression or an <<type-discriminator,entity type expression>>,
+1. a `#case_operand#`, which must be an atomic valued path expression or an <<entity-type-expressions,entity type expression>>,
 2. a list of one or more ``#simple_when_clause#``s, each of which has a tested `scalar_expression` paired with a result `scalar_expression`, and
 3. a default `scalar_expression`.
 
@@ -384,23 +384,24 @@ Numeric type promotion is defined by the following rules:
 
 A _conditional expression_ is a sequence of tokens which specifies a condition which, for a given record, might be _satisfied_ or _unsatisfied_. Unlike the scalar <<Expressions>> defined in the previous section, a conditional expression is not considered to have a well-defined type.
 
-NOTE: The Jakarta Persistence specification defines the result of a conditional expression in terms of ternary logic. This specification does not specify that a conditional expression evaluates to well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
+NOTE: The Jakarta Persistence specification defines the result of a conditional expression in terms of ternary logic. This specification does not specify that a conditional expression evaluates to a well-defined value, only the effect of the conditional expression when it is used as a restriction. The "value" of a conditional expression is not considered observable by the application program.
 
 Conditional expressions may be categorized as:
 
-- `null` comparisons,
-- `in` expressions,
-- `between` expressions,
-- `like` expressions,
-- equality and inequality operator expressions,
+- <<null-comparisons,`null` comparisons>>,
+- <<in-expressions,`in` expressions>>,
+- <<between,`between` expressions>>,
+- <<like,`like` expressions>>,
+- <<equality-and-inequality,equality and inequality>> operator expressions,
 - <<quantifiers,quantified conditional expressions>>, and
-- logical operator expressions.
+- <<logical-operators,logical operator expressions>>.
 
 The syntax for conditional expressions is given by the `conditional_expression` rule. Within a conditional expression, parentheses indicate grouping.
 
+[[null-comparisons]]
 ==== Null comparisons
 
-A `null` comparison, with syntax given by `null_comparison_expression` is satisfied when:
+A `null` comparison, with syntax given by `null_comparison_expression`, is satisfied when:
 
 - the `not` keyword is missing, and its operand evaluates to a null value, or
 - the `not` keyword occurs, and its operand evaluates to any non-null value.
@@ -408,13 +409,37 @@ A `null` comparison, with syntax given by `null_comparison_expression` is satisf
 [[in-expressions]]
 ==== In expressions
 
-An `in` expression, with syntax given by `in_expression` is satisfied when its leftmost operand evaluates to a non-null value, and:
+In the core language, an `in` expression, with syntax given by `in_expression`, must have:
+
+- a <<path-expressions,path expression>> as the leftmost operand, and
+- a parenthesized list of one or more ``in_item``s, each of which must be a <<literal-expressions,literal>>, <<enum-literals,enum literal>>, or <<parameters,parameter>>.
+
+All operands must have the same type.
+
+**TODO** We should relax the restrictions on the left operand.
+
+In the extended language, the leftmost operand must be a path expression assigned an atomic type or an <<entity-type-expressions,entity type expression>>, and there must be exactly one of the following elements:
+
+- a parenthesized list of one or more ``in_item``s, each of which must be a <<literal-expressions,literal>>, an <<enum-literals,enum literal>>, a <<entity-type-literals,literal entity type>>, `true`, `false`, or a <<parameters,parameter>>, and each having the same assigned type as the leftmost operand,
+- a parenthesized subquery with a `#simple_select_expression#` expression with the same assigned type as the leftmost operand, or
+- an unparenthesized parameter.footnote:[Jakarta Persistence treats this parameter as a _collection-valued input parameter_.]
+
+If the condition has a list of expressions, it is satisfied when its leftmost operand evaluates to a non-null value, and:
 
 - the `not` keyword is missing, and any one of its parenthesized operands evaluates to the same value as its leftmost operand, or
 - the `not` keyword occurs, and none of its parenthesized operands evaluate to the same value as its leftmost operand.
 
-All operands must have the same type.
+If the condition has a subquery, it is satisfied when its leftmost operand evaluates to a non-null value, and:
 
+- the `not` keyword is missing, and the value produced by evaluating the left operand does not occur in the result list of the subquery, or
+- the `not` keyword occurs, and the value produced by evaluating the left operand does occur in the result list of the subquery.
+
+If the condition has an unparenthesized parameter, it is satisfied when its leftmost operand evaluates to a non-null value, and:
+
+- the `not` keyword is missing, and the value produced by evaluating the left operand is not a member of the value assigned to the parameter, or
+- the `not` keyword occurs, and the value produced by evaluating the left operand is a member of the value assigned to the parameter.
+
+[[between]]
 ==== Between expressions
 
 A `between` expression, with syntax given by `between_expression` is satisfied when its operands all evaluate to non-null values, and, if the `not` keyword is missing, its left operand evaluates to a value which is:
@@ -429,6 +454,7 @@ Or, if the `not` keyword occurs, the left operand must evaluate to a value which
 
 All three operands must have the same type.
 
+[[like]]
 ==== Like expressions
 
 A `like` expression, with syntax given by `like_expression` is satisfied when its left operand evaluates to a non-null value and:
@@ -524,6 +550,7 @@ For clients written in Java, note that:
 - This specification does not define an order for UUID values, which is completely implementation-dependent. Applications must not assume that the order agrees with the `compareTo()` method of `java.util.UUID`.
 ====
 
+[[logical-operators]]
 === Logical operators
 
 The logical operators are `and`, `or`, and `not`.
