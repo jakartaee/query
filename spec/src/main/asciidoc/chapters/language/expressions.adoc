@@ -11,8 +11,9 @@ Expressions may be categorized as:
 - <<path-expressions,paths>>,
 - <<function-calls,function calls>> and <<aggregate-functions,aggregate function calls>>,
 - <<types-and-typecasts,typecasts>>, <<type-discriminator,type expressions>>, and <<entity-type-literals,literal entity types>>,
-- <<case-expressions,case expressions>>, and
-- <<operator-expressions,operator expressions>>.
+- <<case-expressions,case expressions>>,
+- <<operator-expressions,operator expressions>>, and
+- <<subquery-expressions>>.
 
 [[literal-expressions]]
 ==== Literal expressions
@@ -336,6 +337,13 @@ The four numeric operators may also be applied to an operand of wrapper type, fo
 The four numeric operators may also be applied to operands of type `java.math.BigInteger` or `java.math.BigDecimal`.
 
 A numeric operator expression is evaluated according to the native semantics of the database. In translating an operator expression to the native query language of the database, a Jakarta Query provider is encouraged, but not required, to apply reasonable transformations so that evaluation of the expression more closely mimics the semantics of the Java language.
+
+[[subquery-expressions]]
+==== Subquery expression
+
+In the extended language, a `#subquery#` may occur as a `scalar_expression` in many places where an expression of atomic type is legal.
+Such a subquery must produce a result list with exactly one element when executed.
+When the `scalar_expression` is evaluated, the subquery is executed, and the whole expression evaluates to the single element of the result list of the subquery.
 
 ==== Numeric types and numeric type promotion
 
