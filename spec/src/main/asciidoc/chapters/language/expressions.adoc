@@ -469,6 +469,7 @@ Within the pattern, `_` matches any single character, and `%` matches any sequen
 Any other character occurring in the pattern is interpreted literally and matches only itself.
 
 In the extended language, a `like_expression` may specify an `#escape_character#`.
+**TODO** add the escape character to the core language because it is needed by Jakarta Data's Like constraint
 An escape character may be used to suppress the interpretation as a wildcard of a particular `_` or `%` character in the pattern.
 
 That is, if the escape character is `c`, then the character bigram `c_` is interpreted literally as the character `_`, the bigram `c%` as the character `%`, and the bigram `cc` as the character `c`.
