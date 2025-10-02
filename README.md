@@ -145,3 +145,69 @@ group by h.name
 having count(r) > 10
 order by count(r) desc
 ```
+
+### Language Levels and Feature Summary
+
+The Core and Full grammars together define two levels of Jakarta Query: **Core** and **Extended**.  
+The Core level represents the minimal, portable subset, while the Extended level is a superset that introduces SQL-oriented features such as joins, grouping, and subqueries.  
+This subsection summarizes the differences between them, based on the syntax defined in the [Core language grammar] and the [Full language grammar] sections.
+
+> **Note**  
+> In the following tables:
+> * Yes = Feature available at this level
+> * No  = Feature not available at this level
+
+#### Clauses and Constructs
+
+| Feature / Construct                               | Core | Extended |
+|---------------------------------------------------|------|----------|
+| `FROM` clause                                     | Yes  | Yes      |
+| `WHERE` clause                                    | Yes  | Yes      |
+| `ORDER BY` clause                                 | Yes  | Yes      |
+| `SELECT` paths/id/count                           | Yes  | Yes      |
+| Update (`UPDATE ... SET`)                         | Yes  | Yes      |
+| Delete (`DELETE FROM`)                            | Yes  | Yes      |
+| Joins (inner/left/fetch)                          | No   | Yes      |
+| Grouping (`GROUP BY`)                             | No   | Yes      |
+| Having (`HAVING`)                                 | No   | Yes      |
+| Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`)  | No   | Yes      |
+| Distinct in `SELECT`                              | No   | Yes      |
+| Constructor expressions                           | No   | Yes      |
+| Subqueries (`EXISTS`, `IN`, `ALL`, `ANY`, `SOME`) | No   | Yes      |
+| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | No   | Yes      |
+
+#### Special Expressions and Functions
+
+##### Datetime Expressions
+
+| Expression                                  | Core | Extended |
+|---------------------------------------------|------|----------|
+| `LOCAL DATE`, `LOCAL TIME`, `LOCAL TIMESTAMP` | Yes  | Yes      |
+| `EXTRACT(field FROM x)`                     | No   | Yes      |
+
+##### Boolean Expressions
+
+| Expression               | Core | Extended |
+|--------------------------|------|----------|
+| Literals `TRUE`, `FALSE` | Yes  | Yes      |
+| `EXISTS`                 | No   | Yes      |
+
+##### Numeric Expressions
+
+| Expression                   | Core | Extended |
+|------------------------------|------|----------|
+| Basic operators (+, -, *, /) | Yes  | Yes      |
+| `ABS`                        | Yes  | Yes      |
+| `MOD`                        | No   | Yes      |
+| `ROUND`                      | No   | Yes      |
+
+##### String Expressions
+
+| Expression                 | Core | Extended |
+|----------------------------|------|----------|
+| `||` concatenation         | Yes  | Yes      |
+| `LENGTH`                   | Yes  | Yes      |
+| `LOWER`, `UPPER`           | Yes  | Yes      |
+| `LEFT`, `RIGHT`            | Yes  | Yes      |
+| `LOCATE`                   | No   | Yes      |
+| `SUBSTRING`                | No   | Yes      |
