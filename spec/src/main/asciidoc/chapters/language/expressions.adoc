@@ -11,7 +11,6 @@ Expressions may be categorized as:
 - <<path-expressions,paths>>,
 - <<function-calls,function calls>> and <<aggregate-functions,aggregate function calls>>,
 - <<types-and-typecasts,typecasts>>, <<type-discriminator,type expressions>>, and <<entity-type-literals,literal entity types>>,
-- <<quantifiers,quantifiers>>,
 - <<case-expressions,case expressions>>, and
 - <<operator-expressions,operator expressions>>.
 
@@ -281,11 +280,6 @@ In the core language, the only allowed aggregate function call is the expression
 In the extended language, the syntax for aggregate functions is given by `#aggregate_expression#`.
 An aggregate function invocation may specify the keyword `#distinct#`, in which case <<distinct,duplicate elimination>> is applied to the list of values produced by evaluating the argument expression over all elements of the nested list before counting or summing the values.footnote:[Use of `min(distinct ...)` or `max(distinct ...)` is allowed but redundant.]
 
-[[quantifiers]]
-==== Quantifiers
-
-**TODO** `EXISTS()`, `ALL()`, `ANY()`, `SOME()`
-
 [[case-expressions]]
 ==== Case expressions
 
@@ -415,6 +409,7 @@ The left operand must have type `java.lang.String`.
 
 Within the pattern, `_` matches any single character, and `%` matches any sequence of characters.
 
+[[equality-and-inequality]]
 ==== Equality and inequality operators
 
 The equality and inequality operators are `=`, `&lt;&gt;`, `&lt;`, `&gt;`, `&lt;=`, `&gt;=`.
@@ -427,6 +422,8 @@ The operands of an equality or inequality operator must have the same type.
 
 NOTE: Portability is maximized when Jakarta Query providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
 
+In the extended language, the right operand of an equality or inequality operator may be a subquery, as discussed in the <<quantifiers,next section>>.
+
 [WARNING]
 ====
 When using NoSQL databases, there are limitations to the support of equality and inequality operators:
@@ -437,6 +434,26 @@ When using NoSQL databases, there are limitations to the support of equality and
 
 3. **Graph and Document Databases**: Support for all equality and inequality operators is required.
 ====
+
+[[quantifiers]]
+==== Quantified conditional expressions
+
+In the extended language, there are two kinds of conditional expression involving quantification:
+
+- _existence expressions_, with syntax given by `#exists_expression#`, and
+- _quantified comparison expressions_, in which the right operand of an <<equality-and-inequality,equality or inequality operator>> is an `#all_or_any_expression#`.
+
+In either case, a `#subquery#` occurs as the argument of one of the following special quantifier functions.
+
+[cols="10,1,~"]
+|===
+| Quantifier | Kind | Interpretation
+
+| `exists` | Existence | Satisfied if the result list of the subquery is nonempty.
+| `not exists` | Existence | Satisfied if the result list of the subquery is empty.
+| `any` or `some` | Quantified comparison | Satisfied if the result list of the subquery contains at least one value which would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
+| `all` | Quantified comparison | Satisfied if every value belonging to the result list of the subquery would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
+|===
 
 === Ordering
 
