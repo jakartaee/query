@@ -64,7 +64,7 @@ In the following tables:
 [cols="3,1,1",options="header"]
 |===
 | Expression                                          | Core | Extended
-| `CURRENT_DATE`, `CURRENT_TIME`, `CURRENT_TIMESTAMP` | Yes | Yes
+| `LOCAL DATE`, `LOCAL TIME`, `LOCAL TIMESTAMP` | Yes | Yes
 | `EXTRACT(field FROM x)`                             | No  | Yes
 |===
 
