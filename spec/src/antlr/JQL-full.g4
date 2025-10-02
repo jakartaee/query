@@ -377,6 +377,7 @@ in_item_list
 in_item
     : literal
     | enum_literal
+    | entity_type_literal
     | special_boolean_expression
     | single_valued_input_parameter
     ;
