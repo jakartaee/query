@@ -431,13 +431,13 @@ If the condition has a list of expressions, it is satisfied when its leftmost op
 
 If the condition has a subquery, it is satisfied when its leftmost operand evaluates to a non-null value, and:
 
-- the `not` keyword is missing, and the value produced by evaluating the left operand does not occur in the result list of the subquery, or
-- the `not` keyword occurs, and the value produced by evaluating the left operand does occur in the result list of the subquery.
+- the `not` keyword is missing, and the value produced by evaluating the left operand occurs in the result list of the subquery, or
+- the `not` keyword occurs, and the value produced by evaluating the left operand does not occur in the result list of the subquery.
 
 If the condition has an unparenthesized parameter, it is satisfied when its leftmost operand evaluates to a non-null value, and:
 
-- the `not` keyword is missing, and the value produced by evaluating the left operand is not a member of the value assigned to the parameter, or
-- the `not` keyword occurs, and the value produced by evaluating the left operand is a member of the value assigned to the parameter.
+- the `not` keyword is missing, and the value produced by evaluating the left operand is a member of the value assigned to the parameter, or
+- the `not` keyword occurs, and the value produced by evaluating the left operand is not a member of the value assigned to the parameter.
 
 [[between]]
 ==== Between expressions
