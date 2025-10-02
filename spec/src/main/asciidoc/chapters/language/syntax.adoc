@@ -94,7 +94,8 @@ In the following tables:
 |===
 | Expression                             | Core | Extended
 | &#124;&#124; concatenation             | Yes | Yes
-| `LENGTH`, `LOWER`, `UPPER`             | Yes | Yes
+| `LENGTH`                               | Yes | Yes
+| `LOWER`, `UPPER`                       | Yes | Yes
 | `LEFT`, `RIGHT`                        | Yes  | Yes
 | `LOCATE`                               | No  | Yes
 | `SUBSTRING`                            | No  | Yes
