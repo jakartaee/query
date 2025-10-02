@@ -372,7 +372,7 @@ Conditional expressions may be categorized as:
 - `like` expressions,
 - equality and inequality operator expressions,
 - <<quantifiers,quantified conditional expressions>>, and
-- logical operator expressions,.
+- logical operator expressions.
 
 The syntax for conditional expressions is given by the `conditional_expression` rule. Within a conditional expression, parentheses indicate grouping.
 
@@ -454,7 +454,7 @@ In the extended language, there are two kinds of conditional expression involvin
 
 In either case, a `#subquery#` occurs as the argument of one of the following special quantifier functions: `#exists#`, `#all#`, `#any#`, or `#some#`.
 When a quantifier is evaluated, the subquery is executed, producing a result list containing values which are instances of some atomic or entity type.
-For a quantified comparison expressions, the type of these values must be the same as the type of the left operand of the equality or inequality operator.
+For a quantified comparison expression, the type of these values must be the same as the type of the left operand of the equality or inequality operator.
 
 An existence expression is satisfied if and only if:
 
