@@ -53,7 +53,7 @@ In the following tables:
 | Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`)                         | No  | Yes
 | Distinct in `SELECT`                              | No  | Yes
 | Constructor expressions                           | No  | Yes
-| Subqueries (`EXISTS`, `IN`)                       | No  | Yes
+| Subqueries (`EXISTS`, `IN`, `ALL` , `ANY`, `SOME`)                       | No  | Yes
 | Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | No  | Yes
 |===
 
