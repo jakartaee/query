@@ -35,7 +35,7 @@ Finally, the binary operations **union**, **intersection**, and **complementatio
 [[root-entity]]
 === The root entity
 
-Every query begins with a _root entity_.
+Every query begins with a _root entity_ (unless it is a <<subqueries,correlated subquery>>).
 A root entity is specified using the syntax:
 
 [source,sql]
@@ -624,3 +624,20 @@ In principle, a union may act on result lists of distinct type, producing a resu
 This specification requires union, intersection, or complementation only for lists of identical type because many data stores are not capable of unions that produce lists of heterogeneous type.
 Some implementations allow unions of lists containing entities of distinct type when the entity types are related by <<inheritance,inheritance>>, but that functionality is not required by this specification.
 ====
+
+[[subqueries]]
+=== Subqueries
+
+A _subquery_ is a query which occurs as an expression in another _outer query_.
+Subqueries have a restricted syntax compared to root queries, and, in particular, every subquery must have a <<projection,projection>> with exactly one value expression.
+
+NOTE: This specification defines the behavior of subqueries occurring within <<restriction,restrictions>> in the `where` clause or `having` clause.
+Some implementations of Jakarta Query allow subqueries to occur elsewhere in the query, but this functionality falls outside the scope of this specification.
+
+A subquery may have expressions which involve aliases declared by any outer query.
+A query with such expressions is called _correlated_.
+
+- A subquery which is not correlated may be executed independently of the containing query, and its result set is fixed for all rows of the outer query.
+- A correlated subquery must be evaluated once for each given element of the result list to which the restricted is applied. A correlated subquery does not have a <<root-entity,root entity>>, and every element of the `from` clause is treated as a <<joins,join>>. When the correlated subquery is executed, the first join in the pipeline is applied to a result list containing only the given element.
+
+A subquery may not have an <<ordering>>.
