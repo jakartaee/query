@@ -362,8 +362,9 @@ Conditional expressions may be categorized as:
 - `in` expressions,
 - `between` expressions,
 - `like` expressions,
-- equality and inequality operator expressions, and
-- logical operator expressions.
+- equality and inequality operator expressions,
+- <<quantifiers,quantified conditional expressions>>, and
+- logical operator expressions,.
 
 The syntax for conditional expressions is given by the `conditional_expression` rule. Within a conditional expression, parentheses indicate grouping.
 
@@ -443,17 +444,19 @@ In the extended language, there are two kinds of conditional expression involvin
 - _existence expressions_, with syntax given by `#exists_expression#`, and
 - _quantified comparison expressions_, in which the right operand of an <<equality-and-inequality,equality or inequality operator>> is an `#all_or_any_expression#`.
 
-In either case, a `#subquery#` occurs as the argument of one of the following special quantifier functions.
+In either case, a `#subquery#` occurs as the argument of one of the following special quantifier functions: `#exists#`, `#all#`, `#any#`, or `#some#`.
+When a quantifier is evaluated, the subquery is executed, producing a result list containing values which are instances of some atomic or entity type.
+For a quantified comparison expressions, the type of these values must be the same as the type of the left operand of the equality or inequality operator.
 
-[cols="10,1,~"]
-|===
-| Quantifier | Kind | Interpretation
+An existence expression is satisfied if and only if:
 
-| `exists` | Existence | Satisfied if the result list of the subquery is nonempty.
-| `not exists` | Existence | Satisfied if the result list of the subquery is empty.
-| `any` or `some` | Quantified comparison | Satisfied if the result list of the subquery contains at least one value which would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
-| `all` | Quantified comparison | Satisfied if every value belonging to the result list of the subquery would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
-|===
+- the `not` keyword is missing, and the result list of the subquery is nonempty, or
+- the `not` keyword is present, and the result list of the subquery is empty.
+
+A quantified comparison expression is satisfied if and only if:
+
+- the quantifier is `#any#` or `#some#` and the result list of the subquery contains at least one value which would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery, or
+- the quantifier is `#all#` and every value belonging to the result list of the subquery would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
 
 === Ordering
 
