@@ -639,4 +639,4 @@ A query with such expressions is called _correlated_.
 - A subquery which is not correlated may be executed independently of the containing query, and its result set is fixed for all rows of the outer query.
 - A correlated subquery must be evaluated once for each given element of the result list to which the restricted is applied. A correlated subquery does not have a <<root-entity,root entity>>, and every element of the `from` clause is treated as a <<joins,join>>. When the correlated subquery is executed, the first join in the pipeline is applied to a result list containing only the given element.
 
-A subquery may not have an <<ordering>>.
+A subquery must not have an <<ordering>>.
