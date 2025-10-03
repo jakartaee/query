@@ -460,7 +460,7 @@ All three operands must have the same type.
 A `like` expression has syntax given by `like_expression`.
 
 - Its left operand must be an expression assigned some atomic type representing character strings.
-- Its right operand must be a pattern given as literal string, with syntax `literal_pattern`, or, in the extended language, a <<parameters,parameter>>.
+- Its right operand must be a pattern given as a literal string, with syntax `literal_pattern`, or, in the extended language, a <<parameters,parameter>>.
 
 
 If an implementation of Jakarta Query targets clients written in Java, it must allow expressions assigned the type `java.lang.String` as the left operand of a `like` expression.
