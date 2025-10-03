@@ -45,7 +45,7 @@ The expressions `local date`, `local time`, and `local datetime` evaluate to the
 [[parameters]]
 ==== Parameter expressions
 
-A parameter expression, with syntax given by `input_parameter`, is assigned a type and value either:
+A _parameter expression_, with syntax given by `input_parameter`, is assigned a type and value either:
 
 1. at runtime, via invocation of some API (for example, `setParameter()` in Jakarta Persistence), or
 2. at compile type, via static analysis (for example, by inspecting the parameters of a Jakarta Data repository method).
@@ -77,7 +77,7 @@ When executed, the enum literal expression evaluates to the named member of the 
 [[entity-type-literals]]
 ==== Entity type literals
 
-In the extended language, an entity type literal, with syntax given by `#entity_type_literal#` is just the name of an entity type.
+In the extended language, an _entity type literal_, with syntax given by `#entity_type_literal#` is just the name of an entity type, in the sense given in <<entities-and-embeddables>>.
 When executed, it evaluates to a value which represents the named entity type.
 
 An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<E>` to an entity type literal, where `E` is the Java class mapping the named entity type.
