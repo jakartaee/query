@@ -435,22 +435,33 @@ All three operands must have the same type.
 [[like]]
 ==== Like expressions
 
-A `like` expression, with syntax given by `like_expression` is satisfied when its left operand evaluates to a non-null value and:
+A `like` expression has syntax given by `like_expression`.
+
+- Its left operand must be an expression assigned some atomic type representing character strings.
+- Its right operand must be a pattern given as literal string, with syntax `literal_pattern`, or, in the extended language, a <<parameters,parameter>>.
+
+
+If an implementation of Jakarta Query targets clients written in Java, it must allow expressions assigned the type `java.lang.String` as the left operand of a `like` expression.
+
+The expression is satisfied when its left operand evaluates to a non-null value and:
 
 - the `not` keyword is missing, and this value matches the pattern, or
 - the `not` keyword occurs, and the value does not match the pattern.
 
-The left operand must have type `java.lang.String`.
-
 Matching is lexicographic.
-Within the pattern, `_` matches any single character, and `%` matches any sequence of characters.
+Within the pattern, the characters `_` and `%` are interpreted as wildcards:
+
+- `_` matches any single character, and
+- `%` matches any contiguous sequence of (zero or more) characters.
+
 Any other character occurring in the pattern is interpreted literally and matches only itself.
 
 In the extended language, a `like_expression` may specify an `#escape_character#`.
-**TODO** add the escape character to the core language because it is needed by Jakarta Data's Like constraint
 An escape character may be used to suppress the interpretation as a wildcard of a particular `_` or `%` character in the pattern.
 
 That is, if the escape character is `c`, then the character bigram `c_` is interpreted literally as the character `_`, the bigram `c%` as the character `%`, and the bigram `cc` as the character `c`.
+
+**TODO** add the escape character to the core language because it is needed by Jakarta Data's Like constraint
 
 [[equality-and-inequality]]
 ==== Equality and inequality operators
