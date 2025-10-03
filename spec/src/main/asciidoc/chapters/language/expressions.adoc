@@ -491,7 +491,7 @@ A quantified comparison expression is satisfied if and only if:
 [[natural-order]]
 === Natural order
 
-Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of <<equality-and-inequality,inequality comparisons>>, and the effect of the <<order-clause>>.
+Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of <<equality-and-inequality,inequality comparisons>> and the effect of the <<order-clause>>.
 
 For any numeric type, or for any date or datetime type, there is a _natural order_ completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order:
 
