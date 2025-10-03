@@ -546,6 +546,7 @@ If neither `nulls first` nor `nulls last` is explicitly specified, the precedenc
 [NOTE]
 This specification does not specify an order for atomic values or structures.
 Such ordering is typically determined by the database itself.
+Some general principles for ordering of atomic types are established in <<natural-order>>.
 
 Each value expression in the `order by` list must also occur in the projection list. TODO!
 

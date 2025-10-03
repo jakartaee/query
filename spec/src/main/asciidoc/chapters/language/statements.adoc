@@ -6,15 +6,16 @@ Each statement is built from a sequence of _clauses_. The beginning of a clause 
 
 As discussed in <<algebra>>, there is a logical ordering of clauses, reflecting the order in which their effect must be computed by the datastore:
 
-1. `from`
-2. `where`,
-3. `#group#`
-4. `#having#`,
-5. `select` or `set`,
-6. `order`.
+1. <<from-clause,`from`>>,
+2. <<where-clause,`where`>>,
+3. <<group-clause,`#group#`>>,
+4. <<having-clause,`#having#`>>,
+5. <<select-clause,`select`>> or <<set-clause,`set`>>,
+6. <<order-clause,`order`>>.
 
 The interpretation and effect of each clause in this list is influenced by clauses occurring earlier in the list, but not by clauses occurring later in the list.
 
+[[from-clause]]
 ==== From clause
 
 In the core language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
@@ -99,6 +100,7 @@ Every `#join#` or `#fetch_join#` begins with a `#join_spec#`:
 
 The joins belonging to a query are evaluated in the order in which they occur in the query.
 
+[[where-clause]]
 ==== Where clause
 
 The `where` clause, with syntax given by `where_clause`, specifies a restriction on a result list, as specified by <<restriction>>.
@@ -111,6 +113,7 @@ A restriction specified using `where` is applied after every join and before any
 //
 // The `where` clause is always optional. When it is missing, there is no restriction, and all records of the queried entity type are returned, deleted, or updated.
 
+[[group-clause]]
 ==== Group clause
 
 The `#group#` clause in the extended language, with syntax given by `#groupby_clause#`, specifies a list of grouping items, which are collectively interpreted as an aggregation, as specified in <<aggregation>>.
@@ -124,6 +127,7 @@ Each such path expression is interpreted as a value expression producing an elem
 
 NOTE: An implementation of Jakarta Query might treat the entity-valued path expression as an expression referring to the identifier of the entity.
 
+[[having-clause]]
 ==== Having clause
 
 The `#having#` clause in the extended language, with syntax given by `#having_clause#`, specifies a restriction on the result list of an aggregation, as specified by <<restriction>>.
@@ -169,25 +173,58 @@ The list of expressions is interpreted as a projection, as specified by <<projec
 
 If the `#distinct#` keyword occurs, then projection is followed by duplicate elimination, as specified by <<distinct>>.
 
+[[set-clause]]
 ==== Set clause
 
 The `set` clause, with syntax given by `set_clause`, specifies a list of updates to attributes of the queried entity. For each record which satisfies the restriction imposed by the `where` clause, and for each element of the list, the scalar expression is evaluated and assigned to the entity attribute identified by the path expression.
 
+[[order-clause]]
 ==== Order clause
 
-The `order` clause (or `order by` clause), with syntax given by `orderby_clause`, specifies a lexicographic order for the query results, that is, a list of entity attributes used to sort the records which satisfy the restriction imposed by the `where` clause. The keywords `asc` and `desc` specify that a given attribute should be sorted in ascending or descending order respectively; when neither is specified, ascending order is the default.
+The `order` clause (or `order by` clause), with syntax given by `orderby_clause`, specifies a lexicographic order for the query results, that is, a list of expressions used to sort the records which satisfy the restriction imposed by the `where` clause, as specified in <<ordering>>.
 
-NOTE: An implementation of Jakarta Query is not required to support sorting by entity attributes which are not returned by the query. If a query returns the queried entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, a provider might require that an attribute which occurs in the `order` also occurs in the `select`.
+An item of the order by clause, with syntax given by `orderby_item` has:
+
+- an `orderby_expression`, which must be an expression assigned an atomic type, and
+- optionally, the keyword `asc` or `desc`,
+- optionally, in the extended language, `#nulls first#` or `#nulls last#`.
+
+In the core language, an `orderby_expression` must be a <<path-expressions,path expression>> or <<identifier-version-expressions,identifier expression>>.
+In the extended language, an `orderby_expression` may be almost any sort of atomic-valued expression (but not a parameter), as specified by the full grammar of the extended language.
+
+NOTE: An implementation of Jakarta Query is not required to support sorting by any expression not <<projection,returned by the query>>. If a query returns an entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, an implementation might require that an attribute which occurs in the `order` also occurs in the `select`.
+
+The keyword `asc` or `desc` specifies that the values of a given expression should be sorted in ascending or descending order respectively; when neither is specified, ascending order is the default:
+
+- _ascending order_ is determined by the natural order of the expression type, as specified by <<natural-order>>, and
+- _descending order_ is the reverse of the natural order.
 
 Entity attributes occurring earlier in the `order by` clause take precedence. That is, an attribute occurring later in the `order by` clause is only used to resolve "ties" between records which cannot be unambiguously ordered using only earlier attributes.
 
-This specification does not define how null values are ordered with respect to non-null values. The ordering of null values may vary between data stores and between Jakarta Query providers.
+In the extended language, `#nulls first#` or `#nulls last#` specifies whether null values should be considered, respectively, smaller or larger than non-null values. This specification does not define how null values are ordered with respect to non-null values when the sorting of null values is not explicitly specified. The ordering of null values may vary between data stores and between Jakarta Query providers.
 
 The `order` clause is always optional. When it is missing, the order of the query results is not defined by this specification and might not be deterministic.
 
 NOTE: An implementation of Jakarta Query might provide some other facility to specify sorting criteria for the results of a given query. For example, Jakarta Query allows an object carrying sorting criteria to be passed as an argument to a repository method.
 
 NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
+
+[WARNING]
+====
+When using NoSQL databases, sorting support varies by database type:
+
+Key-value databases:: Sorting of results is not supported.
+
+Wide-column databases:: Support for sorting of results is not required. In general, sorting is not natively supported. When sorting is available, it is typically limited to:
+* The key attribute, defined by an annotation such as `jakarta.nosql.Id`.
+* Fields that are indexed as secondary indexes.
+
+Graph and document databases:: Support for sorting by a single entity attribute is required. Support for compound sorting (sorting by multiple entity attributes) is not required and may vary due to:
+* Potential instability with tied values, where sorting for equivalent values may differ across queries.
+* Schema flexibility and mixed data types.
+* Dependence on indexes and internal storage order, requiring proper indexing to ensure predictable sorting.
+* The distributed nature of sharded clusters, where sorting across shards may introduce additional complexity.
+====
 
 [[union-intersect-except]]
 === Union, intersect, and except
