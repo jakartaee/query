@@ -488,15 +488,25 @@ A quantified comparison expression is satisfied if and only if:
 - the quantifier is `#any#` or `#some#` and the result list of the subquery contains at least one value which would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery, or
 - the quantifier is `#all#` and every value belonging to the result list of the subquery would make the equality or inequality expression evaluate to true if it occurred as the right operand in place of the subquery.
 
-=== Ordering
+[[natural-order]]
+=== Natural order
 
-Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of inequality comparisons, and the effect of the <<Order clause>>.
+Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of <<equality-and-inequality,inequality comparisons>>, and the effect of the <<order-clause>>.
 
-For numeric types, and for date, time, and datetime types, the total order is unique and completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order, that is, the order must agree with the order defined by Java.
+For any numeric type, or for any date or datetime type, there is a _natural order_ completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order:
 
-Boolean values must be ordered so that `false < true` is satisfied.
+- smaller numeric values come before larger numeric values, and
+- earlier dates or datetimes come before later dates or datetimes.
 
-For other types, there is at least some freedom in the choice of order. Usually, the order is determined by the native semantics of the database. Note that:
+NOTE: For an implementation of Jakarta Query which targets clients written in Java, this natural order agrees with the order defined by the corresponding Java type from `java.lang`, `java.math`, or `java.time`.
+
+Furthermore, Jakarta Query implementations must sort boolean values so that `false < true` is satisfied.
+
+For other types, there is at least some freedom in the choice of order. Usually, the order is determined by the native semantics of the database.
+
+[CAUTION]
+====
+For clients written in Java, note that:
 
 - Textual data is represented in Java as the type `java.lang.String`. Strings are in general ordered lexicographically, but the ordering also depends on the character set and collation used by the database server. Applications must not assume that the order agrees with the `compareTo()` method of `java.lang.String`. In evaluating an inequality involving string operands, an implementation of Jakarta Query is not required to emulate Java collation.
 
@@ -504,24 +514,7 @@ For other types, there is at least some freedom in the choice of order. Usually,
 
 - This specification does not define an order for the sorting of Java `enum` values, which is provider-dependent. An implementation of Jakarta Query might allow control over the order of `enum` values. For example, Jakarta Persistence allows this via the `@Enumerated` annotation.
 
-- This specification does not define an order for UUID values, which is provider-dependent.
-
-[WARNING]
-====
-When using NoSQL databases, sorting support varies by database type:
-
-Key-value databases:: Sorting of results is not supported.
-
-Wide-column databases:: Support for sorting of results is not required. In general, sorting is not natively supported. When sorting is available, it is typically limited to:
-* The key attribute, defined by an annotation such as `jakarta.nosql.Id`.
-* Fields that are indexed as secondary indexes.
-
-Graph and document databases:: Support for sorting by a single entity attribute is required. Support for compound sorting (sorting by multiple entity attributes) is not required and may vary due to:
-* Potential instability with tied values, where sorting for equivalent values may differ across queries.
-* Schema flexibility and mixed data types.
-* Dependence on indexes and internal storage order, requiring proper indexing to ensure predictable sorting.
-* The distributed nature of sharded clusters, where sorting across shards may introduce additional complexity.
-
+- This specification does not define an order for UUID values, which is completely implementation-dependent. Applications must not assume that the order agrees with the `compareTo()` method of `java.util.UUID`.
 ====
 
 === Logical operators
