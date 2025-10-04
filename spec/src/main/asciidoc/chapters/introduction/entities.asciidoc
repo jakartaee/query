@@ -27,6 +27,21 @@ Identity for a given atomic value type must be reflexive, symmetric, and transit
 An implementation of this specification in Java typically supports at least the following atomic types: Java primitive types, `String`, `LocalDate`, `LocalDateTime`, `LocalTime`, `Year`, and `Instant`, `java.util.UUID`, `java.math.BigInteger` and `java.math.BigDecimal`, `byte[]`, and  `enum` types.
 ====
 
+An atomic value might be _null_.
+Null values are conventionally used to represent missing or unknown information.footnote:[The null value is also indispensable when evaluating <<path-expressions,path expressions>> in queries involving <<left-joins,left joins>> and when evaluating <<treat,treated path expressions>>.]
+A null value is considered distinct from and distinguishable from every non-null value of the same type.
+The relationship between distinctness in this sense and <<equality-and-inequality,equality>> is not defined by this specification, and the behavior of some expressions involving null values varies between implementations of Jakarta Query.
+
+[NOTE]
+====
+An implementation of Jakarta Query is permitted to treat null values as equal, so that, in the sense defined by <<predicates>>, the <<equality-and-inequality,comparison expression>> `null = null` is satisfied while `null <> null` is unsatisfied.
+Such implementations are typically based on binary logic.
+On the other hand, an implementation is permitted to treat null values as unequal, so that both `null = null` and `null <> null` are unsatisfied.
+Such implementations are typically based on SQL-style ternary logic.
+Jakarta Persistence requires the use of ternary logic and treats null values as unequal.
+Jakarta Data permits either treatment.
+====
+
 [[collections]]
 === Collections
 
@@ -222,8 +237,6 @@ However, the precise behavior of some queries might vary depending on the native
 ====
 This specification should not be interpreted to mandate an inefficient implementation of query language constructs in cases where the native behavior of the database varies from Java in such minor ways. That said, portability between implementations of Jakarta Query is maximized when their behavior is closest to the Java language.
 ====
-
-Since an attribute of an entity may be null, an expression in the query language may evaluate to a null value.
 
 [[paths]]
 === Paths

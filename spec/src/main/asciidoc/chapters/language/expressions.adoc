@@ -206,6 +206,7 @@ This specification does not, therefore, require support for `#function()#`, not 
 
 The extended language provides three special functions for working with subtype polymorphism.
 
+[[treat]]
 ===== Treated path expressions
 
 A _treated path expression_ is an invocation of the special `#treat()#` function, with syntax given by `#treated_entity_path_expression#` and `#treated_joinable_path_expression#`.
