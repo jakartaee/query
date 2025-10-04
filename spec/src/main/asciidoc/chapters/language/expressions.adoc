@@ -515,6 +515,7 @@ In an implementation of Jakarta Query which targets clients written in Java, eve
 - For other types, these operators are usually evaluated according to the native semantics of the database.
 
 NOTE: Portability is maximized when Jakarta Query providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
+footnote:[A notable special case is `java.math.BigDecimal`, whose implementation of `equals()` is inconsistent with its implementation of `compareTo()`. For `BigDecimal`, the `=` operator in Jakarta Data should be implemented for consistency with `compareTo()`.]
 
 In the extended language, the right operand of an equality or inequality operator may be a subquery, as discussed in the <<quantifiers,next section>>.
 
