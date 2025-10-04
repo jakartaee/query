@@ -88,6 +88,8 @@ The extended language is designed for reuse by Jakarta Persistence.
 The core language is designed for reuse by Jakarta Data and Jakarta NoSQL.
 Jakarta Query itself has no dependence on either of these specifications, and reuse in other contexts is encouraged.
 
+Furthermore, the semantics defined by Jakarta Query may be reused by reference in other specifications, for example, in the definition of the Jakarta Persistence Criteria API, or in the definition of the Jakarta Data Restrictions.
+
 This document:
 
 - standardizes the syntax and semantics of the language,
@@ -96,7 +98,7 @@ This document:
 
 The definition of the query language itself is independent of the Java programming language, and of any details of the underlying datastore and data access technology.
 
-=== Non-Goals
+=== Non-goals
 
 This specification does not specify Java APIs for:
 
@@ -106,8 +108,6 @@ This specification does not specify Java APIs for:
 - defining entity classes which are used in queries.
 
 Jakarta Persistence and Jakarta Data define diverse ways in which queries may be embedded and executed in Java, using the `EntityManager` or a `@Repository` interface, respectively.
-
-Furthermore, the semantics defined by Jakarta Query may be reused by reference in other specifications, for example, in the definition of the Jakarta Persistence Criteria API, or in the definition of the Jakarta Data Restrictions.
 
 This document does not define how constructs in Jakarta Query map to constructs in SQL or in any other datastore-specific query languages.
 Jakarta Persistence defines an interpretation compatible with SQL.
