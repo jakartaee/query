@@ -227,7 +227,7 @@ When Jakarta Query is used from within the Java programming language:
 
 - An entity or embeddable type typically corresponds to a Java class or record type, and the labeled elements of an entity or embeddable typically correspond to fields or properties of the class or record type.
 - An atomic value type typically corresponds to a Java primitive type, class, or enumerated type.
-- Every expression in a JQL query is assigned a Java type.
+- Every <<value-expressions,value expression>> in a query is assigned a Java type. Conceptually -- but not literally -- the expression evaluates to a (possibly null) instance of that type.
 
 The interpretation of an <<operator-expressions,operator expression>> or <<literal-expressions,literal expression>> of a given type is given by the interpretation of the equivalent expression in Java.
 However, the precise behavior of some queries might vary depending on the native semantics of queries on the underlying datastore. For example, numeric precision and overflow, string collation, and integer division are permitted to depart from the semantics of the Java language.
