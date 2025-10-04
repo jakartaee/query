@@ -12,22 +12,21 @@
 //
 // SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
 
-=== Jakarta Query Project Team
+=== Jakarta Query project team
 
 This specification is being developed as part of Jakarta Query project under the
 Jakarta EE Specification Process. It is the result of the collaborative work
 of the project committers and various contributors.
 
-==== Project Leads
+==== Project leads
 
 * https://projects.eclipse.org/user/8388[Gavin King]
 * https://projects.eclipse.org/user/3043[Lukas Jungmann]
 
-==== Committers
+==== Other committers
 
-* https://projects.eclipse.org/user/8388[Gavin King]
-* https://projects.eclipse.org/user/3043[Lukas Jungmann]
 * https://projects.eclipse.org/user/10400[Nathan Rauh]
+* https://accounts.eclipse.org/users/osantanatrg[Otavio Santana]
 * https://projects.eclipse.org/user/18033[Riva Tholoor Philip]
 
 ==== Contributors
