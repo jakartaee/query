@@ -329,19 +329,19 @@ All binary infix operators are left-associative. The relative precedence, from h
 
 The unary prefix operators `+` and `-` have higher precedence than the binary infix operators. Thus, `2 * -3 + 5` means `(2 * (-3)) + 5` and evaluates to `-1`.
 
-NOTE: The precise behavior of numeric operators is outside the scope of this specification and varies according to the database and cleint programming language.
+NOTE: The precise behavior of numeric operators is outside the scope of this specification and varies according to the database and client programming language.
 
 In an implementation of Jakarta Query which targets clients written in Java:
 
 - The concatenation operator `||` is assigned the type `java.lang.String`. Its operand expressions must also be of type `java.lang.String`. When executed, a concatenation operator expression evaluates to a new string concatenating the strings to which its arguments evaluate.
 
-- The numeric operators `+`, `-`, `*`, and `/` have the same meaning for primitive numeric types they have in Java, and operator expressions involving these operators are assigned the types they would be assigned in Java. As an exception, when the operands of `/` are both integers, an implementation of Jakarta Query is not required to interpret the operator expression as integer division if that is not the native semantics of the database. However, portability is maximized when Jakarta Query providers _do_ interpret such an expression as integer division.
+- The numeric operators `+`, `-`, `*`, and `/` have the same meaning for primitive numeric types as they have in Java, and operator expressions involving these operators are assigned the types they would be assigned in Java. As an exception, when the operands of `/` are both integers, an implementation of Jakarta Query is not required to interpret the operator expression as integer division if that is not the native semantics of the database. However, portability is maximized when Jakarta Query providers _do_ interpret such an expression as integer division.
 
 - The four numeric operators may also be applied to an operand of wrapper type, for example, to `java.lang.Integer` or `java.lang.Double`. In this case, the operator expression is assigned a wrapper type and evaluates to a null value when either of its operands evaluates to a null value. When both operands are non-null, the semantics are identical to the semantics of an operator expression involving the corresponding primitive types.
 
 - The four numeric operators may also be applied to operands of type `java.math.BigInteger` or `java.math.BigDecimal`.
 
-- A numeric operator expression is evaluated according to the native semantics of the database. In translating an operator expression to the native query language of the database, a Jakarta Query provider is encouraged, but not required, to apply reasonable transformations so that evaluation of the expression more closely mimics the semantics of the Java language.
+- A numeric operator expression is evaluated according to the native semantics of the database. In translating an operator expression to the native query language of the database, a Jakarta Query provider is encouraged, but not required, to apply reasonable transformations so that evaluation of the expression more closely mimics the semantics of the Java language.footnote:[As <<mapping-to-java,earlier>> noted, this specification never mandates an inefficient implementation of operations which are implemented by the database itself.]
 
 
 [WARNING]

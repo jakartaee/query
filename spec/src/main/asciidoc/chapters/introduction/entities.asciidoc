@@ -206,6 +206,7 @@ In some databases, records must be disjoint; in other databases, one record migh
 Questions about the representation used for record storage are completely outside the scope of this specification.
 Such questions are the domain of our sister-specifications.
 
+[[mapping-to-java]]
 === Mapping to Java
 
 When Jakarta Query is used from within the Java programming language:
