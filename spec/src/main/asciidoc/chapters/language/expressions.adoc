@@ -20,7 +20,7 @@ Expressions may be categorized as:
 
 The syntax for literal expressions is given by the rules `string_literal` and `numeric_literal`, and in the previous section titled <<Lexical structure>>.
 
-In an implementation of Jakarta Query for clients written in Java, a string, integer, or decimal literal is assigned the type it would be assigned in Java.
+In an implementation for Java, a string, integer, or decimal literal is assigned the type it would be assigned in Java.
 So, for example, `'Hello'` is assigned the type `java.lang.String`, `123` is assigned the type `int`, `1e4` is assigned the type `double`, and `1.23f` is assigned the type `float`.
 In the extended language:
 
@@ -34,7 +34,7 @@ When executed, a literal expression evaluates to its literal value.
 
 The syntax for _special values_ is given by the rules `special_boolean_expression` and `special_datetime_expression`.
 
-In an implementation of Jakarta Query for clients written in Java:
+In an implementation of Jakarta Query for Java:
 
 - the special values `true` and `false` are assigned the type `boolean`, and
 - the special values `local date`, `local time`, and `local datetime` are assigned the types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`.
@@ -68,7 +68,7 @@ An enum literal may only occur as:
 
 In each case, the enum literal expression is assigned the type of the left operand of the assignment, comparison, or `in` operator.
 
-In an implementation of Jakarta Query for clients written in Java, the type assigned must be a Java `enum` type, and the identifier must be the name of an enumerated value of the `enum` type including the fully qualified Java enum class name. For example, `day <> java.time.DayOfWeek.MONDAY` is a legal comparison expression.
+In an implementation for Java, the type assigned must be a Java `enum` type, and the identifier must be the name of an enumerated value of the `enum` type including the fully qualified Java enum class name. For example, `day <> java.time.DayOfWeek.MONDAY` is a legal comparison expression.
 
 When executed, the enum literal expression evaluates to the named member of the enumerated type.
 
@@ -80,7 +80,7 @@ When executed, the enum literal expression evaluates to the named member of the 
 In the extended language, an _entity type literal_, with syntax given by `#entity_type_literal#` is just the name of an entity type, in the sense given in <<entities-and-embeddables>>.
 When executed, it evaluates to a value which represents the named entity type.
 
-An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<E>` to an entity type literal, where `E` is the Java class mapping the named entity type.
+An implementation for Java assigns the type `java.lang.Class<E>` to an entity type literal, where `E` is the Java class mapping the named entity type.
 When executed, the literal evaluates to an instance of `Class` representing the Java class `E`.
 
 [[path-expressions]]
@@ -162,7 +162,7 @@ NOTE: Some of these functions cannot be emulated on every datastore. When a func
 
 NOTE: On the other hand, an implementation of Jakarta Query might provide additional built-in functions, and might even allow invocation of user-defined functions.
 
-An implementation of Jakarta Query for clients written in Java must assign:
+An implementation Java must assign:
 
 - the type `java.lang.String` to every function of type "String",
 - the type `java.lang.Integer` to every function of type "Integer", and
@@ -176,7 +176,7 @@ Like keywords, `#datetime_field#` and `#datetime_part#` identifiers are case-ins
 
 [NOTE]
 ====
-As mentioned above in <<atomic-values>>, an implementation of Jakarta Persistence targeting clients written in Java usually supports at least the date/time types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`.
+As mentioned above in <<atomic-values>>, an implementation of Jakarta Persistence for Java usually supports at least the date/time types `java.time.LocalDate`, `java.time.LocalTime`, and `java.time.LocalDateTime`.
 Such implementations are encouraged to also support:
 
 - the `#datetime_field#` identifiers `#YEAR#`, `#QUARTER#`, `#MONTH#`, `#WEEK#`, `#DAY#`, `#HOUR#`, `#MINUTE#`,
@@ -241,7 +241,7 @@ As suggested by the grammar for `#functions_returning_numerics#` and `#functions
 - coercion from string to any numeric type, and
 - coercion from any atomic type to string.
 
-However, this part of the grammar should be read as indicative of what should be supported in implementations of Jakarta Query which target clients written in Java, and, more specifically, what is required for an implementation of Jakarta Persistence.
+However, this part of the grammar should be read as indicative of what should be supported in implementations for Java, and, more specifically, what is required for an implementation of Jakarta Persistence.
 
 The capabilities of the `#cast()#` function vary between client programming languages and between databases.
 ====
@@ -252,7 +252,7 @@ The capabilities of the `#cast()#` function vary between client programming lang
 An _entity type expression_ is an invocation of the special `#type()#` function, with syntax given by `#type_discriminator#`.
 The `#type()#` function accepts an expression assigned an entity type, and, when executed, evaluates to a value which represents the type of the record to which the argument expression evaluates.
 
-An implementation of Jakarta Query targeting clients written in Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
+An implementation for Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
 
 [[aggregate-functions]]
 ==== Aggregate functions calls
@@ -331,7 +331,7 @@ The unary prefix operators `+` and `-` have higher precedence than the binary in
 
 NOTE: The precise behavior of numeric operators is outside the scope of this specification and varies according to the database and cleint programming language.
 
-In an implementation of Jakarta Query which targets clients written in Java:
+In an implementation for Java:
 
 - The concatenation operator `||` is assigned the type `java.lang.String`. Its operand expressions must also be of type `java.lang.String`. When executed, a concatenation operator expression evaluates to a new string concatenating the strings to which its arguments evaluate.
 
