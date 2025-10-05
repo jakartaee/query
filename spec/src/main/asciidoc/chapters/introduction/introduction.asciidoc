@@ -132,5 +132,9 @@ Admonitions are used to set apart:
 - explanatory text which is not prescriptive or not part of the definition of the language, and
 - information relating to compatibility between implementations of Jakarta Query, and to differences between the core language and the extended language.
 
+Throughout this specification, the phrase _"an implementation for Java"_ means an implementation of Jakarta Query which targets clients written in the Java programming language and running on the Java Virtual Machine.
+It does not imply that the implementation itself is entirely in Java.
+This specification places certain requirements on implementations for Java which are relaxed when an implementation targets clients in a different programming language.
+
 include::project_team.adoc[]
 
