@@ -124,7 +124,7 @@ When a keyword or name of a grammar rule is not part of the core language, the k
 ANTLR 4-style BNF is used to define the syntax of the language in <<syntax>>.
 
 An informal but readable BNF-like metalanguage is used to illustrate the syntax of some basic language elements in <<algebra>>.
-Here, repetition is indicated by a comma-separated list terminated with en ellipsis, and production by a label enclosed in brackets; all other tokens are interpreted literally.
+Here, repetition is indicated by a comma-separated list terminated with an ellipsis, and production is indicated by a label enclosed in brackets; all other tokens are interpreted literally.
 Code fragments written in this metalanguage are never prescriptive.
 
 Admonitions are used to set apart:
