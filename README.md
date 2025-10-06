@@ -205,7 +205,7 @@ This subsection summarizes the differences between them, based on the syntax def
 
 | Expression                 | Core | Extended |
 |----------------------------|------|----------|
-| `||` concatenation         | Yes  | Yes      |
+| `\|\|` concatenation     | Yes  | Yes      |
 | `LENGTH`                   | Yes  | Yes      |
 | `LOWER`, `UPPER`           | Yes  | Yes      |
 | `LEFT`, `RIGHT`            | Yes  | Yes      |
