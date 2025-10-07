@@ -557,7 +557,7 @@ A quantified comparison expression is satisfied if and only if:
 
 Every <<atomic-values,atomic value type>> can, in principle, be equipped with a total order. An order for a type determines the result of <<equality-and-inequality,inequality comparisons>> and the effect of the <<order-clause>>.
 
-For any numeric type, or for any date or datetime type, there is a _natural order_ completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order:
+For any numeric type, or for any date or datetime type, there is a _natural order_ for non-null values completely determined by the semantics of the type. Jakarta Query implementations must sort these types according to their natural order:
 
 - smaller numeric values come before larger numeric values, and
 - earlier dates or datetimes come before later dates or datetimes.
@@ -580,6 +580,8 @@ For clients written in Java, note that:
 
 - This specification does not define an order for UUID values, which is completely implementation-dependent. Applications must not assume that the order agrees with the `compareTo()` method of `java.util.UUID`.
 ====
+
+The natural order does not determine the precedence of null values, and so this specification leaves their precedence undefined except when `nulls first` or `nulls last` is explicitly specified for an item of the order by clause, as defined by <<order-clause>>.
 
 [[logical-operators]]
 === Logical operators
