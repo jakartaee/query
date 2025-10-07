@@ -494,6 +494,8 @@ The operands of an equality or inequality operator must have the same type,
  and it must be an atomic type considered _comparable_ by the implementation of Jakarta Query.
 Any type with a <<natural-order,natural order>> must be treated as a comparable type, and the equality and inequality operators must be interpreted in a way which is consistent with the natural order.
 
+For non-null values, the following table defines an interpretation consistent with the natural order:
+
 [cols="15,~"]
 |===
 | Operator | Interpretation in terms of natural order
@@ -506,7 +508,10 @@ Any type with a <<natural-order,natural order>> must be treated as a comparable 
 | `x <> y` | Satisfied if either `x>y` or `x<y` is satisfied
 |===
 
-**TODO** what can we say in general about null values?
+When exactly one of the operands of an equality or inequality operator evaluates to a null value, the conditional expression is not satisfied.
+
+NOTE: When both operands of an equality or inequality operator evaluate to null, the behavior is not defined by this specification.
+As mentioned above in <<atomic-values>>, the semantics of comparisons involving two null values depends on the underlying database -- typically, on whether the database uses binary or ternary logic.
 
 In an implementation of Jakarta Query which targets clients written in Java, every primitive or primitive wrapper type is considered comparable, along with `java.lang.String`, `java.math.BigInteger`, `java.math.BigDecimal`, and types representing dates and datetimes.
 
