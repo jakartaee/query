@@ -154,13 +154,8 @@ A query beginning with `select count(this)` performs aggregation (without groupi
 
 [WARNING]
 ====
-When working with NoSQL databases, the `select` clause behavior may vary depending on the database structure and capabilities:
-
-Key-value databases:: These databases generally do not support `select` clauses beyond retrieving values by their keys. Support for complex path expressions and aggregate functions like `count(this)` is not required.
-
-Wide-column databases:: The ability to use a `select` clause may depend on the presence of secondary indexes. Without secondary indexes, selection is often restricted to key-based operations. Support for `count(this)` is not required.
-
-Graph and document databases:: Support for flexible `select` clauses, including path expressions and aggregate functions like `count(this)` is required. Performance might vary based on the size and indexing of the dataset.
+When a Jakarta Query implementation targets a non-relational database, support for projection might vary from what is described above.
+In particular, this specification does not require support for `count(this)` if the underlying datastore only provides for key-based lookups.
 ====
 
 In the extended language, the `select` clause is much more flexible.
@@ -176,7 +171,7 @@ If the `#distinct#` keyword occurs, then projection is followed by duplicate eli
 [[set-clause]]
 ==== Set clause
 
-The `set` clause, with syntax given by `set_clause`, specifies a list of updates to attributes of the queried entity. For each record which satisfies the restriction imposed by the `where` clause, and for each element of the list, the scalar expression is evaluated and assigned to the entity attribute identified by the path expression.
+The `set` clause, with syntax given by `set_clause`, specifies a list of updates to attributes of the queried entity. For each record satisfying the restriction imposed by the `where` clause, and for each element of the list, the scalar expression is evaluated and assigned to the entity attribute identified by the path expression.
 
 [[order-clause]]
 ==== Order clause
@@ -207,24 +202,13 @@ The `order` clause is always optional. When it is missing, the order of the quer
 
 NOTE: An implementation of Jakarta Query might provide some other facility to specify sorting criteria for the results of a given query. For example, Jakarta Query allows an object carrying sorting criteria to be passed as an argument to a repository method.
 
-NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
-
 [WARNING]
 ====
-When using NoSQL databases, sorting support varies by database type:
-
-Key-value databases:: Sorting of results is not supported.
-
-Wide-column databases:: Support for sorting of results is not required. In general, sorting is not natively supported. When sorting is available, it is typically limited to:
-* The key attribute, defined by an annotation such as `jakarta.nosql.Id`.
-* Fields that are indexed as secondary indexes.
-
-Graph and document databases:: Support for sorting by a single entity attribute is required. Support for compound sorting (sorting by multiple entity attributes) is not required and may vary due to:
-* Potential instability with tied values, where sorting for equivalent values may differ across queries.
-* Schema flexibility and mixed data types.
-* Dependence on indexes and internal storage order, requiring proper indexing to ensure predictable sorting.
-* The distributed nature of sharded clusters, where sorting across shards may introduce additional complexity.
+When a Jakarta Query implementation targets a non-relational database, support for sorting query results might vary from what is described above.
+This specification does not require support for sorting a query result list according to a given ordering if the underlying datastore does not provide a way to sort query results according to that ordering via its native querying capabilities.
 ====
+
+NOTE: If a datastore does not natively provide the ability to sort query results, the Jakarta Query provider is strongly encouraged, but not required, to sort the query results in Java before returning the results to the client.
 
 [[union-intersect-except]]
 === Union, intersect, and except
@@ -295,9 +279,8 @@ Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
-A NoSQL database might not be capable of conditional updates or might not be able to determine the number of matching records reliably for an `update` operation that returns an `int` or `long`.
-
-Additionally, in databases with **append-only semantics**—such as many time-series and wide-column databases—the `update` operation may behave more like an `insert`, and repeated updates to the same record might not overwrite previous values.
+A Jakarta Query implementation which targets a non-relational database might not support conditional updates.
+This specification does not require support for conditional updates if the underlying datastore does not provide a functionally equivalent capability.footnote:[Alternatively, in a non-relational database with _append-only semantics_ -- common in time-series and wide-column databases -- conditional updates might be provided, but the update operation might behave more like an insert operation, with repeated updates to the same record not overwriting previous values.]
 ====
 
 ==== Delete statements
@@ -309,6 +292,7 @@ Such functionality falls outside the scope of this specification.
 
 [WARNING]
 ====
-A NoSQL database might not be capable of the execution of conditional deletes or might not be able to determine the number of deleted records reliably for a `delete` operation.
+A Jakarta Query implementation which targets a non-relational database might not support conditional deletes.
+This specification does not require support for conditional deletes if the underlying datastore does not provide a functionally equivalent capability.
 ====
 
