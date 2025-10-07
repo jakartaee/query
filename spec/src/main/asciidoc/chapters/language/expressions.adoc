@@ -346,17 +346,8 @@ In an implementation for Java:
 
 [WARNING]
 ====
-When working with NoSQL databases, the support for arithmetic operations and support of parentheses for precedence might vary significantly:
-
-Key-value databases:: Arithmetic operations (`+`, `-`, `*`, `/`) are not supported. These databases are designed for simple key-based lookups and lack query capabilities for complex operations.
-
-Wide-column databases:: Arithmetic operations are not required to be supported. Some wide-column databases might offer limited support, which might require secondary indexing even for basic querying.
-
-Document Databases:: Support of arithmetic operations and support of parenthesis for precedence are not required, although databases typically offer these capabilities. Behavior and extent of support can vary significantly between providers.
-
-Graph Databases:: Support for arithmetic operations and parentheses for precedence are not required but is typically offered by databases. Behavior and extent of support can vary significantly between providers.
-
-Due to the diversity of NoSQL database types and their querying capabilities, there is no guarantee that all NoSQL providers will support punctuation characters such as parentheses `(`, `)` for defining operation precedence. It is recommended to consult your NoSQL provider's documentation to confirm the supported query features and their behavior.
+When a Jakarta Query implementation targets a non-relational database, support for arithmetic operators or support for the use of parentheses to control operator precedence might vary from what is described above.
+This specification does not require support for arithmetic operators or grouping parentheses if the underlying datastore does not provide these features among its native querying capabilities.
 ====
 
 [[subquery-expressions]]
@@ -502,13 +493,11 @@ In the extended language, the right operand of an equality or inequality operato
 
 [WARNING]
 ====
-When using NoSQL databases, there are limitations to the support of equality and inequality operators:
+When a Jakarta Query implementation targets a non-relational database, support for equality and inequality operators might vary from what is described above.
+This specification does not require support for use of an equality or inequality operator if the underlying datastore does not provide this operator in its native querying capabilities.
+For example, some non-relational databases might only allow lookup by key, and in such databases only the entity <<structures-and-records,identifier>> may be used in an equality comparison expression.footnote:[In Jakarta NoSQL, the key attribute is identified by the annotation `jakarta.nosql.Id`.]
 
-1. **Key-Value Databases**: Support for the equality restriction on the key attribute is required. The key attribute is defined by the annotation `jakarta.nosql.Id`. Key-value databases are not required to support any other restrictions.
-
-2. **Wide-Column Databases**: Support for equality restriction and the inequality restriction on the `Id` attribute is required. Support for restrictions on other entity attributes is not required. These operations typically work only with the `Id` by default but might be compatible for other entity attributes if secondary indexes are configured in the database schema.
-
-3. **Graph and Document Databases**: Support for all equality and inequality operators is required.
+**TODO** Why does Jakarta Data not have a similar caveat applying to `between`, `like`, `in`, and  `is null`? Do we need to generalize the language above to other sorts of conditional expressions?
 ====
 
 [[quantifiers]]
@@ -579,9 +568,6 @@ Syntactically, logical operators are parsed with lower precedence than <<Equalit
 
 [WARNING]
 ====
-When using NoSQL databases, the support for restrictions varies depending on the database type:
-
-Key-value databases:: Support for the equality restriction is required for the `Id` attribute. There is no requirement to support other types of restrictions or restrictions on other entity attributes.
-Wide-column databases:: Wide-column databases are not required to support the `AND` operator or the `OR` operator. Restrictions must be supported for the key attribute that is annotated with `jakarta.nosql.Id`. Support for restrictions on other attributes is not required. Typically they can be used if they are indexed as secondary indexes, although support varies by database provider.
-Graph and document databases:: The `AND` and `OR` operators and all of the restrictions described in this section must be supported. Precedence between `AND` and `OR` operators is not guaranteed and may vary significantly based on the NoSQL provider.
+When a Jakarta Query implementation targets a non-relational database, support for logical operators might vary from what is described above.
+This specification does not require support for logical operators if the underlying datastore does not provide a functionally equivalent way to restrict query results among its native querying capabilities.
 ====
