@@ -9,6 +9,7 @@ Lexical analysis requires recognition of the following token types:
 - literal strings, and
 - integer and decimal number literals.
 
+[[identifiers-and-keywords]]
 === Identifiers and keywords
 
 An _identifier_ is any legal Java identifier which is not a keyword. Identifiers are case-sensitive: `hello`, `Hello`, and `HELLO` are distinct identifiers.
