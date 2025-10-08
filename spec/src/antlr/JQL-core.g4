@@ -53,7 +53,7 @@ conditional_expression
 
 comparison_expression : scalar_expression comparison_operator scalar_expression;
 between_expression : scalar_expression 'NOT'? 'BETWEEN' scalar_expression 'AND' scalar_expression;
-like_expression : scalar_expression 'NOT'? 'LIKE' literal_pattern;
+like_expression : scalar_expression 'NOT'? 'LIKE' escaped_pattern;
 
 comparison_operator
     : '='
@@ -62,6 +62,11 @@ comparison_operator
     | '<'
     | '<='
     | '<>'
+    ;
+
+escaped_pattern
+    : literal_pattern
+      ('ESCAPE' escape_character)?
     ;
 
 in_expression : simple_path_expression 'NOT'? 'IN' in_item_list;
@@ -134,4 +139,6 @@ numeric_literal : INTEGER | DOUBLE;
 string_literal : STRING;
 
 literal_pattern : STRING;
+
+escape_character : CHARACTER;
 
