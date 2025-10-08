@@ -612,7 +612,7 @@ case_expression
 
 general_case_expression
     : 'CASE' when_clause+
-      'ELSE' scalar_expression
+      ('ELSE' scalar_expression)?
       'END'
     ;
 
@@ -623,7 +623,7 @@ when_clause
 
 simple_case_expression
     : 'CASE' case_operand simple_when_clause+
-      'ELSE' scalar_expression
+      ('ELSE' scalar_expression)?
       'END'
     ;
 
