@@ -199,7 +199,26 @@ This specification does not, therefore, require support for `#function()#`, not 
 **TODO** Should we simply deprecate it? Remove it?
 ====
 
-**TODO** `INDEX()`, `VALUE()`, `KEY()`
+[[map-key-value]]
+==== Map keys and values
+
+In the extended language, a _map key expression_, _map value expression_, or _map entry expression_ is an application of the special `#key()#` function, special `#value()#` function, or special `#entry()#` function, respectively.
+
+The `#entry()#` function may only occur in the <<select-clause,select clause>>, as specified by the full grammar of the extended language.
+
+The argument of the `#key()#`, `#value()#`, or #entry()# function must be an alias of a collection join of a <<collections,map>>, as defined in <<join-clauses>>.
+
+**TODO** This is very restrictive. Should we allow application of `#key()#` or `#value()#` to a path expression?
+
+- A map key expression is assigned the type of the key of the map. A map key expression evaluates to the key of the map entry to which its argument expression evaluates.
+- A map value expression is assigned the type of the value of the map. A map value expression evaluates to the value to which its argument expression evaluates.
+
+NOTE: Application of the `#value()#` value function is always optional.
+
+An implementation for Java must assign the type `java.util.Map.Entry<K,V>` to a map entry expression, where `K` is the type of the key of the map, and `V` is the type of the value of the map.
+The map entry expression evaluates to an instance of this type packaging the value to which its argument expression evaluates and the key of the map entry of this value.
+
+NOTE: An implementation of Jakarta Query which targets clients written in a language other than Java is not required to provide support for the `#entry()#` function.
 
 [[types-and-typecasts]]
 ==== Types and typecasts
