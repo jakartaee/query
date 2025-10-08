@@ -289,30 +289,30 @@ In the extended language, a _case expression_ has syntax given by `#general_case
 
 A `#general_case_expression#` has:
 
-1. a list of one or more ``#when_clause#``s, each of which has a `conditional_expression` paired with a result `scalar_expression`, and
-2. a default `scalar_expression`.
+1. a list of one or more ``#when_clause#``s, each of which has a `conditional_expression` paired with a result `scalar_expression`, and,
+2. optionally, a default `scalar_expression`.
 
 When a general case expression is executed, each `conditional_expression` is evaluated, in order, until one is satisfied.
 
 - If some `conditional_expression` is satisfied, then its result `scalar_expression` is evaluated.
-- Otherwise, if no `conditional_expression` is satisfied, the default `scalar_expression` is evaluated.
+- Otherwise, if no `conditional_expression` is satisfied, the default `scalar_expression`, if any, is evaluated.
 
 The whole case expression evaluates to the value produced by the result or default `scalar_expression` which was evaluated.
+If there is no `else`, and no `scalar_expression` was evaluated, the whole case expression evaluates to the null value.
 
 A `#simple_case_expression#` has:
 
-1. a `#case_operand#`, which must be an atomic valued path expression or an <<entity-type-expressions,entity type expression>>,
-2. a list of one or more ``#simple_when_clause#``s, each of which has a tested `scalar_expression` paired with a result `scalar_expression`, and
-3. a default `scalar_expression`.
+1. a `#case_operand#`, which must be an atomic-valued path expression or an <<entity-type-expressions,entity type expression>>,
+2. a list of one or more ``#simple_when_clause#``s, each of which has a tested `scalar_expression` paired with a result `scalar_expression`, and,
+3. optionally, a default `scalar_expression`.
 
 When a simple case expression is executed, the `#case_operand#` is evaluated, and then each tested `scalar_expression` is evaluated, in order, until one produces a value identical to the value of the `#case_operand#`.
 
 - If some tested `scalar_expression` evaluates to the value of the `#case_operand#`, then its result `scalar_expression` is evaluated.
-- Otherwise, if no `conditional_expression` is satisfied, the default `scalar_expression` is evaluated.
+- Otherwise, if no `conditional_expression` is satisfied, the default `scalar_expression`, if any, is evaluated.
 
 The whole case expression evaluates to the value produced by the result or default `scalar_expression` which was evaluated.
-
-**TODO** make the `else` clause optional, as in SQL.
+If there is no `else`, and no `scalar_expression` was evaluated, the whole case expression evaluates to the null value.
 
 [[operator-expressions]]
 ==== Operator expressions
