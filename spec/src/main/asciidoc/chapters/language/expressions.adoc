@@ -9,7 +9,7 @@ Expressions may be categorized as:
 - <<literal-expressions,literal atomic values>>, <<enum-literals,enum literals>>, and <<special-values,special values>>,
 - <<parameters,parameters>>,
 - <<path-expressions,paths>>,
-- <<function-calls,function calls>> and <<aggregate-functions,aggregate function calls>>,
+- <<function-application,function application>> and <<aggregate-functions,aggregate function application>>,
 - <<types-and-typecasts,typecasts>>, <<entity-type-expressions,type expressions>>, and <<entity-type-literals,literal entity types>>,
 - <<case-expressions,case expressions>>,
 - <<operator-expressions,operator expressions>>, and
@@ -138,10 +138,10 @@ This specification leaves the notion of a _version_ undefined.
 Implementations of Jakarta Query are free to interpret this notion in terms of concepts defined externally to this specification.
 For example, Jakarta Persistence specifies the notion of a version field or property of an entity.
 
-[[function-calls]]
-==== Function calls
+[[function-application]]
+==== Function application
 
-A _function call_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by:
+A _function application_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by:
 
 - `function_expression` in the core language, or
 - `#functions_returning_strings#`, `#functions_returning_datetime#`, and `#functions_returning_numerics#` in the full grammar of the extended language.
@@ -180,7 +180,7 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#extract#` | 2 | Any date or time type | See text | See text
 |===
 
-When any argument expression of any function call evaluates to a null value, the whole function call evaluates to null.
+When any argument expression of any function application evaluates to a null value, the whole function application evaluates to null.
 
 NOTE: Some of these functions cannot be emulated on every datastore. When a function cannot be reasonably emulated via the native query capabilities of the database, an implementation of Jakarta Query is not required to provide the function.
 
@@ -207,8 +207,8 @@ Such implementations are encouraged to also support:
 `#SECOND#`, and
 - the `#datetime_part#` identifiers `#DATE#` and `#TIME#`.
 
-If the first argument of `#extract()#` is a `#datetime_field#` identifier, the function call is assigned the type `Integer`.
-If the first argument of `#extract()#` is `#DATE#`, the function call is assigned the type `LocalDate`. If the first argument of `#extract()#` is `#TIME#`, the function call is assigned the type `LocalTime`.
+If the first argument of `#extract()#` is a `#datetime_field#` identifier, the function application is assigned the type `Integer`.
+If the first argument of `#extract()#` is `#DATE#`, the function application is assigned the type `LocalDate`. If the first argument of `#extract()#` is `#TIME#`, the function call is assigned the type `LocalTime`.
 
 The `#datetime_field#` or `#datetime_part#` must be compatible with the type of the second argument expression.
 For example, `extract(day from local date)` is well-typed; `extract(year from local time)` is not.
@@ -252,7 +252,7 @@ The extended language provides three special functions for working with subtype 
 [[treat]]
 ===== Treated path expressions
 
-A _treated path expression_ is an invocation of the special `#treat()#` function, with syntax given by `#treated_entity_path_expression#` and `#treated_joinable_path_expression#`.
+A _treated path expression_ is an application of the special `#treat()#` function, with syntax given by `#treated_entity_path_expression#` and `#treated_joinable_path_expression#`.
 The `#treat()#` function accepts:
 
 1. a <<path-expressions,path expression>> whose last element is assigned an entity type, and
@@ -267,7 +267,7 @@ When a treated path expression is executed, the record produced by evaluating th
 
 ===== Coercion expressions
 
-A _coercion expression_ is an invocation of the special `#cast()#` function, with syntax given by the last alternatives of `#functions_returning_numerics#` and `#functions_returning_strings#`.
+A _coercion expression_ is an application of the special `#cast()#` function, with syntax given by the last alternatives of `#functions_returning_numerics#` and `#functions_returning_strings#`.
 The `#cast()#` function accepts:
 
 1. an expression assigned an atomic type, and
@@ -293,17 +293,17 @@ The capabilities of the `#cast()#` function vary between client programming lang
 [[entity-type-expressions]]
 ===== Entity type expressions
 
-An _entity type expression_ is an invocation of the special `#type()#` function, with syntax given by `#type_discriminator#`.
+An _entity type expression_ is an application of the special `#type()#` function, with syntax given by `#type_discriminator#`.
 The `#type()#` function accepts an expression assigned an entity type, and, when executed, evaluates to a value which represents the type of the record to which the argument expression evaluates.
 
 An implementation for Java assigns the type `java.lang.Class<? extends E>` where `E` is the Java class mapping the entity type assigned to the argument expression, and an entity type expression evaluates to an instance of `Class` representing the Java class which maps the entity type of the record to which the argument expression evaluates.
 
 [[aggregate-functions]]
-==== Aggregate functions calls
+==== Aggregate functions application
 
-An _aggregate function call_ may only occur in the `select` or `having` clause of a query involving <<aggregation,aggregation>>.
+An _aggregate function application_ may only occur in the `select` or `having` clause of a query involving <<aggregation,aggregation>>.
 Such a clause operates on a list of nested result lists, as specified above in <<projection-and-aggregation>> and <<restriction-and-aggregation>>.
-An aggregate function call is evaluated in the context of such a nested list.
+An aggregate function application is evaluated in the context of such a nested list.
 
 This specification defines the standard aggregate functions listed in the table below.
 
@@ -320,10 +320,10 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#avg#` | 1 | Any numeric type `N` | `N` | The average (arithmetic mean) of non-null values of the argument expression over all nested list elements
 |===
 
-In the core language, the only allowed aggregate function call is the expression `count(this)`, as specified below in <<select-clause>>.
+In the core language, the only allowed aggregate function application is the expression `count(this)`, as specified below in <<select-clause>>.
 
 In the extended language, the syntax for aggregate functions is given by `#aggregate_expression#`.
-An aggregate function invocation may specify the keyword `#distinct#`, in which case <<distinct,duplicate elimination>> is applied to the list of values produced by evaluating the argument expression over all elements of the nested list before counting or summing the values.footnote:[Use of `min(distinct ...)` or `max(distinct ...)` is allowed but redundant.]
+An aggregate function application may specify the keyword `#distinct#`, in which case <<distinct,duplicate elimination>> is applied to the list of values produced by evaluating the argument expression over all elements of the nested list before counting or summing the values.footnote:[Use of `min(distinct ...)` or `max(distinct ...)` is allowed but redundant.]
 
 [[case-expressions]]
 ==== Case expressions
