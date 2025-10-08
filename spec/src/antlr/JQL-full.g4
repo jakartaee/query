@@ -384,7 +384,11 @@ in_item
 
 like_expression
     : string_expression
-      'NOT'? 'LIKE' pattern_value
+      'NOT'? 'LIKE' escaped_pattern
+    ;
+
+escaped_pattern
+    : pattern_value
       ('ESCAPE' escape_character)?
     ;
 
