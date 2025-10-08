@@ -86,10 +86,29 @@ When executed, the literal evaluates to an instance of `Class` representing the 
 [[path-expressions]]
 ==== Path expressions
 
-A _path expression_ is a period-separated list of Java identifiers, with syntax specified by `state_field_path_expression`. A path expression is a compound path identifying an element of a structure, as discussed above in <<paths>>. Each identifier is interpreted as the name of an attribute of an entity or embeddable type. Each prefix of the list is assigned a type:
+A _path expression_ has syntax specified by:
 
-- the first element of the list is assigned the type of the named attribute of the entity being queried, and
-- each subsequent element is assigned the type of the named attribute of the type assigned to the previous element.
+- `simple_path_expression` in the core language, and
+- `#single_valued_path_expression#`, `#atomic_valued_path_expression#`, `#embeddable_valued_path_expression#`, `#entity_valued_path_expression#`, `#collection_valued_path_expression#`, or `#joinable_path_expression#` in the extended language.
+
+A `simple_path_expression` or `#joinable_path_expression#` is simply period-separated list of <<identifiers-and-keywords,identifiers>>.
+Any other sort of path expression might begin with:
+
+- an identifier,
+- a <<treat,treated path expression>>, or
+- a <<map-key-value,map key or value expression>>.
+
+The first element of the path expression is called the _root element_ of the path.
+
+A path expression is always a compound path identifying an element of a structure, as discussed above in <<paths>>. Each identifier -- except, possibly, for the first identifier in the list -- is interpreted as the label of an element of an entity or embeddable type.
+
+Each element of the path is assigned a type:
+
+1. If the root element is an identifier matching an alias declared in the `from` clause, as defined below in <<from-clause>>, the root element is assigned the entity type associated with that alias.footnote:[This is the same type as the type of a structure with that label belonging to each element of the result list.]
+2. Otherwise, if the root element is an identifier, and if the `from` clause declares a root entity with (implicit or explicit) alias `this`, then the path expression is interpreted as if it were prefixed with the first element `this`, with `this` being assigned the type of the root entity.footnote:[This is the same type as the type of a structure with label `this` belonging to each element of the result list.]
+3. If the root element is a `#treated_entity_path_expression#`, then it is assigned the treated type, according to the usual rules defined by <<treat>>.
+4. If the root element is a map key or value expression, then it is assigned a type according to the usual rules specified by <<map-key-value>>.
+5. The identifier of each non-root element must match the label of an element of the entity or embeddable type assigned to the previous element. Then the non-root element is assigned the type of this element of the entity or embeddable type.
 
 The type of the whole path expression is the type of the last element of the list. For example, `pages` might be assigned the type `int`, `address` might be assigned the type `org.example.Address`, and `address.street` might be assigned the type `java.lang.String`.
 
@@ -97,8 +116,8 @@ NOTE: Typically, the last element of a path expression is assigned an <<atomic-v
 
 When a path expression is executed, each element of the path is evaluated in turn:
 
-- the first element of the path expression is evaluated in the context of a given record of the queried entity type, and evaluates to the value of the named entity attribute of the given record, and then
-- each subsequent element is evaluated in the context of the result produced the previous element (typically, and embeddable class or associated entity class), and evaluates to the value of the named attribute of the result.
+- the root element of the path expression is evaluated in the context of a given structure belonging to a result list, and, if it is an identifier, evaluates to the value of the labeled element of the given structure, and then
+- each subsequent element is evaluated in the context of the result structure produced the previous element (typically, and embeddable class or associated entity class), and evaluates to the value of the labeled element of the result structure.
 
 If any element of a path expression evaluates to a null value, the whole path expression evaluates to a null value.
 
