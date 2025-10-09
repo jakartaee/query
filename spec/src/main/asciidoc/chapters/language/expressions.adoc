@@ -390,6 +390,13 @@ Conditional expressions may be categorized as:
 
 The syntax for conditional expressions is given by the `conditional_expression` rule. Within a conditional expression, parentheses indicate grouping.
 
+[WARNING]
+====
+When a Jakarta Query implementation targets a non-relational database, support for conditional expression might depart from what is described below.
+This specification does not require support for use of any sort of conditional expression if the underlying datastore does not provide a functionally equivalent capability among its native querying capabilities.footnote:[This is not an open-ended invitation for implementations backed by non-relational databases to ignore the requirements of this specification in cases where there _is_ a reasonable way to emulate the behavior of a conditional expression.]
+For example, in a non-relational database which only allows lookup by key, the only sort of conditional expression which is allowed is an equality operator expression involving the entity <<structures-and-records,identifier>>.footnote:[In Jakarta NoSQL, the key attribute is identified by the annotation `jakarta.nosql.Id`.]
+====
+
 [[null-comparisons]]
 ==== Null comparisons
 
@@ -512,15 +519,6 @@ NOTE: Portability is maximized when Jakarta Query providers interpret equality a
 footnote:[A notable special case is `java.math.BigDecimal`, whose implementation of `equals()` is inconsistent with its implementation of `compareTo()`. For `BigDecimal`, the `=` operator in Jakarta Data should be implemented for consistency with `compareTo()`.]
 
 In the extended language, the right operand of an equality or inequality operator may be a subquery, as discussed in the <<quantifiers,next section>>.
-
-[WARNING]
-====
-When a Jakarta Query implementation targets a non-relational database, support for equality and inequality operators might vary from what is described above.
-This specification does not require support for use of an equality or inequality operator if the underlying datastore does not provide this operator in its native querying capabilities.
-For example, some non-relational databases might only allow lookup by key, and in such databases only the entity <<structures-and-records,identifier>> may be used in an equality comparison expression.footnote:[In Jakarta NoSQL, the key attribute is identified by the annotation `jakarta.nosql.Id`.]
-
-**TODO** Why does Jakarta Data not have a similar caveat applying to `between`, `like`, `in`, and  `is null`? Do we need to generalize the language above to other sorts of conditional expressions?
-====
 
 [[quantifiers]]
 ==== Quantified conditional expressions
