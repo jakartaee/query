@@ -121,6 +121,8 @@ When a path expression is executed, each element of the path is evaluated in tur
 
 If any element of a path expression evaluates to a null value, the whole path expression evaluates to a null value.
 
+NOTE: An implementation of the core language is not required to support path expressions which involve multiple entities. For example, if `Book` and `Publisher` are different entity types, then the path expression `book.publisher.name` is not part of the core language.footnote:[Path expressions involving multiple entities are called _implicit joins_ by the Jakarta Persistence specification.]
+
 [[identifier-version-expressions]]
 ==== Identifier and version expressions
 
