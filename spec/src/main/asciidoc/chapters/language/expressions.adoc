@@ -100,12 +100,12 @@ Any other sort of path expression might begin with:
 
 The first element of the path expression is called the _root element_ of the path.
 
-A path expression is always a compound path identifying an element of a structure, as discussed above in <<paths>>. Each identifier -- except, possibly, for the first identifier in the list -- is interpreted as the label of an element of an entity or embeddable type.
+A path expression is a compound path identifying a labelled element of a structure, as discussed above in <<paths>>. Every prefix of a path is itself a path. That is, _every_  identifier in a path is interpreted as the label of an element of a structure.
 
 Each element of the path is assigned a type:
 
-1. If the root element is an identifier matching an alias declared in the `from` clause, as defined below in <<from-clause>>, the root element is assigned the entity type associated with that alias.footnote:[This is the same type as the type of a structure with that label belonging to each element of the result list.]
-2. Otherwise, if the root element is an identifier, and if the `from` clause declares a root entity with (implicit or explicit) alias `this`, then the path expression is interpreted as if it were prefixed with the first element `this`, with `this` being assigned the type of the root entity.footnote:[This is the same type as the type of a structure with label `this` belonging to each element of the result list.]
+1. If the root element is an identifier matching an alias declared in a `from` clause of any containing query, as defined below in <<from-clause>>, the root element is assigned the entity type associated with that alias.footnote:[This is the same type as the type of a structure with that label belonging to each element of the result list.]
+2. Otherwise, if the root element is an identifier, and if a containing query has a `from` clause declaring a root entity with (implicit or explicit) alias `this`, then the path expression is interpreted as if it were prefixed with the first element `this`, with `this` being assigned the type of the root entity.footnote:[This is the same type as the type of a structure with label `this` belonging to each element of the result list.]
 3. If the root element is a `#treated_entity_path_expression#`, then it is assigned the treated type, according to the usual rules defined by <<treat>>.
 4. If the root element is a map key or value expression, then it is assigned a type according to the usual rules specified by <<map-key-value>>.
 5. The identifier of each non-root element must match the label of an element of the entity or embeddable type assigned to the previous element. Then the non-root element is assigned the type of this element of the entity or embeddable type.
@@ -116,8 +116,11 @@ NOTE: Typically, the last element of a path expression is assigned an <<atomic-v
 
 When a path expression is executed, each element of the path is evaluated in turn:
 
-- the root element of the path expression is evaluated in the context of a given structure belonging to a result list, and, if it is an identifier, evaluates to the value of the labeled element of the given structure, and then
-- each subsequent element is evaluated in the context of the result structure produced by the previous element (typically, an embeddable class or associated entity class), and evaluates to the value of the labeled element of the result structure.
+- The root element of the path expression is evaluated in the context of a given structure belonging to a result list, and:
+  * if the root element is an identifier, it evaluates to the value of the labeled element of the given structure, or
+  * otherwise, it is evaluated as a value expression according to the rules specified here.
+
+- Each subsequent element of the path is evaluated in the context of the structure produced by evaluating the previous element (typically, an instance of an entity or embeddable type), and evaluates to the value of the labeled element of the result structure.
 
 If any element of a path expression evaluates to a null value, the whole path expression evaluates to a null value.
 
