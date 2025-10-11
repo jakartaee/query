@@ -10,10 +10,11 @@ Expressions may be categorized as:
 - <<parameters,parameters>>,
 - <<path-expressions,paths>>,
 - <<function-application,function application>> and <<aggregate-functions,aggregate function application>>,
+- <<map-key-value,map key and value expressions>> and <<identifier-version-expressions,entity identifier and version expressions>>,
 - <<types-and-typecasts,typecasts>>, <<entity-type-expressions,type expressions>>, and <<entity-type-literals,literal entity types>>,
 - <<case-expressions,case expressions>>,
 - <<operator-expressions,operator expressions>>, and
-- <<subquery-expressions>>.
+- <<subquery-expressions,subqueries>>.
 
 [[literal-expressions]]
 ==== Literal expressions
