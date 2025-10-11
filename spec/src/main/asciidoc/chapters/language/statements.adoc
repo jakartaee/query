@@ -75,7 +75,7 @@ In the extended language, an `#identification_variable_declaration#` might inclu
 - joins, with syntax given by `#join#` and semantics specified by <<joins>>, and
 - fetch joins, with syntax given by `#fetch_join#` and semantics specified by <<fetch-joins>>.
 
-Each `#join#` is in turn either a `#range_join#`, with semantics given by <<joins-entities>> or a `#path_join#`, with semantics given by <<joins-nested>>.
+Each `#join#` is in turn either a `#range_join#`, with semantics given by <<joins-entities>>, or a `#path_join#`, with semantics given by <<joins-nested>>.
 Such joins may specify a restriction.
 
 In addition, each `#identification_variable_declaration#` apart from the first -- which specifies the root entity -- is itself considered a join.
@@ -145,7 +145,7 @@ In the core language, the `select` clause, with syntax given by `select_clause`,
 
 Alternatively, the `select` clause may contain either:
 
-- a single `count(this)` <<aggregate-functions,aggregate function invocation>>, or
+- a single `count(this)` <<aggregate-functions,aggregate function application>>, or
 - a single <<identifier-version-expressions,identifier expression>>.
 
 A query beginning with `select count(this)` performs aggregation (without grouping), as specified by <<projection-and-aggregation>> and always returns a result list of unit length.
