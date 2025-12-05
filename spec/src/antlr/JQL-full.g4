@@ -112,7 +112,7 @@ joinable_path_expression
     // JPQL does not allow use of TREAT() here
     // TODO: Should we allow KEY(), VALUE() here?
     : (identification_variable '.')?
-      (structure_field '.')*
+      (embedded_field '.')*
       (entity_field | collection_field)
     ;
 
