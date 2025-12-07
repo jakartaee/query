@@ -2,7 +2,10 @@ grammar JQLCore;
 
 statement : select_statement | update_statement | delete_statement;
 
-select_statement : select_clause? from_clause? where_clause? orderby_clause?;
+select_statement
+    : from_clause? where_clause? select_clause? orderby_clause?
+    | select_clause from_clause? where_clause? orderby_clause?
+    ;
 update_statement : update_clause set_clause where_clause?;
 delete_statement : delete_clause where_clause?;
 

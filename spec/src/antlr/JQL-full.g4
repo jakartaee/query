@@ -30,7 +30,13 @@ query_expression
     ;
 
 select_query
-    : select_clause?
+    : from_clause
+      where_clause?
+      groupby_clause?
+      having_clause?
+      select_clause?
+      orderby_clause?
+    | select_clause
       from_clause
       where_clause?
       groupby_clause?
