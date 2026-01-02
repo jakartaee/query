@@ -20,7 +20,7 @@ graph LR
     classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
 ```
 
-To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Query distinguishes between two levels of query language: a common subset, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and a superset tailored for [Jakarta Persistence][] and other providers working with relational technologies.
+To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Query defines two query languages: one that is a common subset of the other, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and one that is a superset tailored for [Jakarta Persistence][] and other providers working with relational technologies.
 
 - a common query language that can be implemented by Jakarta Data and Jakarta NoSQL
   providers using non-relational datastores, and 
@@ -103,7 +103,7 @@ timeline
 
 ### Jakarta Common Query Language (JCQL)
 
-The **Common language** focuses on a core set of operations that are common across most data access technologies: operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
+The **Common language** focuses on a minimum set of operations that are common across most data access technologies: operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
 
 ```json
 {
