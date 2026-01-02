@@ -23,7 +23,7 @@ The syntax for literal expressions is given by the rules `string_literal` and `n
 
 In an implementation for Java, a string, integer, or decimal literal is assigned the type it would be assigned in Java.
 So, for example, `'Hello'` is assigned the type `java.lang.String`, `123` is assigned the type `int`, `1e4` is assigned the type `double`, and `1.23f` is assigned the type `float`.
-In the extended language:
+In the persistence language:
 
 - arbitrary-precision integer literals (with suffix `BI`) are assigned the type `java.math.BigInteger`, and
 - arbitrary-precision decimal literals (with suffix `BD`) are assigned the type `java.math.BigDecimal`.
@@ -78,7 +78,7 @@ When executed, the enum literal expression evaluates to the named member of the 
 [[entity-type-literals]]
 ==== Entity type literals
 
-In the extended language, an _entity type literal_, with syntax given by `#entity_type_literal#` is just the name of an entity type, in the sense given in <<entities-and-embeddables>>.
+In the persistence language, an _entity type literal_, with syntax given by `#entity_type_literal#` is just the name of an entity type, in the sense given in <<entities-and-embeddables>>.
 When executed, it evaluates to a value which represents the named entity type.
 
 An implementation for Java assigns the type `java.lang.Class<E>` to an entity type literal, where `E` is the Java class mapping the named entity type.
@@ -89,8 +89,8 @@ When executed, the literal evaluates to an instance of `Class` representing the 
 
 A _path expression_ has syntax specified by:
 
-- `simple_path_expression` in the core language, and
-- `#single_valued_path_expression#`, `#atomic_valued_path_expression#`, `#embeddable_valued_path_expression#`, `#entity_valued_path_expression#`, `#collection_valued_path_expression#`, or `#joinable_path_expression#` in the extended language.
+- `simple_path_expression` in the common language, and
+- `#single_valued_path_expression#`, `#atomic_valued_path_expression#`, `#embeddable_valued_path_expression#`, `#entity_valued_path_expression#`, `#collection_valued_path_expression#`, or `#joinable_path_expression#` in the persistence language.
 
 A `simple_path_expression` or `#joinable_path_expression#` is simply a period-separated list of <<identifiers-and-keywords,identifiers>>.
 Any other sort of path expression might begin with:
@@ -125,14 +125,14 @@ When a path expression is executed, each element of the path is evaluated in tur
 
 If any element of a path expression evaluates to a null value, the whole path expression evaluates to a null value.
 
-NOTE: An implementation of the core language is not required to support path expressions which involve multiple entities. For example, if `Book` and `Publisher` are different entity types, then the path expression `book.publisher.name` is not part of the core language.footnote:[Path expressions involving multiple entities are called _implicit joins_ by the Jakarta Persistence specification.]
+NOTE: An implementation of the common language is not required to support path expressions which involve multiple entities. For example, if `Book` and `Publisher` are different entity types, then the path expression `book.publisher.name` is not part of the common language.footnote:[Path expressions involving multiple entities are called _implicit joins_ by the Jakarta Persistence specification.]
 
 [[identifier-version-expressions]]
 ==== Identifier and version expressions
 
-In the core language, an _identifier expression_, with syntax given by `id_expression`, is assigned the type of the unique identifier of the queried entity and evaluates to the unique identifier of a given record. An identifier expression is a synonym for a path expression with one element matching the identifier attribute of the queried entity type. An identifier expression may occur in the `select` clause, in the `order` clause, or as a scalar expression in the `where` clause.
+In the common language, an _identifier expression_, with syntax given by `id_expression`, is assigned the type of the unique identifier of the queried entity and evaluates to the unique identifier of a given record. An identifier expression is a synonym for a path expression with one element matching the identifier attribute of the queried entity type. An identifier expression may occur in the `select` clause, in the `order` clause, or as a scalar expression in the `where` clause.
 
-In the extended language, the grammar rule `#entity_id_or_version_function#` gives the syntax of the special functions `id` and `version`, which accept a path expression whose last element is assigned an entity type, and evaluate to, respectively, the identifier or version element of the record to which the path expression evaluates when executed.
+In the persistence language, the grammar rule `#entity_id_or_version_function#` gives the syntax of the special functions `id` and `version`, which accept a path expression whose last element is assigned an entity type, and evaluate to, respectively, the identifier or version element of the record to which the path expression evaluates when executed.
 
 NOTE: Record identifiers were defined above in <<structures-and-records>>.
 This specification leaves the notion of a _version_ undefined.
@@ -144,12 +144,12 @@ For example, Jakarta Persistence specifies the notion of a version field or prop
 
 A _function application_ is the name of a function recognized by the Jakarta Query implementation, followed by a parenthesized list of argument expressions, with syntax given by:
 
-- `function_expression` in the core language, or
-- `#functions_returning_strings#`, `#functions_returning_datetime#`, and `#functions_returning_numerics#` in the full grammar of the extended language.
+- `function_expression` in the common language, or
+- `#functions_returning_strings#`, `#functions_returning_datetime#`, and `#functions_returning_numerics#` in the grammar of the persistence language.
 
 This specification defines the standard functions listed in the table below.
 
-NOTE: Functions highlighted in yellow belong to the extended language and are not required for an implementation of the core language.
+NOTE: Functions highlighted in yellow belong to the persistence language and are not required for an implementation of the common language.
 
 [cols="15,15,15,15,~"]
 |===
@@ -195,7 +195,7 @@ An implementation Java must assign:
 
 The primitive types `double`, `float`, `long`, `int`, `short`, `byte`, wrappers for these primitive types, `BigInteger`, and `BigDecimal` are all considered "Numeric" types.
 
-In the extended language, the `#extract()#` function accepts an expression assigned a date, time, or datetime type, along with an identifier -- a `#datetime_field#` or `#datetime_part#` -- indicating a specific part of the date, time, or datetime to extract, and evaluates to the specified part of the value to which its argument expression evaluates.
+In the persistence language, the `#extract()#` function accepts an expression assigned a date, time, or datetime type, along with an identifier -- a `#datetime_field#` or `#datetime_part#` -- indicating a specific part of the date, time, or datetime to extract, and evaluates to the specified part of the value to which its argument expression evaluates.
 
 Like keywords, `#datetime_field#` and `#datetime_part#` identifiers are case-insensitive.
 
@@ -219,7 +219,7 @@ For example, `extract(day from local date)` is well-typed; `extract(year from lo
 ====
 Jakarta Persistence requires support for the `#function()#` function, with syntax given by `#function_invocation#`, allowing invocation of a native or user-defined database function from a query written in JPQL.
 On the other hand, an implementation of Jakarta Query might simply allow direct invocation of such functions -- without the requirement to use the `#function()#` syntax -- as an extension to the functionality required by this specification.
-This specification does not, therefore, require support for `#function()#`, not even in an implementation of the extended language.
+This specification does not, therefore, require support for `#function()#`, not even in an implementation of the persistence language.
 
 **TODO** Should we simply deprecate it? Remove it?
 ====
@@ -227,9 +227,9 @@ This specification does not, therefore, require support for `#function()#`, not 
 [[map-key-value]]
 ==== Map keys and values
 
-In the extended language, a _map key expression_, _map value expression_, or _map entry expression_ is an application of the special `#key()#` function, special `#value()#` function, or special `#entry()#` function, respectively.
+In the persistence language, a _map key expression_, _map value expression_, or _map entry expression_ is an application of the special `#key()#` function, special `#value()#` function, or special `#entry()#` function, respectively.
 
-The `#entry()#` function may only occur in the <<select-clause,select clause>>, as specified by the full grammar of the extended language.
+The `#entry()#` function may only occur in the <<select-clause,select clause>>, as specified by the grammar of the persistence language.
 
 The argument of the `#key()#`, `#value()#`, or #entry()# function must be an alias of a collection join of a <<collections,map>>, as defined in <<join-clauses>>.
 
@@ -248,7 +248,7 @@ NOTE: An implementation of Jakarta Query which targets clients written in a lang
 [[types-and-typecasts]]
 ==== Types and typecasts
 
-The extended language provides three special functions for working with subtype polymorphism.
+The persistence language provides three special functions for working with subtype polymorphism.
 
 [[treat]]
 ===== Treated path expressions
@@ -281,7 +281,7 @@ When a coercion expression is executed, the atomic value produced by evaluating 
 [IMPORTANT]
 ====
 This specification places no specific requirements on the types which are allowed as arguments of the `#cast()#` function, nor on the behavior of coercion between types.
-As suggested by the grammar for `#functions_returning_numerics#` and `#functions_returning_strings#`, implementations of the extended language are strongly encouraged to support at least:
+As suggested by the grammar for `#functions_returning_numerics#` and `#functions_returning_strings#`, implementations of the persistence language are strongly encouraged to support at least:
 
 - coercion from string to any numeric type, and
 - coercion from any atomic type to string.
@@ -308,7 +308,7 @@ An aggregate function application is evaluated in the context of such a nested l
 
 This specification defines the standard aggregate functions listed in the table below.
 
-NOTE: Functions highlighted in yellow belong to the extended language and are not required for an implementation of the core language.
+NOTE: Functions highlighted in yellow belong to the persistence language and are not required for an implementation of the common language.
 
 [cols="15,15,15,15,~"]
 |===
@@ -321,15 +321,15 @@ NOTE: Functions highlighted in yellow belong to the extended language and are no
 | `#avg#` | 1 | Any numeric type `N` | `N` | The average (arithmetic mean) of non-null values of the argument expression over all nested list elements
 |===
 
-In the core language, the only allowed aggregate function application is the expression `count(this)`, as specified below in <<select-clause>>.
+In the common language, the only allowed aggregate function application is the expression `count(this)`, as specified below in <<select-clause>>.
 
-In the extended language, the syntax for aggregate functions is given by `#aggregate_expression#`.
+In the persistence language, the syntax for aggregate functions is given by `#aggregate_expression#`.
 An aggregate function application may specify the keyword `#distinct#`, in which case <<distinct,duplicate elimination>> is applied to the list of values produced by evaluating the argument expression over all elements of the nested list before counting or summing the values.footnote:[Use of `min(distinct ...)` or `max(distinct ...)` is allowed but redundant.]
 
 [[case-expressions]]
 ==== Case expressions
 
-In the extended language, a _case expression_ has syntax given by `#general_case_expression#` or `#simple_case_expression#`.
+In the persistence language, a _case expression_ has syntax given by `#general_case_expression#` or `#simple_case_expression#`.
 
 A `#general_case_expression#` has:
 
@@ -398,7 +398,7 @@ This specification does not require support for arithmetic operators or grouping
 [[subquery-expressions]]
 ==== Subquery expressions
 
-In the extended language, a `#subquery#` may occur as a `scalar_expression` in many places where an expression of atomic type is legal.
+In the persistence language, a `#subquery#` may occur as a `scalar_expression` in many places where an expression of atomic type is legal.
 Such a subquery must produce a result list with exactly one element when executed.
 When the `scalar_expression` is evaluated, the subquery is executed, and the whole expression evaluates to the single element of the result list of the subquery.
 
@@ -452,7 +452,7 @@ A `null` comparison, with syntax given by `null_comparison_expression`, is satis
 [[in-expressions]]
 ==== In expressions
 
-In the core language, an `in` expression, with syntax given by `in_expression`, must have:
+In the common language, an `in` expression, with syntax given by `in_expression`, must have:
 
 - a <<path-expressions,path expression>> as the leftmost operand, and
 - a parenthesized list of one or more ``in_item``s, each of which must be a <<literal-expressions,literal>>, <<enum-literals,enum literal>>, or <<parameters,parameter>>.
@@ -461,7 +461,7 @@ All operands must have the same type.
 
 **TODO** We should relax the restrictions on the left operand.
 
-In the extended language, the leftmost operand must be a path expression assigned an atomic type or an <<entity-type-expressions,entity type expression>>, and there must be exactly one of the following elements:
+In the persistence language, the leftmost operand must be a path expression assigned an atomic type or an <<entity-type-expressions,entity type expression>>, and there must be exactly one of the following elements:
 
 - a parenthesized list of one or more ``in_item``s, each of which must be a <<literal-expressions,literal>>, an <<enum-literals,enum literal>>, a <<entity-type-literals,literal entity type>>, `true`, `false`, or a <<parameters,parameter>>, and each having the same assigned type as the leftmost operand,
 - a parenthesized subquery with a `#simple_select_expression#` expression with the same assigned type as the leftmost operand, or
@@ -503,7 +503,7 @@ All three operands must have the same type.
 A `like` expression has syntax given by `like_expression`.
 
 - Its left operand must be an expression assigned some atomic type representing character strings.
-- Its right operand must be a pattern given as a literal string, with syntax `literal_pattern`, or, in the extended language, a <<parameters,parameter>>.
+- Its right operand must be a pattern given as a literal string, with syntax `literal_pattern`, or, in the persistence language, a <<parameters,parameter>>.
 - Optionally, its right operand may specify an `escape_character` as a literal single character.
 
 If an implementation of Jakarta Query targets clients written in Java, it must allow expressions assigned the type `java.lang.String` as the left operand of a `like` expression.
@@ -562,12 +562,12 @@ In an implementation of Jakarta Query which targets clients written in Java, eve
 NOTE: Portability is maximized when Jakarta Query providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
 footnote:[A notable special case is `java.math.BigDecimal`, whose implementation of `equals()` is inconsistent with its implementation of `compareTo()`. For `BigDecimal`, the `=` operator in Jakarta Data should be implemented for consistency with `compareTo()`.]
 
-In the extended language, the right operand of an equality or inequality operator may be a subquery, as discussed in the <<quantifiers,next section>>.
+In the persistence language, the right operand of an equality or inequality operator may be a subquery, as discussed in the <<quantifiers,next section>>.
 
 [[quantifiers]]
 ==== Quantified conditional expressions
 
-In the extended language, there are two kinds of conditional expression involving quantification:
+In the persistence language, there are two kinds of conditional expression involving quantification:
 
 - _existence expressions_, with syntax given by `#exists_expression#`, and
 - _quantified comparison expressions_, in which the right operand of an <<equality-and-inequality,equality or inequality operator>> is an `#all_or_any_expression#`.

@@ -1,4 +1,4 @@
-grammar JQLCore;
+grammar JCQL;
 
 statement : select_statement | update_statement | delete_statement;
 

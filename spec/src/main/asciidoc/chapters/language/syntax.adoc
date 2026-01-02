@@ -1,22 +1,22 @@
 [[syntax]]
 == Syntax
 
-The following grammars define the syntax of the Jakarta Query language, via ANTLR4-style BNF.
+The following grammars define the syntax of query languages in Jakarta Query, via ANTLR4-style BNF.
 
-=== Core language grammar
+=== Common language grammar
 
-The following grammar is the grammar for the core language.
-
-[source, antlrv4]
-----
-include::../../../../antlr/JQL-core.g4[]
-----
-
-=== Full language grammar
-
-This much longer grammar is the grammar for the full language.
+The following grammar is the grammar for the Jakarta Common Query Language.
 
 [source, antlrv4]
 ----
-include::../../../../antlr/JQL-full.g4[]
+include::../../../../antlr/JCQL.g4[]
+----
+
+=== Persistence language grammar
+
+This much longer grammar is the grammar for the Jakarta Persistence Query Language.
+
+[source, antlrv4]
+----
+include::../../../../antlr/JPQL.g4[]
 ----

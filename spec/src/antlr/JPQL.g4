@@ -1,4 +1,4 @@
-grammar JQLFull;
+grammar JPQL;
 
 statement
     : select_statement
