@@ -120,7 +120,7 @@ Using the Comnon language, a query might retrieve all deluxe rooms that are avai
 from Room where type = 'DELUXE' and status = 'AVAILABLE' order by number
 ```
 
-### Jakarta Persistence Query Language
+### Jakarta Persistence Query Language (JPQL)
 
 The **Persistence language** is a superset of the Common language defined by the Jakarta Query specification. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
 
