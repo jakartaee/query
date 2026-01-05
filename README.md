@@ -28,8 +28,9 @@ To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Qu
   or other persistence technologies backed by relational databases.
 
 > ⚠️ **Note**  
-> While [Jakarta Data][] primarily targets the Jakarta Common Query Language, it may also support
-> the Jakarta Persistence Query Language if its implementation is based on [Jakarta Persistence][].
+> While [Jakarta Data][] requires support for the Jakarta Common Query Language, an implementation
+> might also also support the Jakarta Persistence Query Language. Indeed, every implementation
+> of Jakarta Data based on [Jakarta Persistence][] is required to do so.
 
 The language is closely based on the existing query languages defined by
 Jakarta Persistence 3.2 and Jakarta Data 1.0 and is backward compatible with both.
