@@ -102,7 +102,7 @@ timeline
 
 ### Jakarta Common Query Language (JCQL)
 
-The **Common language** focuses on a minimum set of operations that are common across most data access technologies: operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
+The **Common language** focuses on a minimal set of operations that are common across most data access technologies: operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
 
 ```json
 {
