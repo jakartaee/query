@@ -20,7 +20,7 @@ graph LR
     classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
 ```
 
-To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Query defines two query languages: one that is a common subset of the other, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and one that is a superset tailored for [Jakarta Persistence][] and other providers working with relational technologies.
+To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Query defines a query languages with two levels: one that is a common subset of the other, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and one that is a superset tailored for [Jakarta Persistence][] and other providers working with relational technologies.
 
 - a common query language that can be implemented by Jakarta Data and Jakarta NoSQL
   providers using non-relational datastores, and 
@@ -31,9 +31,8 @@ To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Qu
 > While [Jakarta Data][] primarily targets the Jakarta Common Query Language, it may also support
 > the Jakarta Persistence Query Language if its implementation is based on [Jakarta Persistence][].
 
-The query languages defined by Jakarta Persistence 3.2 and Jakarta Data 1.0 were
-contributed to the Jakarta Query specification as the basis for the Jakarta Query,
-which remains fully backward compatible with both specifications.
+The language is closely based on the existing query languages defined by
+Jakarta Persistence 3.2 and Jakarta Data 1.0 and is backward compatible with both.
 
 ```mermaid
 graph TB
