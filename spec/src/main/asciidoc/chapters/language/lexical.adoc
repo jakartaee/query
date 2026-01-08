@@ -49,7 +49,7 @@ In the grammar, literal strings are labeled with the `STRING` token type.
 
 === Numeric literals
 
-In the core language, numeric literals come in two flavors:
+In the common language, numeric literals come in two flavors:
 
 - any legal Java decimal literal of type `int` or `long` is an _integer literal_, and
 - any legal Java literal of type `float` or `double` is a _decimal literal_.
@@ -77,7 +77,7 @@ In the grammar, integer and decimal literals are labeled with the `INTEGER` and 
 
 NOTE: Jakarta Query does not require support for literals written in octal or hexadecimal.
 
-In the extended language, arbitrary-precision numeric literals are also provided:
+In the persistence language, arbitrary-precision numeric literals are also provided:
 
 - an arbitrary-precision integer literal follows the format of a Java integer literal, but with the explicit suffix `BI`, and with no limit on the number of decimal digits, and
 - an arbitrary-precision decimal literal follows the format of a Java floating-point literal, but with the explicit suffix `BD`, and with no limit on the number of decimal digits.

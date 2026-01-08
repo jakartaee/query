@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Contributors to the Eclipse Foundation
+// Copyright (c) 2025,2026 Contributors to the Eclipse Foundation
 //
 // This program and the accompanying materials are made available under the
 // terms of the Eclipse Public License v. 2.0 which is available at
@@ -23,9 +23,9 @@ link:{Jakarta-Persistence}[Jakarta Persistence], link:{Jakarta-Data}[Jakarta Dat
  link:{Jakarta-NoSQL}[Jakarta NoSQL], and with any other similar persistence technology in any object-oriented programming language.
 Jakarta Query specifies:
 
-- a core language which can be implemented by Jakarta Data and Jakarta NoSQL
+- a common language which can be implemented by Jakarta Data and Jakarta NoSQL
 providers, and
-- an extended language tailored for Jakarta Persistence providers or other
+- a persistence language tailored for Jakarta Persistence providers or other
 persistence technologies backed by relational databases.
 
 The language is closely based on the existing query languages defined by
@@ -81,11 +81,11 @@ evolution.
 
 This specification defines an object-oriented query language with two well-defined levels of compliance:
 
-- the _extended language_, which is known to be implementable by persistence solutions backed by SQL databases, and
-- the _core language_, a strict subset which is designed to be implementable on other kinds of non-SQL data stores.
+- the _persistence language_, which is known to be implementable by persistence solutions backed by SQL databases, and
+- the _common language_, a strict subset which is designed to be implementable on other kinds of non-SQL data stores.
 
-The extended language is designed for reuse by Jakarta Persistence.
-The core language is designed for reuse by Jakarta Data and Jakarta NoSQL.
+The persistence language is designed for reuse by Jakarta Persistence.
+The common language is designed for reuse by Jakarta Data and Jakarta NoSQL.
 Jakarta Query itself has no dependence on either of these specifications, and reuse in other contexts is encouraged.
 
 Furthermore, the semantics defined by Jakarta Query may be reused by reference in other specifications, for example, in the definition of the Jakarta Persistence Criteria API, or in the definition of the Jakarta Data Restrictions.
@@ -93,7 +93,7 @@ Furthermore, the semantics defined by Jakarta Query may be reused by reference i
 This document:
 
 - standardizes the syntax and semantics of the language,
-- delineates the core subset,
+- delineates the common subset,
 - provides guidelines on how query language constructs map to language elements in a program written in Java.
 
 The definition of the query language itself is independent of the Java programming language, and of any details of the underlying datastore and data access technology.
@@ -119,7 +119,7 @@ _Italics_ are used to highlight a word or phrase which is being defined by the t
 *Bold* text is occasionally used to draw attention to important words or phrases.
 
 `Monospace` font indicates a keyword or fragment of text from the query language itself, or from the grammar for the language.
-When a keyword or name of a grammar rule is not part of the core language, the keyword or rule name is `#highlighted#`.
+When a keyword or name of a grammar rule is not part of the common language, the keyword or rule name is `#highlighted#`.
 
 ANTLR 4-style BNF is used to define the syntax of the language in <<syntax>>.
 
@@ -130,7 +130,7 @@ Code fragments written in this metalanguage are never prescriptive.
 Admonitions are used to set apart:
 
 - explanatory text which is not prescriptive or not part of the definition of the language, and
-- information relating to compatibility between implementations of Jakarta Query, and to differences between the core language and the extended language.
+- information relating to compatibility between implementations of Jakarta Query, and to differences between the common language and the persistence language.
 
 Throughout this specification, the phrase _"an implementation for Java"_ means an implementation of Jakarta Query which targets clients written in the Java programming language and running on the Java Virtual Machine.
 It does not imply that the implementation itself is entirely in Java.

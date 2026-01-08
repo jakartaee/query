@@ -213,9 +213,9 @@ On the other hand, any record is assumed to be representable as a finite directe
 ====
 Circularity typically arises in implementations which support _associations_ between entity types.
 An association is a labeled element of an entity or embeddable type which is itself an entity type.
-This specification does not require that implementations allow associations between entities, and the core language does not feature constructs for querying associations.
+This specification does not require that implementations allow associations between entities, and the common language does not feature constructs for querying associations.
 In particular, an implementation of Jakarta Query which targets a non-relational database might not feature any support for associations.
-On the other hand, the extended language defines constructs like <<joins-nested,joins>> and <<treat,typecasts>> which are intended for use in implementations which do support associations.
+On the other hand, the persistence language defines constructs like <<joins-nested,joins>> and <<treat,typecasts>> which are intended for use in implementations which do support associations.
 In particular, association mapping is a fundamental feature of Jakarta Persistence, and circularity is completely normal in implementations based on object/relational mapping.
 ====
 

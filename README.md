@@ -20,36 +20,37 @@ graph LR
     classDef spec fill:#F8F7F7,stroke:#1D5183,stroke-width:1px,color:#1D5183
 ```
 
-To accommodate the diversity of datastores in the Jakarta ecosystem, Jakarta Query distinguishes between two levels of the language: a core subset, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and an extended form, tailored for [Jakarta Persistence][] and other providers working with relational technologies.
+To accommodate a variety of datastore types in the Jakarta ecosystem, Jakarta Query defines a query languages with two levels: one that is a common subset of the other, designed for use by [Jakarta Data][] and [Jakarta NoSQL][] providers targeting non-relational databases, and one that is a superset tailored for [Jakarta Persistence][] and other providers working with relational technologies.
 
-- a core language that can be implemented by Jakarta Data and Jakarta NoSQL 
+- a common query language that can be implemented by Jakarta Data and Jakarta NoSQL
   providers using non-relational datastores, and 
-- an extended language tailored for Jakarta Persistence providers or other 
-  persistence technologies backed by relational databases.
+- additional capability in a query language tailored for Jakarta Persistence providers
+  or other persistence technologies backed by relational databases.
 
 > ⚠️ **Note**  
-> While [Jakarta Data][] primarily targets the Core language, it may also support  
-> the Extended language if its implementation is based on [Jakarta Persistence][].
+> While [Jakarta Data][] requires support for the Jakarta Common Query Language, an implementation
+> might also also support the Jakarta Persistence Query Language. Indeed, every implementation
+> of Jakarta Data based on [Jakarta Persistence][] is required to do so.
 
 The language is closely based on the existing query languages defined by
-Jakarta Persistence and Jakarta Data, and is backward compatible with both.
+Jakarta Persistence 3.2 and Jakarta Data 1.0 and is backward compatible with both.
 
 ```mermaid
 graph TB
     JQ([Jakarta Query]):::main
 
-    subgraph Extended["Extended Language"]
-        Core((Core Language)):::core
+    subgraph Persistence["Jakarta Persistence Query Language"]
+        Common((Jakarta Common Query Language)):::common
     end
 
-    Core --> JD[Jakarta Data]:::spec
-    Core --> JN[Jakarta NoSQL]:::spec
-    Extended --> JP[Jakarta Persistence]:::spec
+    Common --> JD[Jakarta Data]:::spec
+    Common --> JN[Jakarta NoSQL]:::spec
+    Persistence --> JP[Jakarta Persistence]:::spec
 
-    JQ --> Extended
+    JQ --> Persistence
 
     classDef main fill:#019DDC,stroke:#1D5183,stroke-width:2px,color:#fff,font-weight:bold
-    classDef core fill:#F8F7F7,stroke:#1D5183,stroke-width:2px,color:#1D5183
+    classDef common fill:#F8F7F7,stroke:#1D5183,stroke-width:2px,color:#1D5183
     classDef spec fill:#ffffff,stroke:#999,stroke-width:1px,color:#1D5183
 ```
 
@@ -100,9 +101,9 @@ timeline
 
 ## Language Levels in Jakarta Query  
 
-### Core Language
+### Jakarta Common Query Language (JCQL)
 
-The **Core language** is a subset of the full Jakarta Query language, focusing on portable operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
+The **Common language** focuses on a minimal set of operations that are common across most data access technologies: operations such as selection, restriction, ordering, and simple projection. To illustrate, consider the following JSON representation of a `Room` document:
 
 ```json
 {
@@ -113,15 +114,15 @@ The **Core language** is a subset of the full Jakarta Query language, focusing o
 }
 ````
 
-Using the Core language, a query might retrieve all deluxe rooms that are available, ordered by their number:
+Using the Comnon language, a query might retrieve all deluxe rooms that are available, ordered by their number:
 
 ```sql
 from Room where type = 'DELUXE' and status = 'AVAILABLE' order by number
 ```
 
-### Extended Language
+### Jakarta Persistence Query Language (JPQL)
 
-The **Extended language** is the full query language defined by the Jakarta Query specification. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
+The **Persistence language** is a strict superset of the Common language defined by the Jakarta Query specification. It introduces SQL-oriented constructs such as joins, grouping, and bulk updates or deletes, which are especially useful in relational contexts. For example, imagine a `Hotel` document with an embedded list of rooms:
 
 ```json
 {
@@ -135,7 +136,7 @@ The **Extended language** is the full query language defined by the Jakarta Quer
 }
 ```
 
-With the Extended language, a query could count the number of occupied rooms per hotel, returning only those with more than ten:
+With the Persistence language, a query could count the number of occupied rooms per hotel, returning only those with more than ten:
 
 ```sql
 select h.name, count(r)
@@ -148,9 +149,7 @@ order by count(r) desc
 
 ### Language Levels and Feature Summary
 
-The Core and Full grammars together define two levels of Jakarta Query: **Core** and **Extended**.  
-The Core level represents the minimal, portable subset, while the Extended level is a superset that introduces SQL-oriented features such as joins, grouping, and subqueries.  
-This subsection summarizes the differences between them, based on the syntax defined in the [Core language grammar] and the [Full language grammar] sections.
+This subsection summarizes the differences between the syntax defined in the [Jakarta Common Query Language grammar] and the [Jakarta Persistence Query Language grammar].
 
 > **Note**  
 > In the following tables:
@@ -159,55 +158,55 @@ This subsection summarizes the differences between them, based on the syntax def
 
 #### Clauses and Constructs
 
-| Feature / Construct                               | Core | Extended |
-|---------------------------------------------------|------|----------|
-| `FROM` clause                                     | Yes  | Yes      |
-| `WHERE` clause                                    | Yes  | Yes      |
-| `ORDER BY` clause                                 | Yes  | Yes      |
-| `SELECT` paths/id/count                           | Yes  | Yes      |
-| Update (`UPDATE ... SET`)                         | Yes  | Yes      |
-| Delete (`DELETE FROM`)                            | Yes  | Yes      |
-| Joins (inner/left/fetch)                          | No   | Yes      |
-| Grouping (`GROUP BY`)                             | No   | Yes      |
-| Having (`HAVING`)                                 | No   | Yes      |
-| Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`)  | No   | Yes      |
-| Distinct in `SELECT`                              | No   | Yes      |
-| Constructor expressions                           | No   | Yes      |
-| Subqueries (`EXISTS`, `IN`, `ALL`, `ANY`, `SOME`) | No   | Yes      |
-| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | No   | Yes      |
+| Feature / Construct                               | Common | Persistence |
+|---------------------------------------------------|--------|-------------|
+| `FROM` clause                                     | Yes    | Yes         |
+| `WHERE` clause                                    | Yes    | Yes         |
+| `ORDER BY` clause                                 | Yes    | Yes         |
+| `SELECT` paths/id/count                           | Yes    | Yes         |
+| Update (`UPDATE ... SET`)                         | Yes    | Yes         |
+| Delete (`DELETE FROM`)                            | Yes    | Yes         |
+| Joins (inner/left/fetch)                          | No     | Yes         |
+| Grouping (`GROUP BY`)                             | No     | Yes         |
+| Having (`HAVING`)                                 | No     | Yes         |
+| Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`)  | No     | Yes         |
+| Distinct in `SELECT`                              | No     | Yes         |
+| Constructor expressions                           | No     | Yes         |
+| Subqueries (`EXISTS`, `IN`, `ALL`, `ANY`, `SOME`) | No     | Yes         |
+| Set operations (`UNION`, `INTERSECT`, `EXCEPT`)   | No     | Yes         |
 
 #### Special Expressions and Functions
 
 ##### Datetime Expressions
 
-| Expression                                  | Core | Extended |
-|---------------------------------------------|------|----------|
-| `LOCAL DATE`, `LOCAL TIME`, `LOCAL TIMESTAMP` | Yes  | Yes      |
-| `EXTRACT(field FROM x)`                     | No   | Yes      |
+| Expression                                    | Common | Persistence |
+|-----------------------------------------------|--------|-------------|
+| `LOCAL DATE`, `LOCAL TIME`, `LOCAL TIMESTAMP` | Yes    | Yes         |
+| `EXTRACT(field FROM x)`                       | No     | Yes         |
 
 ##### Boolean Expressions
 
-| Expression               | Core | Extended |
-|--------------------------|------|----------|
-| Literals `TRUE`, `FALSE` | Yes  | Yes      |
-| `EXISTS`                 | No   | Yes      |
+| Expression               | Common | Persistence |
+|--------------------------|--------|-------------|
+| Literals `TRUE`, `FALSE` | Yes    | Yes         |
+| `EXISTS`                 | No     | Yes         |
 
 ##### Numeric Expressions
 
-| Expression                   | Core | Extended |
-|------------------------------|------|----------|
-| Basic operators (+, -, *, /) | Yes  | Yes      |
-| `ABS`                        | Yes  | Yes      |
-| `MOD`                        | No   | Yes      |
-| `ROUND`                      | No   | Yes      |
+| Expression                   | Common | Persistence |
+|------------------------------|--------|-------------|
+| Basic operators (+, -, *, /) | Yes    | Yes         |
+| `ABS`                        | Yes    | Yes         |
+| `MOD`                        | No     | Yes         |
+| `ROUND`                      | No     | Yes         |
 
 ##### String Expressions
 
-| Expression                 | Core | Extended |
-|----------------------------|------|----------|
-| `\|\|` concatenation     | Yes  | Yes      |
-| `LENGTH`                   | Yes  | Yes      |
-| `LOWER`, `UPPER`           | Yes  | Yes      |
-| `LEFT`, `RIGHT`            | Yes  | Yes      |
-| `LOCATE`                   | No   | Yes      |
-| `SUBSTRING`                | No   | Yes      |
+| Expression                 | Common | Persistence |
+|----------------------------|--------|-------------|
+| `\|\|` concatenation       | Yes    | Yes         |
+| `LENGTH`                   | Yes    | Yes         |
+| `LOWER`, `UPPER`           | Yes    | Yes         |
+| `LEFT`, `RIGHT`            | Yes    | Yes         |
+| `LOCATE`                   | No     | Yes         |
+| `SUBSTRING`                | No     | Yes         |

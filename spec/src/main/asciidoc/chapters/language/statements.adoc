@@ -18,15 +18,15 @@ The interpretation and effect of each clause in this list is influenced by claus
 [[from-clause]]
 ==== From clause
 
-In the core language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
+In the common language, the `from` clause, with syntax given by `from_clause`, specifies an _entity name_ identifying the root entity of the query, as defined in <<root-entity>>.
 This entity is always assigned the implicit alias `this`.
 
-In the core language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-and-embeddables>>.
+In the common language, path expressions occurring in later clauses are interpreted with respect to this entity. That is, the first element of each path expression in the query must be a persistent attribute of the entity named in the `from` clause. The entity name is a Java identifier, usually the unqualified name of the entity class, as specified in <<entities-and-embeddables>>.
 
-NOTE: The core language does not have joins, and so the `from` clause is always trivial.
+NOTE: The common language does not have joins, and so the `from` clause is always trivial.
 
-In the extended language, the `from` clause might enumerate multiple steps of the basic operation pipeline.
-The `#from_clause#` of the full grammar allows:
+In the persistence language, the `from` clause might enumerate multiple steps of the basic operation pipeline.
+The `#from_clause#` of the persistence language grammar allows:
 
 1. A root entity, as defined in <<root-entity>>, which may either:
    - explicitly specify its alias according to the syntax given by `#range_variable_declaration#`, or
@@ -43,7 +43,7 @@ Join clauses are discussed <<join-clauses,below>>.
 
 An `#identification_variable_declaration#` declaring a root entity has a `#range_variable_declaration#` with an `#entity_name#` specifying the name of the root entity, and an `#identification_variable#` specifying its alias (label).
 
-Since a `from` clause may introduce multiple distinct labels, paths in the extended language may begin with the label of an entity.
+Since a `from` clause may introduce multiple distinct labels, paths in the persistence language may begin with the label of an entity.
 Alternatively, a path which does not begin with the label of an entity is interpreted as beginning with the implicit label `this`.
 
 // NOTE: The syntax of the `update` statement is irregular, with the `from` keyword implied. That is, the syntax _should_ be `update from Entity`, but for historical reasons it is simply `update Entity`.
@@ -70,7 +70,7 @@ from Book where title like :title
 [[join-clauses]]
 ==== Join clauses
 
-In the extended language, an `#identification_variable_declaration#` might include a list of:
+In the persistence language, an `#identification_variable_declaration#` might include a list of:
 
 - joins, with syntax given by `#join#` and semantics specified by <<joins>>, and
 - fetch joins, with syntax given by `#fetch_join#` and semantics specified by <<fetch-joins>>.
@@ -116,7 +116,7 @@ A restriction specified using `where` is applied after every join and before any
 [[group-clause]]
 ==== Group clause
 
-The `#group#` clause in the extended language, with syntax given by `#groupby_clause#`, specifies a list of grouping items, which are collectively interpreted as an aggregation, as specified in <<aggregation>>.
+The `#group#` clause in the persistence language, with syntax given by `#groupby_clause#`, specifies a list of grouping items, which are collectively interpreted as an aggregation, as specified in <<aggregation>>.
 
 According to the rule `#groupby_item#`, each item must be either:
 
@@ -130,7 +130,7 @@ NOTE: An implementation of Jakarta Query might treat the entity-valued path expr
 [[having-clause]]
 ==== Having clause
 
-The `#having#` clause in the extended language, with syntax given by `#having_clause#`, specifies a restriction on the result list of an aggregation, as specified by <<restriction>>.
+The `#having#` clause in the persistence language, with syntax given by `#having_clause#`, specifies a restriction on the result list of an aggregation, as specified by <<restriction>>.
 
 The `#having#` clause specifies a `conditional_expression`, interpreted as the logical predicate of the restriction.
 
@@ -141,7 +141,7 @@ A restriction specified using `having` is applied after aggregation and before a
 [[select-clause]]
 ==== Select clause
 
-In the core language, the `select` clause, with syntax given by `select_clause`, specifies one or more path expressions with syntax `simple_path_expression`, which are collectively interpreted as a projection with automatically assigned aliases, as specified in <<projection>>.
+In the common language, the `select` clause, with syntax given by `select_clause`, specifies one or more path expressions with syntax `simple_path_expression`, which are collectively interpreted as a projection with automatically assigned aliases, as specified in <<projection>>.
 
 Alternatively, the `select` clause may contain either:
 
@@ -158,7 +158,7 @@ When a Jakarta Query implementation targets a non-relational database, support f
 In particular, this specification does not require support for `count(this)` if the underlying datastore only provides for key-based lookups.
 ====
 
-In the extended language, the `select` clause is much more flexible.
+In the persistence language, the `select` clause is much more flexible.
 Its syntax, given by `#select_clause#`, permits:
 
 - one or more expressions, with optional labels, as given by `#select_item#`, where `#select_expression#` is the expression, and `#result_variable#` is the label, and
@@ -182,10 +182,10 @@ An item of the order by clause, with syntax given by `orderby_item` has:
 
 - an `orderby_expression`, which must be an expression assigned an atomic type, and
 - optionally, the keyword `asc` or `desc`,
-- optionally, in the extended language, `#nulls first#` or `#nulls last#`.
+- optionally, in the persistence language, `#nulls first#` or `#nulls last#`.
 
-In the core language, an `orderby_expression` must be a <<path-expressions,path expression>> or <<identifier-version-expressions,identifier expression>>.
-In the extended language, an `orderby_expression` may be almost any sort of atomic-valued expression (but not a parameter), as specified by the full grammar of the extended language.
+In the common language, an `orderby_expression` must be a <<path-expressions,path expression>> or <<identifier-version-expressions,identifier expression>>.
+In the persistence language, an `orderby_expression` may be almost any sort of atomic-valued expression (but not a parameter), as specified by the grammar of the persistence language.
 
 NOTE: An implementation of Jakarta Query is not required to support sorting by any expression not <<projection,returned by the query>>. If a query returns an entity, then any sortable attribute of the queried entity may occur in the `order` clause. Otherwise, if the query has an explicit `select` clause, an implementation might require that an attribute which occurs in the `order` also occurs in the `select`.
 
@@ -196,7 +196,7 @@ The keyword `asc` or `desc` specifies that the values of a given expression shou
 
 Entity attributes occurring earlier in the `order by` clause take precedence. That is, an attribute occurring later in the `order by` clause is only used to resolve "ties" between records which cannot be unambiguously ordered using only earlier attributes.
 
-In the extended language, `#nulls first#` or `#nulls last#` specifies whether null values should be considered, respectively, smaller or larger than non-null values. This specification does not define how null values are ordered with respect to non-null values when the sorting of null values is not explicitly specified. The ordering of null values may vary between data stores and between Jakarta Query providers.
+In the persistence language, `#nulls first#` or `#nulls last#` specifies whether null values should be considered, respectively, smaller or larger than non-null values. This specification does not define how null values are ordered with respect to non-null values when the sorting of null values is not explicitly specified. The ordering of null values may vary between data stores and between Jakarta Query providers.
 
 The `order` clause is always optional. When it is missing, the order of the query results is not defined by this specification and might not be deterministic.
 
@@ -215,19 +215,19 @@ NOTE: If a datastore does not natively provide the ability to sort query results
 
 The semantics of union, intersection, and complementation of query result sets is specified by <<union-intersection>> above.
 
-NOTE: These operations are part of the extended language, and so support for union, intersection, and complementation is not required for an implementation of Jakarta Query core.
+NOTE: These operations are part of the persistence language, and so support for union, intersection, and complementation is not required for an implementation of the Jakarta Common Query Language.
 
 Each of these operations is treated as an infix binary operator acting on query result lists of identical shape (type) and producing a new query result set of the same shape as the operands.
 
 ==== Union and complement
 
-The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `#union#` of the full grammar.
+The syntax of `#union#`, `#union all#`, `#except#`, and `#except all#` is given by the rule `#union#` of the persistence language grammar.
 The operands must produce result lists of the same type.
 The type of the union or complement expression is the same as the type of its operands.
 
 ==== Intersection
 
-The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the full grammar.
+The syntax of `#intersect#` and `#intersect all#` is given by the rule `#intersection#` of the persistence language grammar.
 The operands must produce result lists of the same type.
 The type of the intersection expression is the same as the type of its operands.
 
@@ -245,7 +245,7 @@ The clauses which can appear in a statement are given by the grammar for each ki
 
 A `select` statement, with syntax given by `select_statement`, returns data to the client.
 
-In the core language, a `select` statement may contain one of more of the following clauses:
+In the common language, a `select` statement may contain one of more of the following clauses:
 
 - `select`
 - `from`
@@ -255,9 +255,9 @@ In the core language, a `select` statement may contain one of more of the follow
 A `select` statement is a pipeline as defined in <<algebra>>.
 The result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
 
-In the extended language, a `select` statement may contain, in addition, a `#group#` and/or a `#having#` clause, with syntax specified by `#select_query#`.
+In the persistence language, a `select` statement may contain, in addition, a `#group#` and/or a `#having#` clause, with syntax specified by `#select_query#`.
 Each `#select_query#` is a pipeline as defined in <<algebra>>.
-A `#select_statement#` in the full grammar may contain union, intersection, and complement operations, as defined in <<union-intersect-except>>.
+A `#select_statement#` in the persistence language grammar may contain union, intersection, and complement operations, as defined in <<union-intersect-except>>.
 
 - If the `#select_statement#` is a `#union#` or `#intersection#`, the result list of the whole `select` statement is the same as the result list of the union or intersection.
 - Otherwise, if the `#select_statement#` is just a `#select_query#`, result list of the whole `select` statement is the same as the result list of the last operation in the pipeline.
