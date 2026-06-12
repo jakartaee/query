@@ -604,7 +604,7 @@ In an implementation of Jakarta Query which targets clients written in Java, eve
 
 Entity and embeddable types are not considered to have a natural order, and so the behavior of other inequality operators is not defined by this specification.
 
-An implementation of Jakarta Query is not required to allow the use of the inequality operators `<`, `>`, `<=`, and `>=` with time of day types like `LocalTime`.footnote:[Time of day is topologically a circle, and does not have a semantically meaningful total order.]
+An implementation of Jakarta Query is not required to allow the use of the inequality operators `<`, `>`, `<=`, and `>=` with time of day types like `LocalTime`.footnote:[Time of day can be understood algebraically as the circle group, which has no semantically meaningful total order.]
 
 NOTE: Portability is maximized when Jakarta Query providers interpret equality and inequality operators in a manner consistent with the implementation of `Object.equals()` or `Comparable.compareTo()` for the assigned Java type.
 footnote:[A notable special case is `java.math.BigDecimal`, whose implementation of `equals()` is inconsistent with its implementation of `compareTo()`. For `BigDecimal`, the `=` operator in Jakarta Data should be implemented for consistency with `compareTo()`.]
