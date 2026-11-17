@@ -92,11 +92,16 @@ path_join
     ;
 
 fetch_join
-    : join_spec 'FETCH' join_association_expression
+    : fetch_join_spec 'FETCH' join_association_expression
     ;
 
 join_spec
     : ('INNER' | ('LEFT' | 'RIGHT' | 'FULL') 'OUTER'?)?
+      'JOIN'
+    ;
+
+fetch_join_spec
+    : ('INNER' | 'LEFT' 'OUTER'?)?
       'JOIN'
     ;
 
